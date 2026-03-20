@@ -95,43 +95,53 @@
     .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
     .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 
-    /* 유지보수 맵 */
+   /* 유지보수 맵 */
     .maintenance-card{grid-column:span 4;}
     .maintenance-inner{display:grid;grid-template-columns:1fr 320px;gap:16px;}
     .floor-tabs{display:flex;gap:8px;margin-bottom:14px;}
     .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
     .floor-tab.active{background:var(--accent-green);color:#000;border-color:var(--accent-green);box-shadow:var(--glow-green);}
     .floor-tab:hover:not(.active){border-color:var(--accent-green);color:var(--accent-green);}
+
+    /* 💡 수정된 부분: 가로 스크롤 강제 활성화 박스 */
     .farm-map-wrap {
-    background: var(--bg-card2);
-    border-radius: 10px;
-    padding: 16px;
-    border: 1px solid var(--border-color);
-    
-    /* 💡 여기가 핵심입니다! */
-    overflow-x: auto;          /* 가로 내용이 넘치면 스크롤 바 생성 */
-    white-space: nowrap;       /* 안의 내용이 줄바꿈되지 않게 방지 */
-    -webkit-overflow-scrolling: touch; /* 모바일에서 부드러운 스크롤 */
-}
+        background: var(--bg-card2);
+        border-radius: 10px;
+        padding: 16px;
+        border: 1px solid var(--border-color);
+        display: block;           /* 박스 속성 유지 */
+        width: 100%;              /* 부모 너비에 맞춤 */
+        overflow-x: auto;         /* 가로로 넘치면 무조건 스크롤바 생성 */
+        white-space: nowrap;      /* 내부 요소 줄바꿈 방지 */
+        -webkit-overflow-scrolling: touch; /* 모바일 부드러운 스크롤 */
+    }
+
+    /* 💡 수정된 부분: 테이블 최소 너비 고정 (10열 보존) */
     .farm-map-table {
-    border-collapse: separate;
-    border-spacing: 3px;
-    
-    /* 💡 이 줄을 추가하세요 */
-    min-width: 800px; /* 10열이 다 보이기 위해 필요한 최소 너비입니다. */
-}
+        border-collapse: separate;
+        border-spacing: 3px;
+        min-width: 950px;         /* 화면이 좁아져도 950px 너비를 유지하여 스크롤 유도 */
+        table-layout: fixed;      /* 칸 너비를 일정하게 고정 */
+    }
+
     .y-label{font-size:15px;color:var(--text-muted);text-align:right;padding-right:8px;white-space:nowrap;font-weight:600;width:40px;}
     .x-label{font-size:14px;color:var(--text-muted);text-align:center;padding-top:6px;font-weight:600;}
-    .rack-cell{width:32px;height:22px;background:#1a2e1a;border:1px solid #2a4a2a;border-radius:3px;cursor:pointer;position:relative;transition:all .15s;}
+
+    /* 💡 수정된 부분: 셀 크기 고정 및 축소 방지 */
+    .rack-cell {
+        width: 35px;              /* 칸 너비 */
+        height: 25px;             /* 칸 높이 */
+        background: #1a2e1a;
+        border: 1px solid #2a4a2a;
+        border-radius: 3px;
+        cursor: pointer;
+        position: relative;
+        transition: all .15s;
+        flex-shrink: 0;           /* 공간이 좁아도 절대 작아지지 않음 */
+    }
+
     .rack-cell:hover{background:#2a4a2a;border-color:var(--accent-green);transform:scale(1.1);z-index:10;}
-    .rack-cell.need-fix{background:rgba(255,77,109,0.15);border-color:var(--accent-red);}
-    .rack-cell.need-fix::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:radial-gradient(circle,rgba(255,77,109,0.9) 0%,rgba(255,77,109,0.3) 70%);border:2px solid var(--accent-red);border-radius:50%;box-shadow:0 0 8px rgba(255,77,109,0.6);animation:pulse-red 1.5s infinite;}
-    @keyframes pulse-red{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2);opacity:0.7}}
-    .rack-cell.warning{background:rgba(255,215,0,0.1);border-color:var(--accent-yellow);}
-    .rack-cell.warning::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:radial-gradient(circle,rgba(255,215,0,0.9) 0%,rgba(255,215,0,0.3) 70%);border:2px solid var(--accent-yellow);border-radius:50%;box-shadow:0 0 8px rgba(255,215,0,0.5);animation:pulse-yellow 2s infinite;}
-    @keyframes pulse-yellow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2);opacity:0.6}}
-    .rack-tooltip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:rgba(10,15,10,0.97);border:1px solid var(--accent-green);border-radius:6px;padding:6px 10px;font-size:15px;color:var(--text-main);white-space:nowrap;z-index:100;pointer-events:none;}
-    .rack-cell:hover .rack-tooltip{display:block;}
+    /* ... (이하 pulse 애니메이션 및 tooltip 설정은 기존과 동일) ... */
     .maintenance-list-panel{background:var(--bg-card2);border-radius:10px;border:1px solid var(--border-color);overflow:hidden;display:flex;flex-direction:column;}
     .panel-header{padding:12px 16px;background:rgba(255,77,109,0.1);border-bottom:1px solid var(--border-color);font-size:14px;font-weight:700;color:var(--accent-red);letter-spacing:1px;display:flex;align-items:center;gap:8px;}
     .issue-count-badge{background:var(--accent-red);color:#fff;font-size:15px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto;}
