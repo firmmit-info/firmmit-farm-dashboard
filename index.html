@@ -402,7 +402,7 @@ async function updateEnv(){
     {label:'온도(°C)',data:temps,borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y1'},
     {label:'습도(%)',data:hums,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y2'}
   ]};
-  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:11},boxWidth:16}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:8,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'},min:15,max:30},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:12}},grid:{drawOnChartArea:false},min:50,max:90}}};
+  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:13},boxWidth:16}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:8,font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'},min:15,max:30},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:12}},grid:{drawOnChartArea:false},min:50,max:90}}};
   if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
   else{envChart.data=cd;envChart.update();}
 }
