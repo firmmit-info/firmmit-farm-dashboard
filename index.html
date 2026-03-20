@@ -402,7 +402,7 @@ async function updateEnv(){
     {label:'온도(°C)',data:temps,borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y1'},
     {label:'습도(%)',data:hums,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y2'}
   ]};
-  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:11},boxWidth:16}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:8,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},min:15,max:30},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:10}},grid:{drawOnChartArea:false},min:50,max:90}}};
+  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:11},boxWidth:16}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:8,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'},min:15,max:30},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:12}},grid:{drawOnChartArea:false},min:50,max:90}}};
   if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
   else{envChart.data=cd;envChart.update();}
 }
@@ -416,7 +416,7 @@ async function updateHarvest(){
   const bgColors=amounts.map(v=>v>=40?'rgba(0,255,136,0.7)':v>=28?'rgba(0,212,170,0.6)':'rgba(77,166,255,0.5)');
   const bdColors=amounts.map(v=>v>=40?'#00ff88':v>=28?'#00d4aa':'#4da6ff');
   const cd={labels,datasets:[{label:'수확량 (kg)',data:amounts,backgroundColor:bgColors,borderColor:bdColors,borderWidth:1,borderRadius:4}]};
-  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.raw} kg`}}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:10,font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}}});}
+  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.raw} kg`}}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:10,font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}}});}
   else{harvestChart.data=cd;harvestChart.update();}
 }
 
@@ -453,7 +453,7 @@ async function updateNutrient(){
     {label:'P(인산)',data:weekly.map(w=>w.p),backgroundColor:'rgba(54,162,235,0.75)',borderRadius:4},
     {label:'K(칼륨)',data:weekly.map(w=>w.k),backgroundColor:'rgba(75,192,192,0.75)',borderRadius:4}
   ]};
-  if(!nutrientChart){nutrientChart=new Chart(document.getElementById('nutrientChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:10},boxWidth:12}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{stacked:true,ticks:{color:'#4a6a4a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{stacked:true,ticks:{color:'#7aaa7a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}});}
+  if(!nutrientChart){nutrientChart=new Chart(document.getElementById('nutrientChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:14},boxWidth:12}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{stacked:true,ticks:{color:'#4a6a4a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{stacked:true,ticks:{color:'#7aaa7a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}});}
   else{nutrientChart.data=cd;nutrientChart.update();}
 }
 
