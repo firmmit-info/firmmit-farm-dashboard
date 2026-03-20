@@ -481,70 +481,92 @@ async function updateMaintenance(){
   renderFarmMap(currentFloor);
 }
 
+// ── 유지보수 층 전환 함수 ──
+function switchFloor(floor) {
+  console.log("층 전환 시도:", floor); // 디버깅용
+  currentFloor = floor;
+  
+  // 모든 버튼에서 active 제거 후 클릭한 버튼에만 추가
+  document.querySelectorAll('.floor-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', i + 1 === floor);
+  });
+  
+  // 맵 다시 그리기
+  renderFarmMap(floor);
+}
+
+// ── 유지보수 맵 렌더링 함수 ──
 function renderFarmMap(floor) {
   const table = document.getElementById('farmMapTable');
   if (!table) return;
 
   const X = 10; // 10열
   const Y = 15; // 15단
+  
+  // 현재 층에 해당하는 데이터만 필터링
   const floorData = maintenanceData.filter(d => Number(d.floor) === floor);
   
-  // 💡 [핵심 수정] 매칭용 맵을 만들 때 키 형식을 "열-면-단"으로 통일합니다.
+  // 매칭용 맵 생성 (열+면-단 조합)
   const issueMap = {};
   floorData.forEach(d => { 
-    // d.x가 "3A" 형태이든 "3" 형태이든 상관없이 "3A-5"와 같은 키를 생성
     const key = `${String(d.x).trim().toUpperCase()}-${d.y}`;
     issueMap[key] = d; 
   });
 
   let html = '';
-  for(let y = Y; y >= 1; y--) { // 위에서부터 아래로 (15단 -> 1단)
+  // Y축 (단) 반복: 15단부터 1단까지 역순
+  for (let y = Y; y >= 1; y--) {
     html += `<tr><td class="y-label">${y}단</td>`;
-    for(let x = 1; x <= X; x++) {
+    
+    // X축 (열) 반복: 1열부터 10열까지
+    for (let x = 1; x <= X; x++) {
       html += `<td><div style="display:flex; gap:3px; justify-content:center;">`;
       
-      // A면과 B면 생성
+      // A면, B면 생성
       ['A', 'B'].forEach(side => {
-        const locKey = `${x}${side}-${y}`; // 예: "1A-15"
+        const locKey = `${x}${side}-${y}`; // 예: "3A-5"
         const issue = issueMap[locKey];
         
         let cls = 'rack-cell';
         let tip = `✅ ${floor}층 ${x}열 ${y}단 ${side}면 · 정상`;
         
-        if(issue && issue.status !== 'done') {
-          if(issue.status === 'fix') {
-            cls += ' need-fix'; // 🔴 빨간색 불
+        if (issue && issue.status !== 'done') {
+          if (issue.status === 'fix') {
+            cls += ' need-fix';
             tip = `🔴 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
-          } else if(issue.status === 'warning') {
-            cls += ' warning';  // 🟡 노란색 불
+          } else if (issue.status === 'warning') {
+            cls += ' warning';
             tip = `🟡 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
           }
         }
         
-        // 클릭 시 강조 기능 연결
+        // 클릭 시 강조 효과 함수 호출
         html += `<div class="${cls}" onclick="highlightIssue(${floor},'${x}${side}',${y})">
                    <div class="rack-tooltip">${tip}</div>
                  </div>`;
       });
       
       html += `</div></td>`;
-      if(x < X) html += `<td style="width:12px;"></td>`; // 통로 간격
+      // 열 사이 통로 간격
+      if (x < X) html += `<td style="width:12px;"></td>`;
     }
     html += '</tr>';
   }
   
-  // X축 라벨 (1열~10열)
+  // 하단 X축 (열) 라벨 생성
   html += '<tr><td></td>';
-  for(let x = 1; x <= X; x++) {
+  for (let x = 1; x <= X; x++) {
     html += `<td class="x-label" style="text-align:center;">${x}열</td>`;
-    if(x < X) html += `<td></td>`;
+    if (x < X) html += `<td></td>`;
   }
   html += '</tr>';
   
   table.innerHTML = html;
-  
-  // 우측 리스트 갱신 함수 호출 (이름 확인!)
-  if (typeof renderMaintenanceList === "function") renderMaintenanceList(floor);
+
+  // 우측 리스트도 해당 층에 맞춰 업데이트
+  if (typeof renderMaintenanceList === "function") {
+    renderMaintenanceList(floor);
+  }
 }
 function highlightIssue(floor,x,y){
   if(floor!==currentFloor) switchFloor(floor);
