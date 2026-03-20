@@ -1,252 +1,602 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIRMMIT SMART FARM DASHBOARD</title>
-    <style>
-        :root {
-            --bg-dark: #0a0e0c;
-            --card-bg: #141b17;
-            --accent-green: #00ff88;
-            --accent-red: #ff4d6d;
-            --accent-yellow: #ffd60a;
-            --text-main: #e0e0e0;
-            --text-sub: #a0a0a0;
-            --border: #242b27;
-        }
-        body { margin:0; background:var(--bg-dark); color:var(--text-main); font-family: 'Pretendard', sans-serif; }
-        .container { padding: 20px; max-width: 1600px; margin: 0 auto; }
-        
-        /* 헤더 */
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .logo { font-size: 24px; font-weight: 900; color: var(--accent-green); letter-spacing: -1px; }
-        
-        /* 위젯 6개 완벽 정렬 (3칸 2줄) */
-        .widget-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-        .card-title { font-size: 16px; font-weight: 700; color: var(--text-sub); margin-bottom: 10px; }
-        .val { font-size: 24px; font-weight: 800; }
-        .desc { font-size: 12px; color: var(--text-sub); margin-top: 5px; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FIRMMIT 딸기수직농장 모니터링</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-main:#0a0f0a; --bg-card:#111811; --bg-card2:#162016;
+      --border-color:#1e3a1e; --accent-green:#00ff88; --accent-teal:#00d4aa;
+      --accent-yellow:#ffd700; --accent-red:#ff4d6d; --accent-blue:#4da6ff;
+      --text-main:#e8f5e8; --text-sub:#7aaa7a; --text-muted:#4a6a4a;
+      --glow-green:0 0 15px rgba(0,255,136,0.3);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-main);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(0,255,136,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+    .wrapper{position:relative;z-index:1;max-width:1920px;margin:0 auto;padding:0 16px 16px;}
+    .header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:linear-gradient(135deg,#0d1a0d,#111f11);border-bottom:2px solid var(--accent-green);box-shadow:0 4px 30px rgba(0,255,136,0.1);margin-bottom:16px;}
+    .logo-area{display:flex;align-items:center;gap:16px;}
+    .logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--glow-green);}
+    .logo-text h1{font-size:22px;font-weight:900;color:var(--accent-green);letter-spacing:2px;text-shadow:0 0 20px rgba(0,255,136,0.5);}
+    .logo-text p{font-size:12px;color:var(--text-sub);letter-spacing:1px;margin-top:2px;}
+    .status-badge{display:flex;align-items:center;gap:8px;background:rgba(0,255,136,0.1);border:1px solid var(--accent-green);border-radius:20px;padding:6px 16px;font-size:12px;color:var(--accent-green);}
+    .status-dot{width:8px;height:8px;background:var(--accent-green);border-radius:50%;animation:blink 1.5s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+    .clock-area{text-align:right;}
+    #clock-time{font-size:32px;font-weight:700;color:var(--accent-green);font-variant-numeric:tabular-nums;text-shadow:var(--glow-green);}
+    #clock-date{font-size:12px;color:var(--text-sub);margin-top:2px;}
+    .grid-main{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+    .card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
+    .card:hover{border-color:var(--accent-green);box-shadow:var(--glow-green);}
+    .card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent-green),transparent);}
+    .card-title{font-size:12px;font-weight:500;color:var(--text-sub);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .card-title i{color:var(--accent-green);font-size:13px;}
+    .weather-card{grid-column:span 1;}
+    .weather-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .weather-icon-big{font-size:48px;filter:drop-shadow(0 0 10px rgba(255,215,0,0.5));}
+    .weather-temp .val{font-size:38px;font-weight:700;color:var(--accent-yellow);}
+    .weather-temp .unit{font-size:18px;color:var(--text-sub);}
+    .weather-desc{font-size:14px;color:var(--text-sub);margin-bottom:14px;text-align:center;}
+    .weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .weather-item{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;}
+    .weather-item .label{font-size:10px;color:var(--text-muted);margin-bottom:4px;}
+    .weather-item .value{font-size:18px;font-weight:700;color:var(--accent-blue);}
+    .env-card{grid-column:span 2;}
+    .chart-container{position:relative;height:160px;}
+    .env-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
+    .env-stat-item{background:var(--bg-card2);border-radius:8px;padding:8px;text-align:center;border:1px solid var(--border-color);}
+    .env-stat-item .s-label{font-size:10px;color:var(--text-muted);margin-bottom:4px;}
+    .env-stat-item .s-val{font-size:16px;font-weight:700;}
+    .green{color:var(--accent-green)}.blue{color:var(--accent-blue)}.yellow{color:var(--accent-yellow)}
+    .harvest-card{grid-column:span 3;}
+    .harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+    .harvest-total .big{font-size:28px;font-weight:700;color:var(--accent-green);}
+    .harvest-total .small{font-size:11px;color:var(--text-muted);}
+    .harvest-chart-wrap{position:relative;height:170px;}
+    .power-card{grid-column:span 1;}
+    .power-gauge-wrap{position:relative;text-align:center;margin:10px 0;}
+    .power-gauge-wrap canvas{display:block;margin:0 auto;}
+    .power-center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+    .power-center-text .kw{font-size:26px;font-weight:700;color:var(--accent-yellow);}
+    .power-center-text .kwlabel{font-size:11px;color:var(--text-muted);}
+    .power-items{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+    .power-item{background:var(--bg-card2);border-radius:8px;padding:8px;text-align:center;font-size:11px;color:var(--text-sub);}
+    .power-item .pval{font-size:15px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
+    .nutrient-card{grid-column:span 2;}
+    .nutrient-today{display:flex;align-items:center;gap:20px;margin-bottom:14px;}
+    .nutrient-count-circle{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,212,170,0.05));border:2px solid var(--accent-teal);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+    .nutrient-count-circle .n-num{font-size:28px;font-weight:700;color:var(--accent-teal);}
+    .nutrient-count-circle .n-unit{font-size:10px;color:var(--text-muted);}
+    .nutrient-ratios{flex:1;}
+    .ratio-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+    .ratio-label{font-size:11px;color:var(--text-sub);width:30px;flex-shrink:0;}
+    .ratio-bar-bg{flex:1;height:8px;background:var(--bg-card2);border-radius:4px;overflow:hidden;}
+    .ratio-bar-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+    .ratio-val{font-size:11px;font-weight:700;width:32px;text-align:right;}
+    .nutrient-week-chart{height:120px;}
+    .workers-card{grid-column:span 2;}
+    .workers-summary{display:flex;gap:10px;margin-bottom:14px;}
+    .worker-stat-box{flex:1;background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border-color);}
+    .worker-stat-box .ws-num{font-size:26px;font-weight:700;color:var(--accent-green);}
+    .worker-stat-box .ws-label{font-size:10px;color:var(--text-muted);margin-top:2px;}
+    .worker-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:200px;overflow-y:auto;}
+    .worker-item{display:flex;align-items:center;gap:10px;background:var(--bg-card2);border-radius:8px;padding:10px;border:1px solid var(--border-color);transition:border-color .3s;}
+    .worker-item:hover{border-color:var(--accent-green);}
+    .worker-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+    .worker-info .w-name{font-size:13px;font-weight:700;}
+    .worker-info .w-role{font-size:10px;color:var(--text-muted);margin-top:1px;}
+    .worker-info .w-time{font-size:10px;color:var(--accent-teal);margin-top:1px;}
+    .worker-badge{margin-left:auto;font-size:9px;padding:3px 7px;border-radius:10px;font-weight:600;}
+    .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
+    .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 
-        /* 요약 바 */
-        .summary-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .sum-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 15px; text-align: center; }
-        .sum-val { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
-        .sum-lbl { font-size: 12px; color: var(--text-sub); }
+    /* 유지보수 맵 */
+    .maintenance-card{grid-column:span 4;}
+    .maintenance-inner{display:grid;grid-template-columns:1fr 320px;gap:16px;}
+    .floor-tabs{display:flex;gap:8px;margin-bottom:14px;}
+    .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
+    .floor-tab.active{background:var(--accent-green);color:#000;border-color:var(--accent-green);box-shadow:var(--glow-green);}
+    .floor-tab:hover:not(.active){border-color:var(--accent-green);color:var(--accent-green);}
+    .farm-map-wrap{background:var(--bg-card2);border-radius:10px;padding:16px;border:1px solid var(--border-color);overflow-x:auto;}
+    .farm-map-table{border-collapse:separate;border-spacing:3px;width:100%;}
+    .y-label{font-size:10px;color:var(--text-muted);text-align:right;padding-right:8px;white-space:nowrap;font-weight:600;width:40px;}
+    .x-label{font-size:9px;color:var(--text-muted);text-align:center;padding-top:6px;font-weight:600;}
+    .rack-cell{width:32px;height:22px;background:#1a2e1a;border:1px solid #2a4a2a;border-radius:3px;cursor:pointer;position:relative;transition:all .15s;}
+    .rack-cell:hover{background:#2a4a2a;border-color:var(--accent-green);transform:scale(1.1);z-index:10;}
+    .rack-cell.need-fix{background:rgba(255,77,109,0.15);border-color:var(--accent-red);}
+    .rack-cell.need-fix::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:radial-gradient(circle,rgba(255,77,109,0.9) 0%,rgba(255,77,109,0.3) 70%);border:2px solid var(--accent-red);border-radius:50%;box-shadow:0 0 8px rgba(255,77,109,0.6);animation:pulse-red 1.5s infinite;}
+    @keyframes pulse-red{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2);opacity:0.7}}
+    .rack-cell.warning{background:rgba(255,215,0,0.1);border-color:var(--accent-yellow);}
+    .rack-cell.warning::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:radial-gradient(circle,rgba(255,215,0,0.9) 0%,rgba(255,215,0,0.3) 70%);border:2px solid var(--accent-yellow);border-radius:50%;box-shadow:0 0 8px rgba(255,215,0,0.5);animation:pulse-yellow 2s infinite;}
+    @keyframes pulse-yellow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2);opacity:0.6}}
+    .rack-tooltip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:rgba(10,15,10,0.97);border:1px solid var(--accent-green);border-radius:6px;padding:6px 10px;font-size:11px;color:var(--text-main);white-space:nowrap;z-index:100;pointer-events:none;}
+    .rack-cell:hover .rack-tooltip{display:block;}
+    .maintenance-list-panel{background:var(--bg-card2);border-radius:10px;border:1px solid var(--border-color);overflow:hidden;display:flex;flex-direction:column;}
+    .panel-header{padding:12px 16px;background:rgba(255,77,109,0.1);border-bottom:1px solid var(--border-color);font-size:12px;font-weight:700;color:var(--accent-red);letter-spacing:1px;display:flex;align-items:center;gap:8px;}
+    .issue-count-badge{background:var(--accent-red);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto;}
+    .maintenance-list{flex:1;overflow-y:auto;padding:10px;max-height:320px;}
+    .maintenance-list::-webkit-scrollbar{width:4px;}
+    .maintenance-list::-webkit-scrollbar-thumb{background:var(--accent-red);border-radius:2px;}
+    .issue-item{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:8px;margin-bottom:6px;border:1px solid transparent;cursor:pointer;transition:all .2s;}
+    .issue-item:hover{background:rgba(255,77,109,0.08);border-color:rgba(255,77,109,0.3);}
+    .issue-item.urgent{background:rgba(255,77,109,0.08);border-color:rgba(255,77,109,0.2);}
+    .issue-item.caution{background:rgba(255,215,0,0.06);border-color:rgba(255,215,0,0.2);}
+    .issue-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+    .dot-red{background:var(--accent-red);box-shadow:0 0 6px rgba(255,77,109,0.6);}
+    .dot-yellow{background:var(--accent-yellow);box-shadow:0 0 6px rgba(255,215,0,0.5);}
+    .issue-info{flex:1;}
+    .issue-location{font-size:12px;font-weight:700;color:var(--text-main);margin-bottom:2px;}
+    .issue-desc{font-size:11px;color:var(--text-sub);}
+    .issue-date{font-size:10px;color:var(--text-muted);margin-top:2px;}
+    .issue-status{font-size:9px;padding:2px 7px;border-radius:8px;font-weight:600;flex-shrink:0;}
+    .status-urgent{background:rgba(255,77,109,0.2);color:var(--accent-red);}
+    .status-caution{background:rgba(255,215,0,0.15);color:var(--accent-yellow);}
+    .status-done{background:rgba(0,255,136,0.1);color:var(--accent-green);}
+    .map-legend{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-color);}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-sub);}
+    .legend-dot{width:12px;height:12px;border-radius:50%;border:2px solid;}
+    .ld-normal{background:#1a2e1a;border-color:#2a4a2a;}
+    .ld-fix{background:rgba(255,77,109,0.3);border-color:var(--accent-red);}
+    .ld-warning{background:rgba(255,215,0,0.2);border-color:var(--accent-yellow);}
+    .maint-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+    .maint-stat{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border-color);}
+    .maint-stat .ms-num{font-size:24px;font-weight:700;}
+    .maint-stat .ms-label{font-size:10px;color:var(--text-muted);margin-top:2px;}
 
-        /* 메인 맵 섹션 */
-        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
-        .floor-btn-group { margin-bottom: 15px; display: flex; gap: 10px; }
-        .f-btn { padding: 8px 18px; border-radius: 6px; border: 1px solid var(--border); background: #1e2622; color: var(--text-sub); cursor: pointer; }
-        .f-btn.active { background: var(--accent-green); color: #000; font-weight: bold; }
-
-        /* 맵 테이블 디자인 (10열 15단 A/B면 최적화) */
-        .map-container { background: #0d120f; padding: 25px; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
-        table { border-collapse: collapse; margin: 0 auto; }
-        .y-lbl { color: #555; text-align: right; padding-right: 12px; font-size: 11px; font-weight: bold; }
-        .x-lbl { color: #555; padding-top: 10px; font-size: 11px; font-weight: bold; text-align: center; }
-        
-        .rack-set { display: flex; gap: 2px; } /* A/B면 밀착 */
-        .cell { width: 16px; height: 18px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.05); position: relative; cursor: pointer; }
-        .cell.normal { background: rgba(0, 255, 136, 0.1); }
-        .cell.fix { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); animation: blink 1.5s infinite; }
-        .cell.warn { background: var(--accent-yellow); box-shadow: 0 0 10px var(--accent-yellow); }
-        
-        /* 툴팁 */
-        .tooltip { visibility: hidden; position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; border: 1px solid var(--accent-green); }
-        .cell:hover .tooltip { visibility: visible; }
-        
-        /* 리스트 디자인 */
-        .list-container { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 15px; }
-        .issue-item { background: #1a221e; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--accent-yellow); }
-        .issue-item.urgent { border-left-color: var(--accent-red); }
-        .i-loc { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-        .i-msg { font-size: 12px; color: var(--text-sub); }
-
-        @keyframes blink { 50% { opacity: 0.4; } }
-    </style>
+    /* 로딩 & 토스트 */
+    .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+    .loading-spinner{width:60px;height:60px;border:3px solid var(--border-color);border-top:3px solid var(--accent-green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{color:var(--accent-green);font-size:14px;letter-spacing:2px;}
+    .toast{position:fixed;bottom:20px;right:20px;background:#1a0a0a;border:1px solid var(--accent-red);color:var(--accent-red);padding:12px 20px;border-radius:8px;font-size:13px;z-index:1000;display:none;}
+    ::-webkit-scrollbar{width:6px;}
+    ::-webkit-scrollbar-track{background:var(--bg-main);}
+    ::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:3px;}
+    @media(max-width:1440px){.grid-main{grid-template-columns:repeat(3,1fr)}.env-card,.harvest-card{grid-column:span 2}.maintenance-card{grid-column:span 3}}
+    @media(max-width:1024px){.grid-main{grid-template-columns:repeat(2,1fr)}.env-card,.harvest-card,.nutrient-card,.workers-card,.maintenance-card{grid-column:span 2}.maintenance-inner{grid-template-columns:1fr}}
+    @media(max-width:600px){.grid-main{grid-template-columns:1fr}.card{grid-column:span 1!important}.header{flex-wrap:wrap;gap:10px}}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">FIRMMIT SMART FARM</div>
-            <div id="u-time" style="font-size:12px; color:var(--text-sub);">데이터 연결 중...</div>
-        </header>
 
-        <div class="widget-grid">
-            <div class="card">
-                <div class="card-title">☀️ 외부 환경</div>
-                <div id="w-val" class="val">--°C / --%</div>
-                <div id="w-desc" class="desc">로딩 중...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">🌡️ 내부 환경</div>
-                <div id="e-val" class="val">--°C / --%</div>
-                <div id="e-desc" class="desc">로딩 중...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">🍓 실시간 수확량</div>
-                <div id="h-val" class="val">-- kg</div>
-                <div class="desc" style="color:var(--accent-green);">이번 달 누적 합계</div>
-            </div>
-            <div class="card">
-                <div class="card-title">👨‍🌾 근무자 현황</div>
-                <div id="wk-val" class="val">-- 명</div>
-                <div id="wk-desc" class="desc">로딩 중...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">💧 양액 공급</div>
-                <div id="n-val" class="val">-- 회</div>
-                <div id="n-desc" class="desc">오늘 공급 횟수</div>
-            </div>
-            <div class="card">
-                <div class="card-title">⚡ 전력 사용량</div>
-                <div id="p-val" class="val">-- kW</div>
-                <div class="desc" style="color:var(--accent-red);">실시간 부하량</div>
-            </div>
-        </div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">🍓 FIRMMIT 데이터 불러오는 중...</div>
+</div>
+<div class="toast" id="errorToast"></div>
 
-        <div class="summary-bar">
-            <div class="sum-card"><div class="sum-val" style="color:var(--accent-green);">300</div><div class="sum-lbl">총 재배기 (1~2층 전체)</div></div>
-            <div class="sum-card"><div id="sum-fix" class="sum-val" style="color:var(--accent-red);">0</div><div class="sum-lbl">🚨 즉시 수리 필요</div></div>
-            <div class="sum-card"><div id="sum-warn" class="sum-val" style="color:var(--accent-yellow);">0</div><div class="sum-lbl">⚠️ 점검 필요</div></div>
-        </div>
+<div class="wrapper">
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon">🍓</div>
+      <div class="logo-text">
+        <h1>FIRMMIT</h1>
+        <p>딸기수직농장 (이천) · SMART FARM MONITORING SYSTEM</p>
+      </div>
+    </div>
+    <div class="status-badge" id="statusBadge">
+      <div class="status-dot"></div> CONNECTING...
+    </div>
+    <div class="clock-area">
+      <div id="clock-time">00:00:00</div>
+      <div id="clock-date"></div>
+    </div>
+  </header>
 
-        <div class="main-layout">
-            <div class="card">
-                <div class="card-title">🛠️ 재배기 유지보수 현황 맵</div>
-                <div class="floor-btn-group">
-                    <button id="btn1" class="f-btn active" onclick="chFloor(1)">1층</button>
-                    <button id="btn2" class="f-btn" onclick="chFloor(2)">2층</button>
-                </div>
-                <div class="map-container">
-                    <table id="mapTable"></table>
-                </div>
-            </div>
-            
-            <div class="list-container">
-                <div style="font-weight:bold; color:var(--accent-red); margin-bottom:15px; display:flex; justify-content:space-between;">
-                    <span>유지보수 필요 항목</span>
-                    <span id="list-cnt" style="background:var(--accent-red); color:#fff; padding:0 8px; border-radius:10px; font-size:11px;">0</span>
-                </div>
-                <div id="issueList" style="max-height:600px; overflow-y:auto;"></div>
-            </div>
+  <div class="grid-main">
+
+    <!-- 외부 날씨 -->
+    <div class="card weather-card">
+      <div class="card-title"><i class="fas fa-cloud-sun"></i> 외부 환경 · 이천시</div>
+      <div class="weather-main">
+        <div class="weather-icon-big" id="weather-icon">⛅</div>
+        <div class="weather-temp">
+          <span class="val" id="ext-temp">--</span><span class="unit">°C</span>
         </div>
+      </div>
+      <div class="weather-desc" id="weather-desc">데이터 로딩중...</div>
+      <div class="weather-grid">
+        <div class="weather-item"><div class="label">💧 외부 습도</div><div class="value" id="ext-hum">--%</div></div>
+        <div class="weather-item"><div class="label">🌬 풍속</div><div class="value" id="ext-wind">--m/s</div></div>
+        <div class="weather-item"><div class="label">☀️ UV 지수</div><div class="value" id="ext-uv">-</div></div>
+        <div class="weather-item"><div class="label">🌡 체감온도</div><div class="value" id="ext-feel">--°C</div></div>
+      </div>
     </div>
 
-    <script>
-        // ★ API 주소
-        const API = 'https://script.google.com/macros/s/AKfycbwzmMyP5IWmDLol0F6F9mEAGNBNl2eqoObRLYRHq1FLwxdS-npdmhDprrbAYYTfYe7JUA/exec';
-        let rawData = [];
-        let curF = 1;
+    <!-- 내부 환경 -->
+    <div class="card env-card">
+      <div class="card-title"><i class="fas fa-temperature-half"></i> 내부 환경 모니터링</div>
+      <div class="chart-container"><canvas id="envChart"></canvas></div>
+      <div class="env-stats">
+        <div class="env-stat-item"><div class="s-label">현재 온도</div><div class="s-val green" id="in-temp">--°C</div></div>
+        <div class="env-stat-item"><div class="s-label">현재 습도</div><div class="s-val blue" id="in-hum">--%</div></div>
+        <div class="env-stat-item"><div class="s-label">CO₂ (ppm)</div><div class="s-val yellow" id="in-co2">--</div></div>
+        <div class="env-stat-item"><div class="s-label">조도 (lux)</div><div class="s-val" style="color:var(--accent-teal)" id="in-lux">--</div></div>
+      </div>
+    </div>
 
-        async function load() {
-            try {
-                const r = await fetch(API);
-                const d = await r.json();
-                
-                // 1. 위젯 6개 데이터 완벽 매핑
-                if(d.weather) {
-                    document.getElementById('w-val').innerText = `${d.weather.temperature}°C / ${d.weather.humidity}%`;
-                    document.getElementById('w-desc').innerText = `상태: ${d.weather.description}`;
-                }
-                if(d.env) {
-                    document.getElementById('e-val').innerText = `${d.env.current.temperature}°C / ${d.env.current.humidity}%`;
-                    document.getElementById('e-desc').innerText = `CO2: ${d.env.current.co2}ppm | LUX: ${d.env.current.lux}`;
-                }
-                if(d.harvest) {
-                    document.getElementById('h-val').innerText = `${d.harvest.monthTotal} kg`;
-                }
-                if(d.workers) {
-                    document.getElementById('wk-val').innerText = `${d.workers.summary.total} 명`;
-                    document.getElementById('wk-desc').innerText = `담당자 ${d.workers.summary.managers}명 / 작업자 ${d.workers.summary.workers}명`;
-                }
-                if(d.nutrient) {
-                    document.getElementById('n-val').innerText = `${d.nutrient.today.injectCount} 회`;
-                    document.getElementById('n-desc').innerText = `N:${d.nutrient.today.n} P:${d.nutrient.today.p} K:${d.nutrient.today.k}`;
-                }
-                if(d.power) {
-                    document.getElementById('p-val').innerText = `${d.power.current.total} kW`;
-                }
-                
-                // 2. 유지보수 요약 및 맵 데이터 매핑
-                if(d.maintenance) {
-                    document.getElementById('sum-fix').innerText = d.maintenance.summary.urgent;
-                    document.getElementById('sum-warn').innerText = d.maintenance.summary.warning;
-                    rawData = d.maintenance.items || [];
-                    draw(curF);
-                }
-                
-                document.getElementById('u-time').innerText = `최근 업데이트: ${new Date().toLocaleTimeString()}`;
-            } catch(e) { 
-                console.error(e); 
-                document.getElementById('u-time').innerText = `데이터 연결 실패`;
-            }
-        }
+    <!-- 전력 -->
+    <div class="card power-card">
+      <div class="card-title"><i class="fas fa-bolt"></i> 실시간 전력 사용량</div>
+      <div class="power-gauge-wrap">
+        <canvas id="powerGauge" width="160" height="160"></canvas>
+        <div class="power-center-text">
+          <div class="kw" id="power-val">--</div>
+          <div class="kwlabel">kW · 사용중</div>
+        </div>
+      </div>
+      <div class="power-items">
+        <div class="power-item">조명<span class="pval" id="pw-light">--kW</span></div>
+        <div class="power-item">양액펌프<span class="pval" id="pw-pump">--kW</span></div>
+        <div class="power-item">공조<span class="pval" id="pw-hvac">--kW</span></div>
+        <div class="power-item">기타<span class="pval" id="pw-etc">--kW</span></div>
+      </div>
+    </div>
 
-        function draw(f) {
-            const table = document.getElementById('mapTable');
-            const X=10, Y=15; // 10열 15단
-            const fData = rawData.filter(d => Number(d.floor) === f);
-            const iMap = {};
-            fData.forEach(d => { iMap[`${String(d.x).toUpperCase()}-${d.y}`] = d; });
+    <!-- 수확량 -->
+    <div class="card harvest-card">
+      <div class="harvest-header">
+        <div class="card-title" style="margin:0"><i class="fas fa-chart-bar"></i> 일자별 수확량 (최근 30일 · kg)</div>
+        <div class="harvest-total">
+          <div class="big" id="harvest-month-total">-- kg</div>
+          <div class="small">이달 누적 수확량</div>
+        </div>
+      </div>
+      <div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div>
+    </div>
 
-            let h = '';
-            for(let y=Y; y>=1; y--) {
-                h += `<tr><td class="y-lbl">${y}단</td>`;
-                for(let x=1; x<=X; x++) {
-                    h += `<td><div class="rack-set">`;
-                    ['A','B'].forEach(s => {
-                        const key = `${x}${s}-${y}`;
-                        const is = iMap[key];
-                        let c = 'cell normal', t = `✅ ${f}층 ${x}열 ${y}단 ${s}면: 정상`;
-                        if(is && is.status !== 'done') {
-                            if(is.status==='fix') { c='cell fix'; t=`🚨 ${f}층 ${x}열 ${y}단 ${s}면: ${is.desc}`; }
-                            else if(is.status==='warning') { c='cell warn'; t=`⚠️ ${f}층 ${x}열 ${y}단 ${s}면: ${is.desc}`; }
-                        }
-                        h += `<div class="${c}"><div class="tooltip">${t}</div></div>`;
-                    });
-                    h += `</div></td>`;
-                    if(x < X) h += `<td style="width:15px;"></td>`; // 통로 띄우기 (15px)
-                }
-                h += '</tr>';
-            }
-            h += '<tr><td></td>';
-            for(let x=1; x<=X; x++) {
-                h += `<td class="x-lbl">${x}열</td>`;
-                if(x < X) h += `<td></td>`;
-            }
-            h += '</tr>';
-            table.innerHTML = h;
+    <!-- 양액 -->
+    <div class="card nutrient-card">
+      <div class="card-title"><i class="fas fa-flask"></i> 양액 관리 현황</div>
+      <div class="nutrient-today">
+        <div class="nutrient-count-circle">
+          <div class="n-num" id="n-count">--</div>
+          <div class="n-unit">오늘 주입</div>
+        </div>
+        <div class="nutrient-ratios">
+          <div class="ratio-row">
+            <span class="ratio-label" style="color:#ff9f40">N</span>
+            <div class="ratio-bar-bg"><div class="ratio-bar-fill" id="bar-n" style="width:0%;background:linear-gradient(90deg,#ff9f40,#ffcd70)"></div></div>
+            <span class="ratio-val" style="color:#ff9f40" id="val-n">--%</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label" style="color:#36a2eb">P</span>
+            <div class="ratio-bar-bg"><div class="ratio-bar-fill" id="bar-p" style="width:0%;background:linear-gradient(90deg,#36a2eb,#7ec8f7)"></div></div>
+            <span class="ratio-val" style="color:#36a2eb" id="val-p">--%</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label" style="color:#4bc0c0">K</span>
+            <div class="ratio-bar-bg"><div class="ratio-bar-fill" id="bar-k" style="width:0%;background:linear-gradient(90deg,#4bc0c0,#7deded)"></div></div>
+            <span class="ratio-val" style="color:#4bc0c0" id="val-k">--%</span>
+          </div>
+        </div>
+      </div>
+      <div class="nutrient-week-chart"><canvas id="nutrientChart"></canvas></div>
+    </div>
 
-            // 리스트 렌더링
-            const list = document.getElementById('issueList');
-            const activeIs = fData.filter(d => d.status !== 'done');
-            document.getElementById('list-cnt').innerText = activeIs.length;
+    <!-- 근무자 -->
+    <div class="card workers-card">
+      <div class="card-title"><i class="fas fa-users"></i> 근무자 현황</div>
+      <div class="workers-summary">
+        <div class="worker-stat-box"><div class="ws-num" id="w-total">-</div><div class="ws-label">총 근무자</div></div>
+        <div class="worker-stat-box"><div class="ws-num" style="color:var(--accent-yellow)" id="w-manager">-</div><div class="ws-label">담당자</div></div>
+        <div class="worker-stat-box"><div class="ws-num" style="color:var(--accent-blue)" id="w-worker">-</div><div class="ws-label">작업자</div></div>
+      </div>
+      <div class="worker-list" id="worker-list">
+        <div style="color:#4a6a4a;text-align:center;padding:20px;grid-column:span 2">데이터 로딩중...</div>
+      </div>
+    </div>
+
+    <!-- 유지보수 맵 -->
+    <div class="card maintenance-card">
+      <div class="card-title"><i class="fas fa-map-marked-alt"></i> 재배기 유지보수 현황 맵</div>
+      <div class="maint-summary">
+        <div class="maint-stat"><div class="ms-num green">300</div><div class="ms-label">총 재배기 (2개층)</div></div>
+        <div class="maint-stat"><div class="ms-num" style="color:var(--accent-red)" id="m-urgent-count">-</div><div class="ms-label">🔴 즉시 수리 필요</div></div>
+        <div class="maint-stat"><div class="ms-num" style="color:var(--accent-yellow)" id="m-warning-count">-</div><div class="ms-label">🟡 점검 필요</div></div>
+      </div>
+      <div class="floor-tabs">
+        <button class="floor-tab active" onclick="switchFloor(1)">🏢 1층</button>
+        <button class="floor-tab"        onclick="switchFloor(2)">🏢 2층</button>
+      </div>
+      <div class="maintenance-inner">
+        <div>
+          <div class="farm-map-wrap">
+            <table class="farm-map-table" id="farmMapTable"></table>
+          </div>
+          <div class="map-legend">
+            <div class="legend-item"><div class="legend-dot ld-normal"></div> 정상</div>
+            <div class="legend-item"><div class="legend-dot ld-fix"></div> 즉시수리</div>
+            <div class="legend-item"><div class="legend-dot ld-warning"></div> 점검필요</div>
+          </div>
+        </div>
+        <div class="maintenance-list-panel">
+          <div class="panel-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            유지보수 필요 항목
+            <span class="issue-count-badge" id="issue-badge">0</span>
+          </div>
+          <div class="maintenance-list" id="maintenanceList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// API URL
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbwzmMyP5IWmDLol0F6F9mEAGNBNl2eqoObRLYRHq1FLwxdS-npdmhDprrbAYYTfYe7JUA/exec';
+const REFRESH_INTERVAL = 30000;
+
+let envChart=null, harvestChart=null, powerChart=null, nutrientChart=null;
+let currentFloor = 1;
+let maintenanceData = [];
+
+// ── 시계 ──
+function updateClock(){
+  const now=new Date(), days=['일','월','화','수','목','금','토'];
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  const ss=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock-time').textContent=`${hh}:${mm}:${ss}`;
+  document.getElementById('clock-date').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+}
+setInterval(updateClock,1000); updateClock();
+
+// ── API 호출 ──
+async function fetchAPI(type){
+  try{
+    const res=await fetch(`${API_URL}?type=${type}`,{redirect:'follow'});
+    const text=await res.text();
+    const data=JSON.parse(text);
+    if(data.error) throw new Error(data.error);
+    return data;
+  }catch(err){
+    showToast(`[${type}] 오류: ${err.message}`);
+    return null;
+  }
+}
+
+// ── 토스트 ──
+function showToast(msg){
+  const t=document.getElementById('errorToast');
+  t.textContent='⚠️ '+msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',4000);
+}
+
+// ── 날씨 ──
+async function updateWeather(){
+  const data=await fetchAPI('weather'); if(!data)return;
+  const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️','안개':'🌫️'};
+  const desc=data.description||'';
+  const iconKey=Object.keys(iconMap).find(k=>desc.includes(k));
+  document.getElementById('weather-icon').textContent=iconKey?iconMap[iconKey]:'🌡️';
+  document.getElementById('ext-temp').textContent=data.temperature;
+  document.getElementById('ext-hum').textContent=data.humidity+'%';
+  document.getElementById('ext-wind').textContent=data.windSpeed+'m/s';
+  document.getElementById('ext-uv').textContent=data.uvIndex;
+  document.getElementById('ext-feel').textContent=data.feelsLike+'°C';
+  document.getElementById('weather-desc').textContent=desc||'데이터 없음';
+}
+
+// ── 내부환경 ──
+async function updateEnv(){
+  const data=await fetchAPI('env'); if(!data)return;
+  const c=data.current;
+  document.getElementById('in-temp').textContent=c.temperature+'°C';
+  document.getElementById('in-hum').textContent=c.humidity+'%';
+  document.getElementById('in-co2').textContent=(c.co2||0).toLocaleString();
+  document.getElementById('in-lux').textContent=(c.lux||0).toLocaleString();
+  const labels=(data.hourly||[]).map(h=>(h.time||'').slice(11,16));
+  const temps=(data.hourly||[]).map(h=>h.temperature);
+  const hums=(data.hourly||[]).map(h=>h.humidity);
+  const cd={labels,datasets:[
+    {label:'온도(°C)',data:temps,borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y1'},
+    {label:'습도(%)',data:hums,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y2'}
+  ]};
+  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:11},boxWidth:16}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:8,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},min:15,max:30},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:10}},grid:{drawOnChartArea:false},min:50,max:90}}};
+  if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
+  else{envChart.data=cd;envChart.update();}
+}
+
+// ── 수확량 ──
+async function updateHarvest(){
+  const data=await fetchAPI('harvest'); if(!data)return;
+  document.getElementById('harvest-month-total').textContent=(data.monthTotal||0)+' kg';
+  const labels=(data.daily||[]).map(d=>d.date);
+  const amounts=(data.daily||[]).map(d=>d.amount);
+  const bgColors=amounts.map(v=>v>=40?'rgba(0,255,136,0.7)':v>=28?'rgba(0,212,170,0.6)':'rgba(77,166,255,0.5)');
+  const bdColors=amounts.map(v=>v>=40?'#00ff88':v>=28?'#00d4aa':'#4da6ff');
+  const cd={labels,datasets:[{label:'수확량 (kg)',data:amounts,backgroundColor:bgColors,borderColor:bdColors,borderWidth:1,borderRadius:4}]};
+  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.raw} kg`}}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:10,font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}}});}
+  else{harvestChart.data=cd;harvestChart.update();}
+}
+
+// ── 근무자 ──
+async function updateWorkers(){
+  const data=await fetchAPI('workers'); if(!data)return;
+  document.getElementById('w-total').textContent=data.summary.total||0;
+  document.getElementById('w-manager').textContent=data.summary.managers||0;
+  document.getElementById('w-worker').textContent=data.summary.workers||0;
+  const list=document.getElementById('worker-list');
+  if(!data.workers||data.workers.length===0){list.innerHTML='<div style="color:#4a6a4a;text-align:center;padding:20px;grid-column:span 2">현재 근무자 없음</div>';return;}
+  list.innerHTML=data.workers.map(w=>{
+    const isMgr=w.type==='담당자';
+    const color=w.color||(isMgr?'#ffd700':'#00ff88');
+    const bgClr=isMgr?'rgba(255,215,0,0.15)':'rgba(0,255,136,0.15)';
+    return `<div class="worker-item"><div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name||'?')[0]}</div><div class="worker-info"><div class="w-name">${w.name}</div><div class="w-role">${w.role}</div><div class="w-time">⏱ ${w.startTime} 출근</div></div><span class="worker-badge ${isMgr?'badge-manager':'badge-work'}">${w.type}</span></div>`;
+  }).join('');
+}
+
+// ── 양액 ──
+async function updateNutrient(){
+  const data=await fetchAPI('nutrient'); if(!data)return;
+  const t=data.today;
+  document.getElementById('n-count').textContent=t.injectCount||0;
+  document.getElementById('bar-n').style.width=(t.n||0)+'%';
+  document.getElementById('bar-p').style.width=(t.p||0)+'%';
+  document.getElementById('bar-k').style.width=(t.k||0)+'%';
+  document.getElementById('val-n').textContent=(t.n||0)+'%';
+  document.getElementById('val-p').textContent=(t.p||0)+'%';
+  document.getElementById('val-k').textContent=(t.k||0)+'%';
+  const weekly=data.weekly||[];
+  const cd={labels:weekly.map(w=>w.date),datasets:[
+    {label:'N(질소)',data:weekly.map(w=>w.n),backgroundColor:'rgba(255,159,64,0.75)',borderRadius:4},
+    {label:'P(인산)',data:weekly.map(w=>w.p),backgroundColor:'rgba(54,162,235,0.75)',borderRadius:4},
+    {label:'K(칼륨)',data:weekly.map(w=>w.k),backgroundColor:'rgba(75,192,192,0.75)',borderRadius:4}
+  ]};
+  if(!nutrientChart){nutrientChart=new Chart(document.getElementById('nutrientChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:10},boxWidth:12}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{stacked:true,ticks:{color:'#4a6a4a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{stacked:true,ticks:{color:'#7aaa7a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}});}
+  else{nutrientChart.data=cd;nutrientChart.update();}
+}
+
+// ── 전력 ──
+async function updatePower(){
+  const data=await fetchAPI('power'); if(!data)return;
+  const c=data.current;
+  const remain=parseFloat(((c.maxCapacity||80)-(c.total||0)).toFixed(1));
+  document.getElementById('power-val').textContent=c.total||0;
+  document.getElementById('pw-light').textContent=(c.light||0)+'kW';
+  document.getElementById('pw-pump').textContent=(c.pump||0)+'kW';
+  document.getElementById('pw-hvac').textContent=(c.hvac||0)+'kW';
+  document.getElementById('pw-etc').textContent=(c.etc||0)+'kW';
+  const cd={labels:['조명','양액펌프','공조','기타','여유'],datasets:[{data:[c.light,c.pump,c.hvac,c.etc,remain],backgroundColor:['rgba(255,215,0,0.85)','rgba(0,212,170,0.85)','rgba(77,166,255,0.85)','rgba(255,107,107,0.75)','rgba(255,255,255,0.05)'],borderColor:['#ffd700','#00d4aa','#4da6ff','#ff6b6b','transparent'],borderWidth:1,hoverOffset:8}]};
+  if(!powerChart){powerChart=new Chart(document.getElementById('powerGauge').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'65%',responsive:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>ctx.label!=='여유'?` ${ctx.raw} kW`:' 여유'}}}}});}
+  else{powerChart.data=cd;powerChart.update();}
+}
+
+// ── 유지보수 맵 ──
+async function updateMaintenance(){
+  const data=await fetchAPI('maintenance'); if(!data)return;
+  maintenanceData=data.items||[];
+  document.getElementById('m-urgent-count').textContent=data.summary.urgent||0;
+  document.getElementById('m-warning-count').textContent=data.summary.warning||0;
+  renderFarmMap(currentFloor);
+}
+
+function switchFloor(floor){
+  currentFloor=floor;
+  document.querySelectorAll('.floor-tab').forEach((btn,i)=>btn.classList.toggle('active',i+1===floor));
+  renderFarmMap(floor);
+}
+
+function renderFarmMap(floor){
+    const table = document.getElementById('farmMapTable');
+    const X = 10; // 10열
+    const Y = 15; // 15단
+    const floorData = maintenanceData.filter(d => Number(d.floor) === floor);
+    
+    // 시트의 '3A'와 같은 문자를 읽기 위한 매칭 맵
+    const issueMap = {};
+    floorData.forEach(d => { 
+        const key = `${String(d.x).trim().toUpperCase()}-${d.y}`;
+        issueMap[key] = d; 
+    });
+
+    let html = '';
+    for(let y = Y; y >= 1; y--){
+        html += `<tr><td class="y-label">${y}단</td>`;
+        for(let x = 1; x <= X; x++){
             
-            if(activeIs.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--accent-green);">✅ ${f}층 이상 없음</div>`;
-            } else {
-                list.innerHTML = activeIs.map(d => `
-                    <div class="issue-item ${d.status==='fix'?'urgent':''}">
-                        <div class="i-loc">${d.floor}층 · ${String(d.x).replace(/[^0-9]/g, '')}열 ${String(d.x).replace(/[0-9]/g, '')}면 · ${d.y}단</div>
-                        <div class="i-msg">${d.desc}</div>
-                        <div style="font-size:10px; margin-top:5px; color:var(--text-sub)">📅 ${d.date}</div>
-                    </div>
-                `).join('');
-            }
-        }
+            // A면, B면 각각의 <td> 생성 (기존 CSS 유지)
+            ['A', 'B'].forEach(side => {
+                const locKey = `${x}${side}`; 
+                const issue = issueMap[`${locKey}-${y}`];
+                let cls = 'rack-cell normal';
+                let tip = `✅ ${floor}층 ${x}열 ${y}단 ${side}면 · 정상`;
+                
+                if(issue && issue.status !== 'done'){
+                    if(issue.status === 'fix'){
+                        cls = 'rack-cell need-fix';
+                        tip = `🔴 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
+                    } else if(issue.status === 'warning'){
+                        cls = 'rack-cell warning';
+                        tip = `🟡 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
+                    }
+                }
+                html += `<td><div class="${cls}" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div></td>`;
+            });
 
-        function chFloor(f) {
-            curF = f;
-            document.getElementById('btn1').classList.toggle('active', f===1);
-            document.getElementById('btn2').classList.toggle('active', f===2);
-            draw(f);
+            // 1열(A,B) 끝난 뒤 통로 간격 생성
+            if(x < X) html += `<td style="width:12px;"></td>`; 
         }
+        html += '</tr>';
+    }
+    
+    // X축 라벨
+    html += '<tr><td></td>';
+    for(let x = 1; x <= X; x++){
+        html += `<td colspan="2" class="x-label" style="text-align:center;">${x}열</td>`;
+        if(x < X) html += `<td></td>`;
+    }
+    html += '</tr>';
+    
+    table.innerHTML = html;
+    renderMaintenanceList(floor);
+}
 
-        load();
-        setInterval(load, 30000); // 30초마다 자동 새로고침
-    </script>
+function renderMaintenanceList(floor){
+    const list = document.getElementById('maintenanceList');
+    const issues = maintenanceData.filter(d => Number(d.floor) === floor && d.status !== 'done');
+    
+    // 요약 뱃지가 원본에 있었다면 업데이트 (없었다면 에러 안 나게 처리)
+    const badge = document.getElementById('list-cnt') || document.getElementById('issue-badge');
+    if(badge) badge.innerText = issues.length;
+    
+    if(issues.length === 0){
+        list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--accent-green);">✅ ${floor}층 이상 없음</div>`;
+        return;
+    }
+    
+    list.innerHTML = issues.map(d => {
+        const isU = d.status === 'fix';
+        const colNum = String(d.x).replace(/[^0-9]/g, '');
+        const colSide = String(d.x).replace(/[0-9]/g, '');
+        
+        return `<div class="issue-item ${isU ? 'urgent' : 'caution'}" onclick="highlightIssue(${d.floor},'${d.x}',${d.y})">
+            <div class="issue-location">${d.floor}층 · ${colNum}열 ${colSide}면 · ${d.y}단</div>
+            <div class="issue-desc">${d.desc}</div>
+            <div style="font-size:11px; color:#a0a0a0; margin-top:5px;">📅 ${d.date} | ${isU ? '🔴 즉시수리' : '🟡 점검필요'}</div>
+        </div>`;
+    }).join('');
+}
+
+function highlightIssue(floor,x,y){
+  if(floor!==currentFloor) switchFloor(floor);
+  document.querySelectorAll('.issue-item').forEach(item=>{
+    const loc=item.querySelector('.issue-location');
+    if(loc&&loc.textContent.includes(`${floor}층 · ${x}열 · ${y}단`)){
+      item.style.boxShadow='0 0 12px rgba(255,77,109,0.5)';
+      item.scrollIntoView({behavior:'smooth',block:'nearest'});
+      setTimeout(()=>item.style.boxShadow='',2000);
+    }
+  });
+}
+
+// ── 전체 갱신 ──
+async function refreshAll(){
+  document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> UPDATING...';
+  await Promise.all([
+    updateWeather(), updateEnv(), updateHarvest(),
+    updateWorkers(), updateNutrient(), updatePower(),
+    updateMaintenance()
+  ]);
+  document.getElementById('loadingOverlay').style.display='none';
+  const now=new Date();
+  document.getElementById('statusBadge').innerHTML=`<div class="status-dot"></div> LIVE · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 갱신`;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  refreshAll();
+  setInterval(refreshAll, REFRESH_INTERVAL);
+});
+</script>
 </body>
 </html>
