@@ -453,7 +453,7 @@ async function updateNutrient(){
     {label:'P(인산)',data:weekly.map(w=>w.p),backgroundColor:'rgba(54,162,235,0.75)',borderRadius:4},
     {label:'K(칼륨)',data:weekly.map(w=>w.k),backgroundColor:'rgba(75,192,192,0.75)',borderRadius:4}
   ]};
-  if(!nutrientChart){nutrientChart=new Chart(document.getElementById('nutrientChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:14},boxWidth:12}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{stacked:true,ticks:{color:'#4a6a4a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{stacked:true,ticks:{color:'#7aaa7a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}});}
+  if(!nutrientChart){nutrientChart=new Chart(document.getElementById('nutrientChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:14},boxWidth:12}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{stacked:true,ticks:{color:'#4a6a4a',font:{size:14}},grid:{color:'rgba(255,255,255,0.04)'}},y:{stacked:true,ticks:{color:'#7aaa7a',font:{size:14}},grid:{color:'rgba(255,255,255,0.04)'}}}}});}
   else{nutrientChart.data=cd;nutrientChart.update();}
 }
 
