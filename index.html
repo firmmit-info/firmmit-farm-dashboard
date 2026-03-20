@@ -489,13 +489,15 @@ function switchFloor(floor){
 
 function renderFarmMap(floor){
     const table = document.getElementById('farmMapTable');
-    const X = 10; // 10열
-    const Y = 15; // 15단
+    const X = 10; 
+    const Y = 15; 
     const floorData = maintenanceData.filter(d => Number(d.floor) === floor);
     
     const issueMap = {};
     floorData.forEach(d => { 
-        const key = `${String(d.x).trim().toUpperCase()}-${d.y}`;
+        // 💡 핵심: 앞뒤 공백을 없애고(trim), 무조건 대문자로 변환해서 '3A' 형태로 만듭니다.
+        const cleanX = String(d.x).replace(/\s+/g, '').toUpperCase();
+        const key = `${cleanX}-${d.y}`;
         issueMap[key] = d; 
     });
 
@@ -503,12 +505,9 @@ function renderFarmMap(floor){
     for(let y = Y; y >= 1; y--){
         html += `<tr><td class="y-label">${y}단</td>`;
         for(let x = 1; x <= X; x++){
-            
-            // 💡 핵심: A면과 B면을 하나의 <td> 안에 묶고(flex), gap을 3px로 줘서 딱 붙입니다!
             html += `<td><div style="display:flex; gap:3px; justify-content:center;">`;
-            
             ['A', 'B'].forEach(side => {
-                const locKey = `${x}${side}`; 
+                const locKey = `${x}${side}`; // '1A', '1B' 등 생성
                 const issue = issueMap[`${locKey}-${y}`];
                 let cls = 'rack-cell normal';
                 let tip = `✅ ${floor}층 ${x}열 ${y}단 ${side}면 · 정상`;
@@ -524,19 +523,15 @@ function renderFarmMap(floor){
                 }
                 html += `<div class="${cls}" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div>`;
             });
-            
-            html += `</div></td>`; // 한 세트 묶음 끝
-
-            // 열과 열 사이 통로 간격
-            if(x < X) html += `<td style="width:14px;"></td>`; 
+            html += `</div></td>`;
+            if(x < X) html += `<td style="width:12px;"></td>`; 
         }
         html += '</tr>';
     }
     
-    // X축 라벨
     html += '<tr><td></td>';
     for(let x = 1; x <= X; x++){
-        html += `<td class="x-label" style="text-align:center;">${x}열</td>`;
+        html += `<td colspan="2" class="x-label" style="text-align:center;">${x}열</td>`;
         if(x < X) html += `<td></td>`;
     }
     html += '</tr>';
