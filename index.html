@@ -563,14 +563,39 @@ function highlightIssue(floor,x,y){
   });
 }
 
-function highlightIssue(floor,x,y){
-  if(floor!==currentFloor) switchFloor(floor);
-  document.querySelectorAll('.issue-item').forEach(item=>{
-    const loc=item.querySelector('.issue-location');
-    if(loc&&loc.textContent.includes(`${floor}층 · ${x}열 · ${y}단`)){
-      item.style.boxShadow='0 0 12px rgba(255,77,109,0.5)';
-      item.scrollIntoView({behavior:'smooth',block:'nearest'});
-      setTimeout(()=>item.style.boxShadow='',2000);
+// 리스트 클릭 시 맵에서 해당 위치를 찾아 강조하고 스크롤하는 통합 함수
+function highlightIssue(floor, x, y) {
+  // 1. 층이 다르면 해당 층 탭으로 먼저 전환
+  if (floor !== currentFloor) {
+    switchFloor(floor);
+  }
+
+  // 2. 유지보수 리스트(우측 패널)에서 해당 항목을 찾아 강조
+  document.querySelectorAll('.issue-item').forEach(item => {
+    const loc = item.querySelector('.issue-location');
+    
+    // x값에서 숫자(열)와 문자(면)를 분리하여 비교 (예: "3A" -> "3열", "A면")
+    const colNum = String(x).replace(/[^0-9]/g, '');
+    const colSide = String(x).replace(/[0-9]/g, '');
+
+    // 리스트의 텍스트 내용과 일치하는지 확인
+    if (loc && loc.textContent.includes(`${floor}층`) && 
+        loc.textContent.includes(`${colNum}열`) && 
+        loc.textContent.includes(`${colSide}면`) && 
+        loc.textContent.includes(`${y}단`)) {
+      
+      // 강조 효과 (그림자)
+      item.style.boxShadow = '0 0 15px rgba(0, 255, 136, 0.6)';
+      item.style.borderColor = 'var(--accent-green)';
+      
+      // 해당 위치로 부드럽게 스크롤
+      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // 2초 후 강조 효과 제거
+      setTimeout(() => {
+        item.style.boxShadow = '';
+        item.style.borderColor = '';
+      }, 2000);
     }
   });
 }
