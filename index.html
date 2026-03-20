@@ -18,14 +18,18 @@
         body { margin:0; background:var(--bg-dark); color:var(--text-main); font-family: 'Pretendard', sans-serif; }
         .container { padding: 20px; max-width: 1600px; margin: 0 auto; }
         
-        /* 헤더 & 위젯 */
+        /* 헤더 */
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: 900; color: var(--accent-green); letter-spacing: -1px; }
+        
+        /* 위젯 6개 완벽 정렬 (3칸 2줄) */
+        .widget-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
         .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-        .card-title { font-size: 18px; font-weight: 700; color: var(--text-sub); margin-bottom: 10px; }
-        .val { font-size: 26px; font-weight: 800; }
+        .card-title { font-size: 16px; font-weight: 700; color: var(--text-sub); margin-bottom: 10px; }
+        .val { font-size: 24px; font-weight: 800; }
+        .desc { font-size: 12px; color: var(--text-sub); margin-top: 5px; }
 
-        /* 요약 바 (데이터 누락 방지!) */
+        /* 요약 바 */
         .summary-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .sum-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 15px; text-align: center; }
         .sum-val { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
@@ -37,17 +41,21 @@
         .f-btn { padding: 8px 18px; border-radius: 6px; border: 1px solid var(--border); background: #1e2622; color: var(--text-sub); cursor: pointer; }
         .f-btn.active { background: var(--accent-green); color: #000; font-weight: bold; }
 
-        /* 맵 테이블 디자인 (2개 1세트 최적화) */
+        /* 맵 테이블 디자인 (10열 15단 A/B면 최적화) */
         .map-container { background: #0d120f; padding: 25px; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
         table { border-collapse: collapse; margin: 0 auto; }
         .y-lbl { color: #555; text-align: right; padding-right: 12px; font-size: 11px; font-weight: bold; }
         .x-lbl { color: #555; padding-top: 10px; font-size: 11px; font-weight: bold; text-align: center; }
         
         .rack-set { display: flex; gap: 2px; } /* A/B면 밀착 */
-        .cell { width: 16px; height: 18px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; position: relative; }
+        .cell { width: 16px; height: 18px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.05); position: relative; cursor: pointer; }
         .cell.normal { background: rgba(0, 255, 136, 0.1); }
         .cell.fix { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); animation: blink 1.5s infinite; }
         .cell.warn { background: var(--accent-yellow); box-shadow: 0 0 10px var(--accent-yellow); }
+        
+        /* 툴팁 */
+        .tooltip { visibility: hidden; position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; border: 1px solid var(--accent-green); }
+        .cell:hover .tooltip { visibility: visible; }
         
         /* 리스트 디자인 */
         .list-container { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 15px; }
@@ -55,7 +63,6 @@
         .issue-item.urgent { border-left-color: var(--accent-red); }
         .i-loc { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
         .i-msg { font-size: 12px; color: var(--text-sub); }
-        .i-tag { display: inline-block; margin-top: 8px; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
 
         @keyframes blink { 50% { opacity: 0.4; } }
     </style>
@@ -63,25 +70,51 @@
 <body>
     <div class="container">
         <header>
-            <div style="font-size:22px; font-weight:900; color:var(--accent-green);">FIRMMIT SMART FARM</div>
-            <div id="u-time" style="font-size:12px; color:var(--text-sub);">연결 중...</div>
+            <div class="logo">FIRMMIT SMART FARM</div>
+            <div id="u-time" style="font-size:12px; color:var(--text-sub);">데이터 연결 중...</div>
         </header>
 
-        <div class="grid-4">
-            <div class="card"><div class="card-title">☀️ 외부 환경</div><div id="w-val" class="val">--°C / --%</div></div>
-            <div class="card"><div class="card-title">🌡️ 내부 환경</div><div id="e-val" class="val">--°C / --%</div></div>
-            <div class="card"><div class="card-title">🍓 이달 수확</div><div id="h-val" class="val">-- kg</div></div>
-            <div class="card"><div class="card-title">⚡ 실시간 전력</div><div id="p-val" class="val">-- kW</div></div>
+        <div class="widget-grid">
+            <div class="card">
+                <div class="card-title">☀️ 외부 환경</div>
+                <div id="w-val" class="val">--°C / --%</div>
+                <div id="w-desc" class="desc">로딩 중...</div>
+            </div>
+            <div class="card">
+                <div class="card-title">🌡️ 내부 환경</div>
+                <div id="e-val" class="val">--°C / --%</div>
+                <div id="e-desc" class="desc">로딩 중...</div>
+            </div>
+            <div class="card">
+                <div class="card-title">🍓 실시간 수확량</div>
+                <div id="h-val" class="val">-- kg</div>
+                <div class="desc" style="color:var(--accent-green);">이번 달 누적 합계</div>
+            </div>
+            <div class="card">
+                <div class="card-title">👨‍🌾 근무자 현황</div>
+                <div id="wk-val" class="val">-- 명</div>
+                <div id="wk-desc" class="desc">로딩 중...</div>
+            </div>
+            <div class="card">
+                <div class="card-title">💧 양액 공급</div>
+                <div id="n-val" class="val">-- 회</div>
+                <div id="n-desc" class="desc">오늘 공급 횟수</div>
+            </div>
+            <div class="card">
+                <div class="card-title">⚡ 전력 사용량</div>
+                <div id="p-val" class="val">-- kW</div>
+                <div class="desc" style="color:var(--accent-red);">실시간 부하량</div>
+            </div>
         </div>
 
         <div class="summary-bar">
-            <div class="sum-card"><div class="sum-val" style="color:var(--accent-green);">300</div><div class="sum-lbl">총 재배기 (2개층)</div></div>
+            <div class="sum-card"><div class="sum-val" style="color:var(--accent-green);">300</div><div class="sum-lbl">총 재배기 (1~2층 전체)</div></div>
             <div class="sum-card"><div id="sum-fix" class="sum-val" style="color:var(--accent-red);">0</div><div class="sum-lbl">🚨 즉시 수리 필요</div></div>
             <div class="sum-card"><div id="sum-warn" class="sum-val" style="color:var(--accent-yellow);">0</div><div class="sum-lbl">⚠️ 점검 필요</div></div>
         </div>
 
         <div class="main-layout">
-            <div class="map-card card">
+            <div class="card">
                 <div class="card-title">🛠️ 재배기 유지보수 현황 맵</div>
                 <div class="floor-btn-group">
                     <button id="btn1" class="f-btn active" onclick="chFloor(1)">1층</button>
@@ -103,6 +136,7 @@
     </div>
 
     <script>
+        // ★ API 주소
         const API = 'https://script.google.com/macros/s/AKfycbwzmMyP5IWmDLol0F6F9mEAGNBNl2eqoObRLYRHq1FLwxdS-npdmhDprrbAYYTfYe7JUA/exec';
         let rawData = [];
         let curF = 1;
@@ -112,20 +146,43 @@
                 const r = await fetch(API);
                 const d = await r.json();
                 
-                // 데이터 매핑
-                document.getElementById('w-val').innerText = `${d.weather.temperature}°C / ${d.weather.humidity}%`;
-                document.getElementById('e-val').innerText = `${d.env.current.temperature}°C / ${d.env.current.humidity}%`;
-                document.getElementById('h-val').innerText = `${d.harvest.monthTotal} kg`;
-                document.getElementById('p-val').innerText = `${d.power.current.total} kW`;
+                // 1. 위젯 6개 데이터 완벽 매핑
+                if(d.weather) {
+                    document.getElementById('w-val').innerText = `${d.weather.temperature}°C / ${d.weather.humidity}%`;
+                    document.getElementById('w-desc').innerText = `상태: ${d.weather.description}`;
+                }
+                if(d.env) {
+                    document.getElementById('e-val').innerText = `${d.env.current.temperature}°C / ${d.env.current.humidity}%`;
+                    document.getElementById('e-desc').innerText = `CO2: ${d.env.current.co2}ppm | LUX: ${d.env.current.lux}`;
+                }
+                if(d.harvest) {
+                    document.getElementById('h-val').innerText = `${d.harvest.monthTotal} kg`;
+                }
+                if(d.workers) {
+                    document.getElementById('wk-val').innerText = `${d.workers.summary.total} 명`;
+                    document.getElementById('wk-desc').innerText = `담당자 ${d.workers.summary.managers}명 / 작업자 ${d.workers.summary.workers}명`;
+                }
+                if(d.nutrient) {
+                    document.getElementById('n-val').innerText = `${d.nutrient.today.injectCount} 회`;
+                    document.getElementById('n-desc').innerText = `N:${d.nutrient.today.n} P:${d.nutrient.today.p} K:${d.nutrient.today.k}`;
+                }
+                if(d.power) {
+                    document.getElementById('p-val').innerText = `${d.power.current.total} kW`;
+                }
                 
-                // 요약 숫자 업데이트
-                document.getElementById('sum-fix').innerText = d.maintenance.summary.urgent;
-                document.getElementById('sum-warn').innerText = d.maintenance.summary.warning;
+                // 2. 유지보수 요약 및 맵 데이터 매핑
+                if(d.maintenance) {
+                    document.getElementById('sum-fix').innerText = d.maintenance.summary.urgent;
+                    document.getElementById('sum-warn').innerText = d.maintenance.summary.warning;
+                    rawData = d.maintenance.items || [];
+                    draw(curF);
+                }
                 
-                rawData = d.maintenance.items || [];
-                draw(curF);
-                document.getElementById('u-time').innerText = `Update: ${new Date().toLocaleTimeString()}`;
-            } catch(e) { console.error(e); }
+                document.getElementById('u-time').innerText = `최근 업데이트: ${new Date().toLocaleTimeString()}`;
+            } catch(e) { 
+                console.error(e); 
+                document.getElementById('u-time').innerText = `데이터 연결 실패`;
+            }
         }
 
         function draw(f) {
@@ -143,15 +200,15 @@
                     ['A','B'].forEach(s => {
                         const key = `${x}${s}-${y}`;
                         const is = iMap[key];
-                        let c = 'cell normal', t = `${f}층 ${x}열 ${s}면 ${y}단: 정상`;
+                        let c = 'cell normal', t = `✅ ${f}층 ${x}열 ${y}단 ${s}면: 정상`;
                         if(is && is.status !== 'done') {
-                            if(is.status==='fix') { c='cell fix'; t=`🚨 즉시수리: ${is.desc}`; }
-                            else if(is.status==='warning') { c='cell warn'; t=`⚠️ 점검필요: ${is.desc}`; }
+                            if(is.status==='fix') { c='cell fix'; t=`🚨 ${f}층 ${x}열 ${y}단 ${s}면: ${is.desc}`; }
+                            else if(is.status==='warning') { c='cell warn'; t=`⚠️ ${f}층 ${x}열 ${y}단 ${s}면: ${is.desc}`; }
                         }
-                        h += `<div class="${c}" title="${t}"></div>`;
+                        h += `<div class="${c}"><div class="tooltip">${t}</div></div>`;
                     });
                     h += `</div></td>`;
-                    if(x < X) h += `<td style="width:12px;"></td>`; // 통로
+                    if(x < X) h += `<td style="width:15px;"></td>`; // 통로 띄우기 (15px)
                 }
                 h += '</tr>';
             }
@@ -163,21 +220,19 @@
             h += '</tr>';
             table.innerHTML = h;
 
-            // 리스트 업데이트
+            // 리스트 렌더링
             const list = document.getElementById('issueList');
             const activeIs = fData.filter(d => d.status !== 'done');
             document.getElementById('list-cnt').innerText = activeIs.length;
             
             if(activeIs.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--accent-green);">✅ 이상 없음</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--accent-green);">✅ ${f}층 이상 없음</div>`;
             } else {
                 list.innerHTML = activeIs.map(d => `
                     <div class="issue-item ${d.status==='fix'?'urgent':''}">
-                        <div class="i-loc">${d.floor}층 · ${d.x} · ${d.y}단</div>
+                        <div class="i-loc">${d.floor}층 · ${String(d.x).replace(/[^0-9]/g, '')}열 ${String(d.x).replace(/[0-9]/g, '')}면 · ${d.y}단</div>
                         <div class="i-msg">${d.desc}</div>
-                        <div class="i-tag" style="background:${d.status==='fix'?'rgba(255,77,109,0.1)':'rgba(255,214,10,0.1)'}; color:${d.status==='fix'?'var(--accent-red)':'var(--accent-yellow)'}">
-                            ${d.status==='fix'?'IMMEDIATE FIX':'CHECK NEEDED'}
-                        </div>
+                        <div style="font-size:10px; margin-top:5px; color:var(--text-sub)">📅 ${d.date}</div>
                     </div>
                 `).join('');
             }
@@ -191,7 +246,7 @@
         }
 
         load();
-        setInterval(load, 30000);
+        setInterval(load, 30000); // 30초마다 자동 새로고침
     </script>
 </body>
 </html>
