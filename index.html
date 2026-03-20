@@ -590,6 +590,41 @@ document.addEventListener('DOMContentLoaded',()=>{
   refreshAll();
   setInterval(refreshAll, REFRESH_INTERVAL);
 });
+  function renderMaintenanceList(floor) {
+  const list = document.getElementById('maintenanceList');
+  if (!list) return; // 리스트 영역이 없으면 중단
+
+  const issues = maintenanceData.filter(d => Number(d.floor) === floor && d.status !== 'done');
+  
+  // 오른쪽 상단 뱃지 숫자 업데이트
+  const badge = document.getElementById('issue-badge');
+  if (badge) badge.innerText = issues.length;
+
+  if (issues.length === 0) {
+    list.innerHTML = `<div style="color:#4a6a4a;text-align:center;padding:40px;">✅ ${floor}층 이상 없음</div>`;
+    return;
+  }
+
+  list.innerHTML = issues.map(d => {
+    const isU = d.status === 'fix';
+    // X열 값에서 숫자와 문자(A/B)를 분리해서 보기 좋게 표시
+    const colNum = String(d.x).replace(/[^0-9]/g, '');
+    const colSide = String(d.x).replace(/[0-9]/g, '');
+
+    return `
+      <div class="issue-item ${isU ? 'urgent' : 'caution'}" onclick="highlightIssue(${d.floor},'${d.x}',${d.y})">
+        <div class="issue-dot ${isU ? 'dot-red' : 'dot-yellow'}"></div>
+        <div class="issue-info">
+          <div class="issue-location">${d.floor}층 · ${colNum}열 ${colSide}면 · ${d.y}단</div>
+          <div class="issue-desc">${d.desc}</div>
+          <div class="issue-date">📅 ${d.date}</div>
+        </div>
+        <span class="issue-status ${isU ? 'status-urgent' : 'status-caution'}">
+          ${isU ? '즉시수리' : '점검필요'}
+        </span>
+      </div>`;
+  }).join('');
+}
 </script>
 </body>
 </html>
