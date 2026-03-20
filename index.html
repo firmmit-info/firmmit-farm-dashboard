@@ -492,23 +492,24 @@ function switchFloor(floor){
 // ------------------------------------------------------------
 function renderFarmMap(floor){
   const table = document.getElementById('farmMapTable');
-  // --- 여기 숫자를 수정했습니다 ---
   const X = 10; // 10열
   const Y = 15; // 15단
-  // ----------------------------
-  
   const floorData = maintenanceData.filter(d => d.floor === floor);
   const issueMap = {};
-  floorData.forEach(d => issueMap[`${d.x}-${d.y}`] = d);
+  
+  floorData.forEach(d => {
+    issueMap[`${d.x}-${d.y}`] = d;
+  });
 
   let html = '';
+  // Y축(단) 그리기
   for(let y = Y; y >= 1; y--){
-    html += `<tr><td class="y-label" style="font-size:10px;">${y}단</td>`;
+    html += `<tr><td class="y-label" style="font-size:10px; width:30px;">${y}단</td>`;
     for(let x = 1; x <= X; x++){
+      // A면, B면 그리기
       ['A', 'B'].forEach(side => {
         const locKey = `${x}${side}`;
         const issue = issueMap[`${locKey}-${y}`];
-        // 칸이 많아졌으므로 크기를 살짝 줄였습니다 (width: 18px)
         let cls = 'rack-cell normal';
         let tip = `✅ ${floor}층 ${x}열 ${y}단 ${side}면 · 정상`;
         
@@ -521,33 +522,24 @@ function renderFarmMap(floor){
             tip = `🟡 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
           }
         }
-        html += `<td><div class="${cls}" style="width:18px; height:22px;" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div></td>`;
+        // 칸 크기를 18px로 조절하여 10열이 한 화면에 들어오게 함
+        html += `<td><div class="${cls}" style="width:18px; height:20px; margin:1px;" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div></td>`;
       });
-      if(x < X) html += `<td style="width:8px;"></td>`; // 통로 간격
+      // 열 사이 통로 (가로 간격)
+      if(x < X) html += `<td style="width:10px;"></td>`;
     }
     html += '</tr>';
   }
   
+  // X축(열) 라벨 그리기
   html += '<tr><td></td>';
   for(let x = 1; x <= X; x++){
-    html += `<td colspan="2" class="x-label" style="text-align:center; font-size:10px;">${x}열</td>`;
+    html += `<td colspan="2" class="x-label" style="text-align:center; font-size:10px; padding-top:5px;">${x}열</td>`;
     if(x < X) html += `<td></td>`;
   }
   html += '</tr>';
   
   table.innerHTML = html;
-  renderMaintenanceList(floor);
-}
-  
-  // X축(열) 라벨 그리기
-  html+='<tr><td></td>';
-  for(let x=1;x<=X;x++){
-    html+=`<td colspan="2" class="x-label" style="text-align:center;">${x}열</td>`;
-    if(x < X) html+=`<td></td>`; // 라벨 밑에도 통로 간격 맞춤
-  }
-  html+='</tr>';
-  
-  table.innerHTML=html;
   renderMaintenanceList(floor);
 }
 
