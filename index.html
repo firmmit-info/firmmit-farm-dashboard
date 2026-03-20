@@ -157,9 +157,62 @@
     ::-webkit-scrollbar{width:6px;}
     ::-webkit-scrollbar-track{background:var(--bg-main);}
     ::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:3px;}
-    @media(max-width:1440px){.grid-main{grid-template-columns:repeat(3,1fr)}.env-card,.harvest-card{grid-column:span 2}.maintenance-card{grid-column:span 3}}
-    @media(max-width:1024px){.grid-main{grid-template-columns:repeat(2,1fr)}.env-card,.harvest-card,.nutrient-card,.workers-card,.maintenance-card{grid-column:span 2}.maintenance-inner{grid-template-columns:1fr}}
-    @media(max-width:600px){.grid-main{grid-template-columns:1fr}.card{grid-column:span 1!important}.header{flex-wrap:wrap;gap:10px}}
+    /* ============================================================
+   반응형 레이아웃 최적화 (Mobile & Tablet)
+   ============================================================ */
+
+/* 1. 대형 모니터 (1440px 이하) : 4열 -> 3열 배치 */
+@media (max-width: 1440px) {
+  .grid-main { grid-template-columns: repeat(3, 1fr); }
+  .env-card, .harvest-card, .maintenance-card { grid-column: span 2; }
+}
+
+/* 2. 태블릿 (1024px 이하) : 2열 배치 및 맵 구조 조정 */
+@media (max-width: 1024px) {
+  .grid-main { grid-template-columns: repeat(2, 1fr); }
+  .env-card, .harvest-card, .nutrient-card, .workers-card, .maintenance-card { 
+    grid-column: span 2; 
+  }
+  .maintenance-inner { grid-template-columns: 1fr; } /* 맵과 리스트를 세로로 배치 */
+  .farm-map-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; } /* 모바일에서 맵 좌우 스크롤 허용 */
+}
+
+/* 3. 스마트폰 (768px 이하) : 1열 배치 및 폰트 크기 조정 */
+@media (max-width: 768px) {
+  .wrapper { padding: 0 8px 8px; }
+  .header { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 12px; 
+    padding: 10px;
+  }
+  .clock-area { text-align: left; width: 100%; }
+  #clock-time { font-size: 24px; }
+  
+  .grid-main { grid-template-columns: 1fr; }
+  .card { grid-column: span 1 !important; padding: 12px; }
+  
+  /* 차트 높이 조절 (모바일에서 너무 길어지지 않게) */
+  .chart-container, .harvest-chart-wrap { height: 200px; }
+  
+  /* 재배기 맵 셀 크기 최적화 (터치하기 편하게 살짝 키움) */
+  .rack-cell { width: 28px; height: 20px; }
+  .y-label { font-size: 9px; width: 30px; }
+
+  /* 유지보수 리스트 높이 제한 */
+  .maintenance-list { max-height: 250px; }
+
+  /* 로고 텍스트 크기 조절 */
+  .logo-text h1 { font-size: 18px; }
+  .logo-text p { font-size: 10px; }
+}
+
+/* 4. 초소형 스마트폰 (480px 이하) */
+@media (max-width: 480px) {
+  .env-stats { grid-template-columns: 1fr 1fr; } /* 환경 스탯을 2열로 변경 */
+  .power-items { grid-template-columns: 1fr; }   /* 전력 항목을 1열로 변경 */
+  .floor-tab { padding: 7px 15px; font-size: 12px; } /* 층 버튼 크기 축소 */
+}
   </style>
 </head>
 <body>
