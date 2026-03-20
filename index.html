@@ -493,7 +493,6 @@ function renderFarmMap(floor){
     const Y = 15; // 15단
     const floorData = maintenanceData.filter(d => Number(d.floor) === floor);
     
-    // 시트의 '3A'와 같은 문자를 읽기 위한 매칭 맵
     const issueMap = {};
     floorData.forEach(d => { 
         const key = `${String(d.x).trim().toUpperCase()}-${d.y}`;
@@ -505,7 +504,9 @@ function renderFarmMap(floor){
         html += `<tr><td class="y-label">${y}단</td>`;
         for(let x = 1; x <= X; x++){
             
-            // A면, B면 각각의 <td> 생성 (기존 CSS 유지)
+            // 💡 핵심: A면과 B면을 하나의 <td> 안에 묶고(flex), gap을 3px로 줘서 딱 붙입니다!
+            html += `<td><div style="display:flex; gap:3px; justify-content:center;">`;
+            
             ['A', 'B'].forEach(side => {
                 const locKey = `${x}${side}`; 
                 const issue = issueMap[`${locKey}-${y}`];
@@ -521,11 +522,13 @@ function renderFarmMap(floor){
                         tip = `🟡 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
                     }
                 }
-                html += `<td><div class="${cls}" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div></td>`;
+                html += `<div class="${cls}" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div>`;
             });
+            
+            html += `</div></td>`; // 한 세트 묶음 끝
 
-            // 1열(A,B) 끝난 뒤 통로 간격 생성
-            if(x < X) html += `<td style="width:12px;"></td>`; 
+            // 열과 열 사이 통로 간격
+            if(x < X) html += `<td style="width:14px;"></td>`; 
         }
         html += '</tr>';
     }
@@ -533,7 +536,7 @@ function renderFarmMap(floor){
     // X축 라벨
     html += '<tr><td></td>';
     for(let x = 1; x <= X; x++){
-        html += `<td colspan="2" class="x-label" style="text-align:center;">${x}열</td>`;
+        html += `<td class="x-label" style="text-align:center;">${x}열</td>`;
         if(x < X) html += `<td></td>`;
     }
     html += '</tr>';
@@ -542,30 +545,20 @@ function renderFarmMap(floor){
     renderMaintenanceList(floor);
 }
 
-function renderMaintenanceList(floor){
-    const list = document.getElementById('maintenanceList');
-    const issues = maintenanceData.filter(d => Number(d.floor) === floor && d.status !== 'done');
+// 리스트 클릭 시 맵에서 깜빡이는 기능도 A/B면에 맞게 수정
+function highlightIssue(floor,x,y){
+  if(floor!==currentFloor) switchFloor(floor);
+  document.querySelectorAll('.issue-item').forEach(item=>{
+    const colNum = String(x).replace(/[^0-9]/g, '');
+    const colSide = String(x).replace(/[0-9]/g, '');
+    const loc = item.querySelector('.issue-location');
     
-    // 요약 뱃지가 원본에 있었다면 업데이트 (없었다면 에러 안 나게 처리)
-    const badge = document.getElementById('list-cnt') || document.getElementById('issue-badge');
-    if(badge) badge.innerText = issues.length;
-    
-    if(issues.length === 0){
-        list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--accent-green);">✅ ${floor}층 이상 없음</div>`;
-        return;
+    if(loc && loc.textContent.includes(`${floor}층 · ${colNum}열 ${colSide}면 · ${y}단`)){
+      item.style.boxShadow='0 0 12px rgba(255,77,109,0.5)';
+      item.scrollIntoView({behavior:'smooth',block:'nearest'});
+      setTimeout(()=>item.style.boxShadow='',2000);
     }
-    
-    list.innerHTML = issues.map(d => {
-        const isU = d.status === 'fix';
-        const colNum = String(d.x).replace(/[^0-9]/g, '');
-        const colSide = String(d.x).replace(/[0-9]/g, '');
-        
-        return `<div class="issue-item ${isU ? 'urgent' : 'caution'}" onclick="highlightIssue(${d.floor},'${d.x}',${d.y})">
-            <div class="issue-location">${d.floor}층 · ${colNum}열 ${colSide}면 · ${d.y}단</div>
-            <div class="issue-desc">${d.desc}</div>
-            <div style="font-size:11px; color:#a0a0a0; margin-top:5px;">📅 ${d.date} | ${isU ? '🔴 즉시수리' : '🟡 점검필요'}</div>
-        </div>`;
-    }).join('');
+  });
 }
 
 function highlightIssue(floor,x,y){
