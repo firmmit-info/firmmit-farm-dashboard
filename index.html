@@ -141,44 +141,62 @@
             const X = 10; // 10열
             const Y = 15; // 15단
             const floorData = maintenanceData.filter(d => d.floor === floor);
-            const issueMap = {};
-            floorData.forEach(d => { issueMap[`${d.x}-${d.y}`] = d; });
+    
+    // 매칭 로직 강화: x값(예: '3A')과 y값(예: 5)을 조합
+    const issueMap = {};
+    floorData.forEach(d => { 
+        const key = `${String(d.x).trim().toUpperCase()}-${d.y}`;
+        issueMap[key] = d; 
+        });
 
-            let html = '';
-            for(let y = Y; y >= 1; y--){
-                html += `<tr><td class="y-label" style="font-size:10px; width:35px;">${y}단</td>`;
-                for(let x = 1; x <= X; x++){
-                    ['A', 'B'].forEach(side => {
-                        const locKey = `${x}${side}`;
-                        const issue = issueMap[`${locKey}-${y}`];
-                        let cls = 'rack-cell normal';
-                        let tip = `✅ ${floor}층 ${x}열 ${y}단 ${side}면 · 정상`;
-                        
-                        if(issue){
-                            if(issue.status === 'fix'){
-                                cls = 'rack-cell need-fix';
-                                tip = `⚠️ ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
-                            } else if(issue.status === 'warning'){
-                                cls = 'rack-cell warning';
-                                tip = `🟡 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
-                            }
-                        }
-                        html += `<td><div class="${cls}" onclick="highlightIssue(${floor},'${locKey}',${y})"><div class="rack-tooltip">${tip}</div></div></td>`;
-                    });
-                    if(x < X) html += `<td style="width:10px;"></td>`;
+    let html = '';
+    for(let y = Y; y >= 1; y--){
+        html += `<tr><td class="y-label" style="font-size:10px; width:35px; color:#555;">${y}단</td>`;
+        for(let x = 1; x <= X; x++){
+            // --- 한 세트(A/B) 시작 ---
+            html += `<td style="display:flex; gap:2px; padding:2px 0;">`; // A/B면을 딱 붙임
+            ['A', 'B'].forEach(side => {
+                const locKey = `${x}${side}`; // '1A', '1B' ...
+                const issue = issueMap[`${locKey}-${y}`];
+                let cls = 'rack-cell normal';
+                let tip = `✅ ${floor}층 ${x}열 ${y}단 ${side}면 · 정상`;
+                
+                if(issue){
+                    if(issue.status === 'fix'){
+                        cls = 'rack-cell need-fix';
+                        tip = `⚠️ ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
+                    } else if(issue.status === 'warning'){
+                        cls = 'rack-cell warning';
+                        tip = `🟡 ${floor}층 ${x}열 ${y}단 ${side}면 · ${issue.desc}`;
+                    }
                 }
-                html += '</tr>';
-            }
-            
-            html += '<tr><td></td>';
-            for(let x = 1; x <= X; x++){
-                html += `<td colspan="2" class="x-label" style="text-align:center; font-size:10px;">${x}열</td>`;
-                if(x < X) html += `<td></td>`;
-            }
-            html += '</tr>';
-            table.innerHTML = html;
-            renderMaintenanceList(floor);
+                // 칸 크기 및 디자인 세밀 조정
+                html += `<div class="${cls}" 
+                             style="width:16px; height:18px; border-radius:2px;" 
+                             onclick="highlightIssue(${floor},'${locKey}',${y})">
+                            <div class="rack-tooltip">${tip}</div>
+                         </div>`;
+            });
+            html += `</td>`;
+            // --- 한 세트 끝 ---
+
+            // 열과 열 사이 통로(간격)
+            if(x < X) html += `<td style="width:15px;"></td>`; 
         }
+        html += '</tr>';
+    }
+    
+    // X축(열) 라벨
+    html += '<tr><td></td>';
+    for(let x = 1; x <= X; x++){
+        html += `<td class="x-label" style="text-align:center; font-size:10px; color:#555; padding-top:8px;">${x}열</td>`;
+        if(x < X) html += `<td></td>`;
+    }
+    html += '</tr>';
+    
+    table.innerHTML = html;
+    renderMaintenanceList(floor);
+}
 
         function renderMaintenanceList(floor){
             const list = document.getElementById('maintenanceList');
