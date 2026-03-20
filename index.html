@@ -489,7 +489,7 @@ function switchFloor(floor){
 
 function renderFarmMap(floor){
   const table=document.getElementById('farmMapTable');
-  const X=15, Y=10;
+  const X=10, Y=15;
   const floorData=maintenanceData.filter(d=>d.floor===floor);
   const issueMap={};
   floorData.forEach(d=>issueMap[`${d.x}-${d.y}`]=d);
