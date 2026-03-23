@@ -103,17 +103,19 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     border-radius: 10px;
     padding: 16px;
     border: 1px solid var(--border-color);
-    display: block;
-    width: 100%;
-    overflow-x: auto; 
+    /* 💡 아래 3줄이 어떤 상황에서든 스크롤을 만들어내는 강제 명령입니다 */
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
 }
 
 .farm-map-table {
     border-collapse: separate;
     border-spacing: 3px;
-    width: 100%;       /* 💡 핵심: 부모 요소에 맞춰 100% 꽉 채움 */
-    min-width: 850px;  /* 💡 핵심: 단, 850px 이하로는 안 줄어듦 (모바일 스크롤용) */
+    /* 💡 테이블 너비가 850px 밑으로 절대 줄어들지 않도록 쐐기를 박습니다 */
+    min-width: 850px !important;
+    width: 100%;
     table-layout: fixed;
 }
 .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
