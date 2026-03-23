@@ -89,34 +89,28 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 .maintenance-card { grid-column: span 4; }
-
 .maintenance-inner {
     display: grid;
-    /* 💡 여기가 핵심입니다! 왼쪽 맵이 오른쪽 리스트를 밀어내지 못하게 철벽을 칩니다. */
+    /* 💡 핵심: minmax(0, 1fr)이 맵이 리스트를 밀어내지 못하도록 철벽을 칩니다. */
     grid-template-columns: minmax(0, 1fr) 320px; 
     gap: 16px;
     align-items: flex-start;
 }
-
 .farm-map-wrap {
     background: var(--bg-card2);
     border-radius: 10px;
     padding: 16px;
     border: 1px solid var(--border-color);
-    /* 💡 아래 3줄이 어떤 상황에서든 스크롤을 만들어내는 강제 명령입니다 */
-    display: block !important;
-    width: 100% !important;
-    overflow-x: auto !important;
+    width: 100%;
+    overflow-x: auto; /* 좁을 때 무조건 가로 스크롤 생성 */
     -webkit-overflow-scrolling: touch;
 }
-
 .farm-map-table {
     border-collapse: separate;
     border-spacing: 3px;
-    /* 💡 테이블 너비가 850px 밑으로 절대 줄어들지 않도록 쐐기를 박습니다 */
-    min-width: 850px !important;
-    width: 100%;
+    min-width: 900px; /* 테이블이 900px 밑으로 줄어들지 않게 강제 고정 */
     table-layout: fixed;
+    width: 100%;
 }
 .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
 .floor-tab.active{background:var(--accent-green);color:#000;border-color:var(--accent-green);box-shadow:var(--glow-green);}
