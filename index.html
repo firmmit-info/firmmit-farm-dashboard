@@ -89,12 +89,27 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 .maintenance-card{grid-column:span 4;}
-.maintenance-inner{display:grid;grid-template-columns:1fr 320px;gap:16px;}
+.maintenance-inner {
+    display: grid;
+    grid-template-columns: 1fr 320px; /* 맵이 왼쪽(나머지 전체), 리스트가 오른쪽(320px) */
+    gap: 16px;
+    min-width: 0; /* 💡 자식이 부모를 뚫고 나가는 것을 허용하는 핵심 설정 */
+}
 .floor-tabs{display:flex;gap:8px;margin-bottom:14px;}
 .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
 .floor-tab.active{background:var(--accent-green);color:#000;border-color:var(--accent-green);box-shadow:var(--glow-green);}
 .floor-tab:hover:not(.active){border-color:var(--accent-green);color:var(--accent-green);}
-.farm-map-wrap{background:var(--bg-card2);border-radius:10px;padding:16px;border:1px solid var(--border-color);display:block;width:100%;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;}
+.farm-map-wrap {
+    background: var(--bg-card2);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    display: block;        /* 반드시 block이어야 스크롤이 생깁니다 */
+    width: 100%;           /* 부모 너비를 넘지 않도록 설정 */
+    overflow-x: auto;      /* 넘치면 스크롤 생성 */
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
 .farm-map-table{border-collapse:separate;border-spacing:3px;min-width:950px;table-layout:fixed;}
 .y-label{font-size:15px;color:var(--text-muted);text-align:right;padding-right:8px;white-space:nowrap;font-weight:600;width:40px;}
 .x-label{font-size:14px;color:var(--text-muted);text-align:center;padding-top:6px;font-weight:600;}
