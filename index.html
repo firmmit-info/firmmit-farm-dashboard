@@ -89,13 +89,25 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 .maintenance-card{grid-column:span 4;}
-.maintenance-inner {
-    display: grid;
-    grid-template-columns: 1fr 320px; /* 맵이 왼쪽(나머지 전체), 리스트가 오른쪽(320px) */
-    gap: 16px;
-    min-width: 0; /* 💡 자식이 부모를 뚫고 나가는 것을 허용하는 핵심 설정 */
+.farm-map-wrap {
+    background: var(--bg-card2);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    display: block;
+    width: 100%;
+    overflow-x: auto; /* 좁을 때 스크롤 생성 */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 }
-.floor-tabs{display:flex;gap:8px;margin-bottom:14px;}
+
+.farm-map-table {
+    border-collapse: separate;
+    border-spacing: 3px;
+    width: 100%;       /* 💡 핵심: 부모 요소에 맞춰 100% 꽉 채움 */
+    min-width: 850px;  /* 💡 핵심: 단, 850px 이하로는 안 줄어듦 (모바일 스크롤용) */
+    table-layout: fixed;
+}
 .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
 .floor-tab.active{background:var(--accent-green);color:#000;border-color:var(--accent-green);box-shadow:var(--glow-green);}
 .floor-tab:hover:not(.active){border-color:var(--accent-green);color:var(--accent-green);}
