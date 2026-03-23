@@ -175,9 +175,10 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{color:var(--accent-green);font-size:16px;letter-spacing:2px;}
 .toast{position:fixed;bottom:20px;right:20px;background:#1a0a0a;border:1px solid var(--accent-red);color:var(--accent-red);padding:12px 20px;border-radius:8px;font-size:15px;z-index:1000;display:none;}
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:var(--bg-main);}
-::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:3px;}
+::-webkit-scrollbar{width:6px; height:10px;}
+::-webkit-scrollbar-track{background:var(--bg-main); border-radius:3px;}
+::-webkit-scrollbar-thumb{background:var(--accent-green); border-radius:3px;}
+.farm-map-wrap::-webkit-scrollbar-track { margin-top: 5px; }
 @media (max-width:1440px){.grid-main{grid-template-columns:repeat(3,1fr);}.env-card,.harvest-card,.maintenance-card{grid-column:span 2;}}
 @media (max-width:1024px){.grid-main{grid-template-columns:repeat(2,1fr);}.env-card,.harvest-card,.nutrient-card,.workers-card,.maintenance-card{grid-column:span 2;}.maintenance-inner{grid-template-columns:1fr;}.farm-map-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}}
 @media (max-width:768px){.wrapper{padding:0 8px 8px;}.header{flex-direction:column;align-items:flex-start;gap:12px;padding:10px;}.clock-area{text-align:left;width:100%;}#clock-time{font-size:24px;}.grid-main{grid-template-columns:1fr;}.card{grid-column:span 1 !important;padding:12px;}.chart-container,.harvest-chart-wrap{height:200px;}.rack-cell{width:28px;height:20px;}.y-label{font-size:9px;width:30px;}.maintenance-list{max-height:250px;}.logo-text h1{font-size:18px;}.logo-text p{font-size:10px;}}
