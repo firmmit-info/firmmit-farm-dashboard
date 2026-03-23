@@ -88,88 +88,48 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .worker-badge{margin-left:auto;font-size:14px;padding:3px 7px;border-radius:10px;font-weight:600;}
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
-/* 1단계: 최상위 카드 영역 팽창 방지 */
-.maintenance-card {
-    grid-column: span 4;
-    min-width: 0; /* 💡 부모 카드가 화면 밖으로 찢어지는 것 차단 */
-}
 
-/* 2단계: 내부 레이아웃 팽창 방지 */
+/* 유지보수 맵 구역 (충돌 코드 모두 제거 후 병합) */
+.maintenance-card { grid-column: span 4; min-width: 0; }
 .maintenance-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px; /* 💡 맵이 320px 리스트를 밀어내지 못하게 고정 */
+    grid-template-columns: minmax(0, 1fr) 320px;
     gap: 16px;
     align-items: flex-start;
     min-width: 0; 
 }
-.farm-map-wrap {
-    background: var(--bg-card2);
-    border-radius: 10px;
-    /* 💡 하단 패딩을 24px로 늘려 스크롤바가 재배기 칸을 가리지 않게 공간 확보 */
-    padding: 16px 16px 24px 16px; 
-    border: 1px solid var(--border-color);
-    width: 100%;
-    
-    /* 💡 핵심: 'auto'는 브라우저 맘대로 숨기므로, 'scroll'을 써서 무조건 띄워둡니다 */
-    overflow-x: scroll !important; 
-    -webkit-overflow-scrolling: touch;
-}
 
-/* 💡 맵 전용 스크롤바: 커서를 올리지 않아도 항상 선명하게 보이도록 강제 색칠 */
-.farm-map-wrap::-webkit-scrollbar {
-    height: 12px; /* 클릭이나 터치가 쉽도록 두께를 12px로 살짝 키움 */
-}
-.farm-map-wrap::-webkit-scrollbar-track {
-    background: rgba(0, 255, 136, 0.08); /* 스크롤바가 다니는 길을 희미하게 표시 */
-    border-radius: 6px;
-}
-.farm-map-wrap::-webkit-scrollbar-thumb {
-    background: var(--accent-green); /* 커서를 치워도 무조건 초록색 유지 */
-    border-radius: 6px;
-}
-
-/* 4단계: 표 크기 강제 유지 */
-.farm-map-table {
-    border-collapse: separate;
-    border-spacing: 3px;
-    min-width: 850px; /* 💡 표는 850px을 유지하되, 부모들이 막아주므로 화면 안에서 스크롤됨 */
-    width: 100%;
-    table-layout: fixed;
-}
-
-/* 5단계: 모바일 화면일 때 리스트 아래로 내리기 */
-@media (max-width: 1024px) {
-    .maintenance-inner {
-        grid-template-columns: minmax(0, 1fr); /* 💡 모바일에서도 팽창 방지 유지 */
-    }
-}
-.farm-map-table {
-    border-collapse: separate;
-    border-spacing: 3px;
-    min-width: 900px; /* 테이블이 900px 밑으로 줄어들지 않게 강제 고정 */
-    table-layout: fixed;
-    width: 100%;
-}
+.floor-tabs{display:flex;gap:8px;margin-bottom:14px;}
 .floor-tab{padding:7px 24px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card2);color:var(--text-sub);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;}
 .floor-tab.active{background:var(--accent-green);color:#000;border-color:var(--accent-green);box-shadow:var(--glow-green);}
 .floor-tab:hover:not(.active){border-color:var(--accent-green);color:var(--accent-green);}
+
 .farm-map-wrap {
     background: var(--bg-card2);
     border-radius: 10px;
-    padding: 16px;
+    padding: 16px 16px 24px 16px; 
     border: 1px solid var(--border-color);
-    
-    /* 💡 스크롤 실종 및 오른쪽 잘림 현상을 막는 4중 방어막 */
     display: block !important;
     width: 100% !important;
-    max-width: 100% !important; /* 겉옷(카드)의 크기를 절대 넘지 못하게 고정 */
-    min-width: 0 !important;    /* 그리드 안에서 억지로 팽창하는 것을 원천 차단 */
-    
-    /* 💡 팽창을 막아둔 상태에서 내용물이 크면 비로소 스크롤바가 생성됩니다 */
-    overflow-x: auto !important;
+    max-width: 100% !important; 
+    min-width: 0 !important;
+    overflow-x: scroll !important; /* 항상 보이게 강제 */
     -webkit-overflow-scrolling: touch;
 }
-.farm-map-table{border-collapse:separate;border-spacing:3px;min-width:950px;table-layout:fixed;}
+
+/* 스크롤바 커스텀 */
+.farm-map-wrap::-webkit-scrollbar { height: 12px; }
+.farm-map-wrap::-webkit-scrollbar-track { background: rgba(0, 255, 136, 0.08); border-radius: 6px; margin-top: 5px; }
+.farm-map-wrap::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 6px; }
+
+.farm-map-table {
+    border-collapse: separate;
+    border-spacing: 3px;
+    min-width: 900px !important; 
+    width: 100%;
+    table-layout: fixed;
+}
+
 .y-label{font-size:15px;color:var(--text-muted);text-align:right;padding-right:8px;white-space:nowrap;font-weight:600;width:40px;}
 .x-label{font-size:14px;color:var(--text-muted);text-align:center;padding-top:6px;font-weight:600;}
 .rack-cell{width:35px;height:25px;background:#1a2e1a;border:1px solid #2a4a2a;border-radius:3px;cursor:pointer;position:relative;transition:all .15s;flex-shrink:0;}
@@ -182,6 +142,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @keyframes pulse-yellow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2);opacity:0.6}}
 .rack-tooltip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:rgba(10,15,10,0.97);border:1px solid var(--accent-green);border-radius:6px;padding:6px 10px;font-size:15px;color:var(--text-main);white-space:nowrap;z-index:100;pointer-events:none;}
 .rack-cell:hover .rack-tooltip{display:block;}
+
 .maintenance-list-panel{background:var(--bg-card2);border-radius:10px;border:1px solid var(--border-color);overflow:hidden;display:flex;flex-direction:column;}
 .panel-header{padding:12px 16px;background:rgba(255,77,109,0.1);border-bottom:1px solid var(--border-color);font-size:14px;font-weight:700;color:var(--accent-red);letter-spacing:1px;display:flex;align-items:center;gap:8px;}
 .issue-count-badge{background:var(--accent-red);color:#fff;font-size:15px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto;}
@@ -203,6 +164,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .status-urgent{background:rgba(255,77,109,0.2);color:var(--accent-red);}
 .status-caution{background:rgba(255,215,0,0.15);color:var(--accent-yellow);}
 .status-done{background:rgba(0,255,136,0.1);color:var(--accent-green);}
+
 .map-legend{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-color);}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-sub);}
 .legend-dot{width:12px;height:12px;border-radius:50%;border:2px solid;}
@@ -213,19 +175,47 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .maint-stat{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border-color);}
 .maint-stat .ms-num{font-size:24px;font-weight:700;}
 .maint-stat .ms-label{font-size:12px;color:var(--text-muted);margin-top:2px;}
+
 .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
 .loading-spinner{width:60px;height:60px;border:3px solid var(--border-color);border-top:3px solid var(--accent-green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{color:var(--accent-green);font-size:16px;letter-spacing:2px;}
 .toast{position:fixed;bottom:20px;right:20px;background:#1a0a0a;border:1px solid var(--accent-red);color:var(--accent-red);padding:12px 20px;border-radius:8px;font-size:15px;z-index:1000;display:none;}
+
+/* 전체 공통 스크롤바 */
 ::-webkit-scrollbar{width:6px; height:10px;}
 ::-webkit-scrollbar-track{background:var(--bg-main); border-radius:3px;}
 ::-webkit-scrollbar-thumb{background:var(--accent-green); border-radius:3px;}
-.farm-map-wrap::-webkit-scrollbar-track { margin-top: 5px; }
-@media (max-width:1440px){.grid-main{grid-template-columns:repeat(3,1fr);}.env-card,.harvest-card,.maintenance-card{grid-column:span 2;}}
-@media (max-width:1024px){.grid-main{grid-template-columns:repeat(2,1fr);}.env-card,.harvest-card,.nutrient-card,.workers-card,.maintenance-card{grid-column:span 2;}.maintenance-inner{grid-template-columns:1fr;}.farm-map-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}}
-@media (max-width:768px){.wrapper{padding:0 8px 8px;}.header{flex-direction:column;align-items:flex-start;gap:12px;padding:10px;}.clock-area{text-align:left;width:100%;}#clock-time{font-size:24px;}.grid-main{grid-template-columns:1fr;}.card{grid-column:span 1 !important;padding:12px;}.chart-container,.harvest-chart-wrap{height:200px;}.rack-cell{width:28px;height:20px;}.y-label{font-size:9px;width:30px;}.maintenance-list{max-height:250px;}.logo-text h1{font-size:18px;}.logo-text p{font-size:10px;}}
-@media (max-width:480px){.env-stats{grid-template-columns:1fr 1fr;}.power-items{grid-template-columns:1fr;}.floor-tab{padding:7px 15px;font-size:12px;}}
+
+/* 반응형 모바일 처리 */
+@media (max-width:1440px){
+    .grid-main{grid-template-columns:repeat(3,1fr);}
+    .env-card,.harvest-card,.maintenance-card{grid-column:span 2;}
+}
+@media (max-width:1024px){
+    .grid-main{grid-template-columns:repeat(2,1fr);}
+    .env-card,.harvest-card,.nutrient-card,.workers-card,.maintenance-card{grid-column:span 2;}
+    .maintenance-inner{grid-template-columns:minmax(0, 1fr);} /* 💡 모바일 충돌 해결 */
+}
+@media (max-width:768px){
+    .wrapper{padding:0 8px 8px;}
+    .header{flex-direction:column;align-items:flex-start;gap:12px;padding:10px;}
+    .clock-area{text-align:left;width:100%;}
+    #clock-time{font-size:24px;}
+    .grid-main{grid-template-columns:1fr;}
+    .card{grid-column:span 1 !important;padding:12px;}
+    .chart-container,.harvest-chart-wrap{height:200px;}
+    .rack-cell{width:28px;height:20px;}
+    .y-label{font-size:9px;width:30px;}
+    .maintenance-list{max-height:250px;}
+    .logo-text h1{font-size:18px;}
+    .logo-text p{font-size:10px;}
+}
+@media (max-width:480px){
+    .env-stats{grid-template-columns:1fr 1fr;}
+    .power-items{grid-template-columns:1fr;}
+    .floor-tab{padding:7px 15px;font-size:12px;}
+}
 </style>
 </head>
 <body>
