@@ -89,17 +89,15 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 .maintenance-card { grid-column: span 4; }
+
 .maintenance-inner {
     display: grid;
-    grid-template-columns: 1fr 320px; /* 왼쪽은 맵(나머지 공간 전부), 오른쪽은 리스트(320px 고정) */
+    /* 💡 여기가 핵심입니다! 왼쪽 맵이 오른쪽 리스트를 밀어내지 못하게 철벽을 칩니다. */
+    grid-template-columns: minmax(0, 1fr) 320px; 
     gap: 16px;
-    align-items: flex-start; /* 맵 높이가 길어져도 리스트가 같이 늘어나지 않게 위쪽으로 정렬 */
+    align-items: flex-start;
 }
 
-/* 💡 핵심 추가 코드: 맵이 그리드 영역을 강제로 부수고 나가지 못하게 막습니다. */
-.maintenance-inner > div:first-child {
-    min-width: 0;
-}
 .farm-map-wrap {
     background: var(--bg-card2);
     border-radius: 10px;
@@ -107,8 +105,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     border: 1px solid var(--border-color);
     display: block;
     width: 100%;
-    overflow-x: auto; /* 좁을 때 스크롤 생성 */
-    white-space: nowrap;
+    overflow-x: auto; 
     -webkit-overflow-scrolling: touch;
 }
 
