@@ -454,9 +454,11 @@ async function updateWorkers() {
   const data = await fetchAPI('workers');
   if (!data) return;
 
+  // 찾고자 하는 HTML 박스의 ID
   const totalEl = document.getElementById('w-total');
-  const onDutyEl = document.getElementById('w-on-duty');
+  const onDutyEl = document.getElementById('w-on-duty'); 
 
+  // ★ 핵심: 해당 박스가 화면에 있을 때만(null이 아닐 때만) 글씨를 넣도록 방어막(if)을 쳤습니다.
   if (totalEl) totalEl.textContent = data.summary.total || 0;
   if (onDutyEl) onDutyEl.textContent = data.summary.onDuty || 0;
 
@@ -483,7 +485,6 @@ async function updateWorkers() {
     </div>`;
   }).join('');
 }
-
 async function updatePower(){
   const data=await fetchAPI('power');if(!data)return;
   const c=data.current;
