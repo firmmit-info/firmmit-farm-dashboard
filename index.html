@@ -43,7 +43,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .weather-item .label{font-size:12px;color:var(--text-muted);margin-bottom:4px;}
 .weather-item .value{font-size:16px;font-weight:700;color:var(--accent-blue);}
 
-/* 내부환경 — 조도 항목 삭제, 3열로 */
+/* 내부환경 */
 .env-card{grid-column:span 2;}
 .chart-container{position:relative;height:160px;}
 .env-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
@@ -63,7 +63,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .power-item{background:var(--bg-card2);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--text-sub);}
 .power-item .pval{font-size:14px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
 
-/* 수확량 (풀 가로 4칸) + 과실등급 우측 */
+/* 수확량 */
 .harvest-card{grid-column:span 4;}
 .harvest-inner{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:flex-start;}
 @media(max-width:900px){.harvest-inner{grid-template-columns:1fr;}}
@@ -117,7 +117,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .ev-urgent{background:rgba(255,77,109,0.1);color:var(--accent-red);border-color:rgba(255,77,109,0.25);}
 .ev-note{background:rgba(255,215,0,0.08);color:var(--accent-yellow);border-color:rgba(255,215,0,0.2);}
 
-/* 근무자 (맨 아래, 풀 가로 4칸) */
+/* 근무자 */
 .workers-card{grid-column:span 4;}
 .workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:flex-start;}
 .workers-summary{display:flex;flex-direction:column;gap:10px;}
@@ -228,7 +228,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       </div>
     </div>
 
-    <!-- 내부 환경 (조도 없음) -->
+    <!-- 내부 환경 -->
     <div class="card env-card">
       <div class="card-title"><i class="fas fa-temperature-half"></i> 내부 환경 모니터링</div>
       <div class="chart-container"><canvas id="envChart"></canvas></div>
@@ -280,7 +280,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
             <div class="grade-donut-wrap">
               <canvas id="gradeDonut" width="100" height="100"></canvas>
               <div class="grade-donut-center">
-                <div class="gd-val" id="grade-total-kg">491.6</div>
+                <div class="gd-val" id="grade-total-kg">--</div>
                 <div class="gd-label">총 kg</div>
               </div>
             </div>
@@ -288,23 +288,23 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
               <div class="grade-bar-row">
                 <div class="grade-bar-top">
                   <span class="grade-bar-label" style="color:var(--accent-green);">🍓 정상과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">83%</span><span class="grade-bar-kg" id="kg-normal">408.0kg</span></div>
+                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
                 </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:83%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
+                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
               </div>
               <div class="grade-bar-row">
                 <div class="grade-bar-top">
                   <span class="grade-bar-label" style="color:var(--accent-yellow);">🫐 소과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">11%</span><span class="grade-bar-kg" id="kg-small">54.1kg</span></div>
+                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
                 </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:11%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
+                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
               </div>
               <div class="grade-bar-row">
                 <div class="grade-bar-top">
                   <span class="grade-bar-label" style="color:var(--accent-red);">⚠️ 기형과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">6%</span><span class="grade-bar-kg" id="kg-deform">29.5kg</span></div>
+                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
                 </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:6%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
+                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
               </div>
             </div>
           </div>
@@ -318,19 +318,23 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div class="notice-inner">
         <div>
           <div class="notice-board-title"><i class="fas fa-bullhorn" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>공지사항</div>
-          <div id="notice-list"></div>
+          <div id="notice-list">
+            <div style="color:#4a6a4a;padding:10px;">데이터 로딩중...</div>
+          </div>
         </div>
         <div>
           <div class="week-cal-header">
-            <div class="week-cal-title"><i class="fas fa-calendar-week" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>이번 주 방문자 일정</div>
+            <div class="week-cal-title"><i class="fas fa-calendar-week" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>이번 주 일정</div>
             <div class="week-cal-range" id="cal-range">--</div>
           </div>
-          <div class="week-cal-grid" id="week-cal-grid"></div>
+          <div class="week-cal-grid" id="week-cal-grid">
+            <div style="color:#4a6a4a;grid-column:span 7;padding:10px;">데이터 로딩중...</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 근무자 현황 (맨 아래) -->
+    <!-- 근무자 현황 -->
     <div class="card workers-card">
       <div class="card-title"><i class="fas fa-users"></i> 근무자 현황</div>
       <div class="workers-inner">
@@ -470,55 +474,98 @@ async function updatePower(){
   else{powerChart.data=cd;powerChart.update();}
 }
 
-const NOTICES=[
-  {type:'important',label:'긴급',title:'6월 정기 방역 소독 실시 (6/10 화요일 오전)',date:'2025-06-05'},
-  {type:'general',label:'일반',title:'딸기 수확 목표량 상향 조정 공지 (6월 30kg/일 → 35kg/일)',date:'2025-06-03'},
-  {type:'info',label:'안내',title:'농촌진흥청 스마트팜 연구팀 방문 예정 (6/12 목요일)',date:'2025-06-02'},
-  {type:'general',label:'일반',title:'양액 조성 레시피 업데이트 적용 완료',date:'2025-05-30'},
-  {type:'info',label:'안내',title:'7월 하계 휴무 일정 협의 예정',date:'2025-05-28'},
-];
-const VISITOR_EVENTS=[
-  {dayOfWeek:1,label:'농업기술원 방문',type:'ev-visit'},
-  {dayOfWeek:1,label:'오전 병해충 점검',type:'ev-task'},
-  {dayOfWeek:2,label:'장비 유지보수팀',type:'ev-urgent'},
-  {dayOfWeek:3,label:'수확량 데이터 보고',type:'ev-note'},
-  {dayOfWeek:4,label:'농촌진흥청 연구팀',type:'ev-visit'},
-  {dayOfWeek:4,label:'온실 환경 점검',type:'ev-task'},
-  {dayOfWeek:5,label:'바이어 투어 방문',type:'ev-visit'},
-];
-
-function renderNotices(){
-  const el=document.getElementById('notice-list');if(!el)return;
-  el.innerHTML=NOTICES.map(n=>{
-    const cls=n.type==='important'?'nb-important':n.type==='general'?'nb-general':'nb-info';
-    return `<div class="notice-item"><span class="notice-badge ${cls}">${n.label}</span><div><div class="notice-title">${n.title}</div><div class="notice-date">${n.date}</div></div></div>`;
+// ==========================================
+// 신규 연동 추가: 공지사항 렌더링
+// ==========================================
+async function updateNotice() {
+  const data = await fetchAPI('notice');
+  const el = document.getElementById('notice-list');
+  if (!el) return;
+  
+  if (!data || data.length === 0) {
+    el.innerHTML = '<div style="color:#4a6a4a;padding:10px;">등록된 공지사항이 없습니다.</div>';
+    return;
+  }
+  
+  // 최대 5개까지만 화면에 출력
+  el.innerHTML = data.slice(0, 5).map(n => {
+    let cls = 'nb-info';
+    if (n.category === '긴급') cls = 'nb-important';
+    else if (n.category === '일반') cls = 'nb-general';
+    return `<div class="notice-item"><span class="notice-badge ${cls}">${n.category}</span><div><div class="notice-title">${n.title}</div><div class="notice-date">${n.date}</div></div></div>`;
   }).join('');
 }
 
-function renderWeekCalendar(){
-  const grid=document.getElementById('week-cal-grid');
-  const rangeEl=document.getElementById('cal-range');
-  if(!grid)return;
-  const today=new Date();
-  const weekStart=new Date(today);weekStart.setDate(today.getDate()-today.getDay());
-  const weekEnd=new Date(weekStart);weekEnd.setDate(weekStart.getDate()+6);
-  const fmt=d=>`${d.getMonth()+1}/${d.getDate()}`;
-  if(rangeEl)rangeEl.textContent=`${fmt(weekStart)} ~ ${fmt(weekEnd)}`;
-  const dayNames=['일','월','화','수','목','금','토'];
-  let html='';
-  for(let i=0;i<7;i++){
-    const dayDate=new Date(weekStart);dayDate.setDate(weekStart.getDate()+i);
-    const isToday=dayDate.toDateString()===today.toDateString();
-    const nc=i===0?'color:var(--accent-red)':i===6?'color:var(--accent-blue)':'';
-    const events=VISITOR_EVENTS.filter(e=>e.dayOfWeek===i);
-    html+=`<div class="week-day-col"><div class="week-day-head${isToday?' today':''}"><div class="week-day-name" style="${nc}">${dayNames[i]}</div><div class="week-day-date" style="${nc}">${dayDate.getDate()}</div></div>${events.map(e=>`<div class="week-event ${e.type}">${e.label}</div>`).join('')}</div>`;
+// ==========================================
+// 신규 연동 추가: 주간 캘린더 (방문자) 렌더링
+// ==========================================
+async function updateVisitor() {
+  const data = await fetchAPI('visitor');
+  const grid = document.getElementById('week-cal-grid');
+  const rangeEl = document.getElementById('cal-range');
+  if (!grid) return;
+
+  const today = new Date();
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - today.getDay()); // 일요일을 주의 시작으로
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6); // 토요일
+  
+  const fmt = d => `${d.getMonth() + 1}/${d.getDate()}`;
+  if (rangeEl) rangeEl.textContent = `${fmt(weekStart)} ~ ${fmt(weekEnd)}`;
+
+  const dayNames = ['일','월','화','수','목','금','토'];
+  let html = '';
+
+  for (let i = 0; i < 7; i++) {
+    const dayDate = new Date(weekStart);
+    dayDate.setDate(weekStart.getDate() + i);
+    const isToday = dayDate.toDateString() === today.toDateString();
+    const nc = i === 0 ? 'color:var(--accent-red)' : i === 6 ? 'color:var(--accent-blue)' : '';
+
+    // 구글 시트에서 넘어온 날짜(예: 5/10)와 달력의 해당 칸 날짜 비교
+    const todayEvents = (data || []).filter(v => {
+      if(!v.date) return false;
+      const parts = v.date.split('/');
+      if(parts.length === 2) {
+        return parseInt(parts[0]) === (dayDate.getMonth() + 1) && parseInt(parts[1]) === dayDate.getDate();
+      }
+      return false;
+    });
+
+    const eventsHtml = todayEvents.map(e => {
+      // 엑셀 시트에 적은 "상태" 값에 따라 캘린더 라벨 색상 지정 (기존 UI 호환)
+      let evType = 'ev-visit'; // 기본: 파란색
+      if (e.status === '완료') evType = 'ev-task'; // 녹색
+      else if (e.status === '취소') evType = 'ev-urgent'; // 빨간색
+      else if (e.status === '예정') evType = 'ev-note'; // 노란색
+
+      return `<div class="week-event ${evType}" title="${e.time} - ${e.purpose}">${e.time} ${e.name}</div>`;
+    }).join('');
+
+    html += `<div class="week-day-col"><div class="week-day-head${isToday ? ' today' : ''}"><div class="week-day-name" style="${nc}">${dayNames[i]}</div><div class="week-day-date" style="${nc}">${dayDate.getDate()}</div></div>${eventsHtml}</div>`;
   }
-  grid.innerHTML=html;
+  
+  grid.innerHTML = html;
 }
 
+// ==========================================
+// 전체 데이터 갱신
+// ==========================================
 async function refreshAll(){
   document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> UPDATING...';
-  await Promise.all([updateWeather(),updateEnv(),updateHarvest(),updateWorkers(),updatePower()]);
+  
+  // API 데이터 동시 호출 (notice, visitor 추가)
+  await Promise.all([
+    updateWeather(),
+    updateEnv(),
+    updateHarvest(),
+    updateWorkers(),
+    updatePower(),
+    updateNotice(),
+    updateVisitor()
+  ]);
+  
   renderGradeDonutFixed();
   document.getElementById('loadingOverlay').style.display='none';
   const now=new Date();
@@ -526,8 +573,7 @@ async function refreshAll(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  renderNotices();
-  renderWeekCalendar();
+  // 페이지 로드 시 전체 갱신 시작
   refreshAll();
   setInterval(refreshAll,REFRESH_INTERVAL);
 });
