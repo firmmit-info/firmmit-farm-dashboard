@@ -117,14 +117,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .ev-urgent{background:rgba(255,77,109,0.1);color:var(--accent-red);border-color:rgba(255,77,109,0.25);}
 .ev-note{background:rgba(255,215,0,0.08);color:var(--accent-yellow);border-color:rgba(255,215,0,0.2);}
 
-/* 근무자 */
+/* 근무자 (2열 구조와 6개 카드 배치를 위해 수정된 CSS) */
 .workers-card{grid-column:span 4;}
-.workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:flex-start;}
-.workers-summary{display:flex;flex-direction:column;gap:12px;height:100%;}
-.worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);flex:1;display:flex;flex-direction:column;justify-content:center;}
+.workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:stretch;}
+.worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);display:flex;flex-direction:column;justify-content:center;height:100%;}
 .worker-stat-box .ws-num{font-size:28px;font-weight:700;color:var(--accent-green);}
 .worker-stat-box .ws-label{font-size:12px;color:var(--text-muted);margin-top:3px;}
-.worker-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+/* 한 줄에 6명이 나오도록 수정 */
+.worker-list{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
 .worker-item{display:flex;align-items:center;gap:10px;background:var(--bg-card2);border-radius:8px;padding:12px 14px;border:1px solid var(--border-color);transition:border-color .3s;}
 .worker-item:hover{border-color:var(--accent-green);}
 .worker-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
@@ -145,20 +145,20 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 ::-webkit-scrollbar-track{background:var(--bg-main);border-radius:3px;}
 ::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:3px;}
 
-/* 반응형 */
+/* 반응형 (화면이 작아질 때 카드 줄이기) */
+@media(max-width:1600px){.worker-list{grid-template-columns:repeat(5,1fr);}}
 @media(max-width:1440px){
   .grid-main{grid-template-columns:repeat(3,1fr);}
   .harvest-card,.notice-card,.workers-card{grid-column:span 3;}
   .env-card{grid-column:span 2;}
-  .worker-list{grid-template-columns:repeat(3,1fr);}
+  .worker-list{grid-template-columns:repeat(4,1fr);}
 }
 @media(max-width:1024px){
   .grid-main{grid-template-columns:repeat(2,1fr);}
   .harvest-card,.notice-card,.workers-card,.env-card{grid-column:span 2;}
   .notice-inner{grid-template-columns:1fr;}
   .workers-inner{grid-template-columns:1fr;}
-  .workers-summary{flex-direction:row;}
-  .worker-list{grid-template-columns:repeat(2,1fr);}
+  .worker-list{grid-template-columns:repeat(3,1fr);}
 }
 @media(max-width:768px){
   .wrapper{padding:0 8px 8px;}
@@ -170,8 +170,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   .chart-container,.harvest-chart-wrap{height:180px;}
   .logo-text h1{font-size:18px;}
   .logo-text p{font-size:10px;}
-  .worker-list{grid-template-columns:1fr 1fr;}
-  .workers-summary{flex-direction:row;flex-wrap:wrap;}
+  .worker-list{grid-template-columns:repeat(2,1fr);}
   .week-cal-grid{gap:3px;}
   .week-event{font-size:10px;padding:3px 4px;}
   .grade-donut-row{justify-content:center;}
@@ -180,7 +179,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @media(max-width:480px){
   .power-items{grid-template-columns:1fr;}
   .worker-list{grid-template-columns:1fr;}
-  .workers-summary{flex-direction:column;}
 }
 </style>
 </head>
@@ -334,22 +332,31 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       </div>
     </div>
 
-    <!-- 근무자 현황 -->
+    <!-- 근무자 현황 (요청하신 2줄 분리 구조) -->
     <div class="card workers-card">
       <div class="card-title"><i class="fas fa-users"></i> 근무자 현황</div>
-      <div class="workers-inner">
-        <div class="workers-summary">
+      
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <!-- 1열: 총 근무자 (6명 전부 표시) -->
+        <div class="workers-inner">
           <div class="worker-stat-box">
             <div id="w-total" class="ws-num">0</div>
             <div class="ws-label">총 근무자</div>
           </div>
+          <div id="worker-list-all" class="worker-list">
+            <!-- 자바스크립트로 전체 리스트가 그려집니다 -->
+          </div>
+        </div>
+
+        <!-- 2열: 출근 (출근자만 표시) -->
+        <div class="workers-inner">
           <div class="worker-stat-box">
             <div id="w-on-duty" class="ws-num">0</div>
             <div class="ws-label">출근</div>
           </div>
-        </div>
-        <div id="worker-list" class="worker-list">
-          <!-- 동적으로 생성될 근무자 리스트 -->
+          <div id="worker-list-on" class="worker-list">
+            <!-- 자바스크립트로 출근자 리스트가 그려집니다 -->
+          </div>
         </div>
       </div>
     </div>
@@ -450,41 +457,59 @@ function updateGradeChart(grade){
   else{gradeDonutChart.data=cd;gradeDonutChart.update();}
 }
 
+// ----------------------------------------------------
+// [핵심] 근무자 현황: 2단 구조 및 퇴근자 회색 처리
+// ----------------------------------------------------
 async function updateWorkers() {
   const data = await fetchAPI('workers');
   if (!data) return;
 
-  // 찾고자 하는 HTML 박스의 ID
   const totalEl = document.getElementById('w-total');
-  const onDutyEl = document.getElementById('w-on-duty'); 
+  const onDutyEl = document.getElementById('w-on-duty');
 
-  // ★ 핵심: 해당 박스가 화면에 있을 때만(null이 아닐 때만) 글씨를 넣도록 방어막(if)을 쳤습니다.
   if (totalEl) totalEl.textContent = data.summary.total || 0;
   if (onDutyEl) onDutyEl.textContent = data.summary.onDuty || 0;
 
-  const list = document.getElementById('worker-list');
-  if (!list) return;
+  const listAll = document.getElementById('worker-list-all');
+  const listOn = document.getElementById('worker-list-on');
 
-  if (!data.workers || data.workers.length === 0) {
-    list.innerHTML = '<div style="color:#4a6a4a;text-align:center;padding:20px;grid-column:span 4">현재 근무중인 인원 없음</div>';
-    return;
-  }
-
-  list.innerHTML = data.workers.map(w => {
+  // 카드를 만들어주는 공통 함수
+  const createCard = (w) => {
     const isMgr = w.type === '담당자';
     const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
     const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
-    return `<div class="worker-item">
+    const isOffDuty = w.status !== '근무중';
+    
+    // 퇴근자일 경우 시간표시를 '퇴근'으로 변경하고, 약간 어둡게(회색빛) 처리하여 구분
+    const timeText = isOffDuty ? `🌙 퇴근` : `⏱ ${w.startTime} 출근`;
+    const cardStyle = isOffDuty ? 'opacity:0.6; filter:grayscale(30%); border-color:var(--border-color);' : '';
+
+    return `<div class="worker-item" style="${cardStyle}">
       <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
       <div class="worker-info">
         <div class="w-name">${w.name}</div>
         <div class="w-role">${w.role}</div>
-        <div class="w-time">⏱ ${w.startTime} 출근</div>
+        <div class="w-time">${timeText}</div>
       </div>
       <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
     </div>`;
-  }).join('');
+  };
+
+  // 1열: 총 근무자 (조남경 등 퇴근한 사람도 모두 포함해서 그림)
+  if (listAll) {
+    listAll.innerHTML = (data.allWorkers && data.allWorkers.length > 0) 
+      ? data.allWorkers.map(createCard).join('') 
+      : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">등록된 근무자가 없습니다.</div>';
+  }
+
+  // 2열: 출근 (현재 근무중인 5명만 그림)
+  if (listOn) {
+    listOn.innerHTML = (data.onDutyWorkers && data.onDutyWorkers.length > 0)
+      ? data.onDutyWorkers.map(createCard).join('')
+      : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">현재 출근한 인원이 없습니다.</div>';
+  }
 }
+
 async function updatePower(){
   const data=await fetchAPI('power');if(!data)return;
   const c=data.current;
