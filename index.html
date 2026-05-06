@@ -410,14 +410,33 @@ async function updateEnv(){
   document.getElementById('in-temp').textContent=(c.temperature||0)+'°C';
   document.getElementById('in-hum').textContent=(c.humidity||0)+'%';
   document.getElementById('in-co2').textContent=(c.co2||0).toLocaleString();
-  const labels=(data.hourly||[]).map(h=>(h.time||'').slice(11,16));
+  
+  // ★ 수정된 부분: 쓸데없이 글자를 자르던 코드를 없애고 구글 시트의 시간(16:00 등)을 그대로 가져옵니다.
+  const labels=(data.hourly||[]).map(h=>h.time||'');
+  
   const temps=(data.hourly||[]).map(h=>h.temperature);
   const hums=(data.hourly||[]).map(h=>h.humidity);
   const cd={labels,datasets:[
     {label:'온도(°C)',data:temps,borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y1'},
     {label:'습도(%)',data:hums,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y2'}
   ]};
-  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#4a6a4a',maxTicksLimit:8,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},min:10,max:25},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:11}},grid:{drawOnChartArea:false},min:60,max:95}}};
+  const opts={
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}},
+      tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}
+    },
+    scales:{
+      x:{
+        // ★ 수정된 부분: X축 글씨 색상을 좀 더 밝게(#7aaa7a) 바꾸어 눈에 띄게 했습니다.
+        ticks:{color:'#7aaa7a',maxTicksLimit:8,font:{size:11}}, 
+        grid:{color:'rgba(255,255,255,0.04)'}
+      },
+      y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},min:10,max:25},
+      y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:11}},grid:{drawOnChartArea:false},min:60,max:95}
+    }
+  };
   if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
   else{envChart.data=cd;envChart.update();}
 }
