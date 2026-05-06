@@ -566,14 +566,40 @@ async function updateVisitor() {
     const isToday = dayDate.toDateString() === today.toDateString();
     const nc = i === 0 ? 'color:var(--accent-red)' : i === 6 ? 'color:var(--accent-blue)' : '';
 
+    // ★ 구글 시트의 날짜 형식이 달라도 무조건 인식하도록 수정한 핵심 부분 ★
     const todayEvents = (data || []).filter(v => {
       if(!v.date) return false;
-      const parts = v.date.split('/');
-      if(parts.length === 2) {
-        return parseInt(parts[0]) === (dayDate.getMonth() + 1) && parseInt(parts[1]) === dayDate.getDate();
+      
+      // 문자열에서 숫자만 쏙쏙 뽑아냅니다 (예: "2026-05-06" -> [2026, 5, 6])
+      const nums = v.date.match(/\d+/g);
+      if (!nums || nums.length < 2) return false;
+      
+      let m, d;
+      if (nums.length >= 3) {
+        m = parseInt(nums[1]); // 년도가 포함된 경우 (두 번째가 월)
+        d = parseInt(nums[2]); // 세 번째가 일
+      } else {
+        m = parseInt(nums[0]); // 년도가 없는 경우 (예: "5/6" -> 첫 번째가 월)
+        d = parseInt(nums[1]); // 두 번째가 일
       }
-      return false;
+      
+      return m === (dayDate.getMonth() + 1) && d === dayDate.getDate();
     });
+
+    const eventsHtml = todayEvents.map(e => {
+      let evType = 'ev-visit';
+      if (e.status === '완료') evType = 'ev-task';
+      else if (e.status === '취소') evType = 'ev-urgent';
+      else if (e.status === '예정') evType = 'ev-note';
+
+      return `<div class="week-event ${evType}" title="${e.time} - ${e.purpose}">${e.time} ${e.name}</div>`;
+    }).join('');
+
+    html += `<div class="week-day-col"><div class="week-day-head${isToday ? ' today' : ''}"><div class="week-day-name" style="${nc}">${dayNames[i]}</div><div class="week-day-date" style="${nc}">${dayDate.getDate()}</div></div>${eventsHtml}</div>`;
+  }
+  
+  grid.innerHTML = html;
+}
 
     const eventsHtml = todayEvents.map(e => {
       let evType = 'ev-visit';
