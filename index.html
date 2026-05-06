@@ -120,11 +120,11 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 /* 근무자 */
 .workers-card{grid-column:span 4;}
 .workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:flex-start;}
-.workers-summary{display:flex;flex-direction:column;gap:10px;}
-.worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);}
+.workers-summary{display:flex;flex-direction:column;gap:12px;height:100%;}
+.worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);flex:1;display:flex;flex-direction:column;justify-content:center;}
 .worker-stat-box .ws-num{font-size:28px;font-weight:700;color:var(--accent-green);}
 .worker-stat-box .ws-label{font-size:12px;color:var(--text-muted);margin-top:3px;}
-.worker-list{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.worker-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .worker-item{display:flex;align-items:center;gap:10px;background:var(--bg-card2);border-radius:8px;padding:12px 14px;border:1px solid var(--border-color);transition:border-color .3s;}
 .worker-item:hover{border-color:var(--accent-green);}
 .worker-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
@@ -335,27 +335,27 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     </div>
 
     <!-- 근무자 현황 -->
-    /* 요약 박스 2개가 세로로 꽉 차게 조정 */
-.workers-summary {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; 
-    height: 100%;
-}
+    <div class="card workers-card">
+      <div class="card-title"><i class="fas fa-users"></i> 근무자 현황</div>
+      <div class="workers-inner">
+        <div class="workers-summary">
+          <div class="worker-stat-box">
+            <div id="w-total" class="ws-num">0</div>
+            <div class="ws-label">총 근무자</div>
+          </div>
+          <div class="worker-stat-box">
+            <div id="w-on-duty" class="ws-num">0</div>
+            <div class="ws-label">출근</div>
+          </div>
+        </div>
+        <div id="worker-list" class="worker-list">
+          <!-- 동적으로 생성될 근무자 리스트 -->
+        </div>
+      </div>
+    </div>
 
-.worker-stat-box {
-    flex: 1; /* 2개의 박스가 높이를 반반씩 나눠 가짐 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* 5명이 한 줄 혹은 두 줄로 잘 보이게 그리드 조정 */
-.worker-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3열로 배치 (윗줄 3명, 아랫줄 2명) */
-    gap: 10px;
-}
+  </div>
+</div>
 
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbzqF_SlIj67yNUEAsgtL4_QOeqbK9lbxwTH2XOerT94twL5IsY4FhIbxv358aVqMTOdlA/exec';
@@ -450,18 +450,37 @@ function updateGradeChart(grade){
   else{gradeDonutChart.data=cd;gradeDonutChart.update();}
 }
 
-async function updateWorkers(){
-  const data=await fetchAPI('workers');if(!data)return;
-  document.getElementById('w-total').textContent=data.summary.total||0;
-  document.getElementById('w-manager').textContent=data.summary.managers||0;
-  document.getElementById('w-worker').textContent=data.summary.workers||0;
-  const list=document.getElementById('worker-list');
-  if(!data.workers||data.workers.length===0){list.innerHTML='<div style="color:#4a6a4a;text-align:center;padding:20px;grid-column:span 4">현재 근무중인 인원 없음</div>';return;}
-  list.innerHTML=data.workers.map(w=>{
-    const isMgr=w.type==='담당자';
-    const color=w.color||(isMgr?'#ffd700':'#00ff88');
-    const bgClr=isMgr?'rgba(255,215,0,0.15)':'rgba(0,255,136,0.15)';
-    return `<div class="worker-item"><div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name||'?')[0]}</div><div class="worker-info"><div class="w-name">${w.name}</div><div class="w-role">${w.role}</div><div class="w-time">⏱ ${w.startTime} 출근</div></div><span class="worker-badge ${isMgr?'badge-manager':'badge-work'}">${w.type}</span></div>`;
+async function updateWorkers() {
+  const data = await fetchAPI('workers');
+  if (!data) return;
+
+  const totalEl = document.getElementById('w-total');
+  const onDutyEl = document.getElementById('w-on-duty');
+
+  if (totalEl) totalEl.textContent = data.summary.total || 0;
+  if (onDutyEl) onDutyEl.textContent = data.summary.onDuty || 0;
+
+  const list = document.getElementById('worker-list');
+  if (!list) return;
+
+  if (!data.workers || data.workers.length === 0) {
+    list.innerHTML = '<div style="color:#4a6a4a;text-align:center;padding:20px;grid-column:span 4">현재 근무중인 인원 없음</div>';
+    return;
+  }
+
+  list.innerHTML = data.workers.map(w => {
+    const isMgr = w.type === '담당자';
+    const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
+    const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
+    return `<div class="worker-item">
+      <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
+      <div class="worker-info">
+        <div class="w-name">${w.name}</div>
+        <div class="w-role">${w.role}</div>
+        <div class="w-time">⏱ ${w.startTime} 출근</div>
+      </div>
+      <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
+    </div>`;
   }).join('');
 }
 
@@ -479,9 +498,6 @@ async function updatePower(){
   else{powerChart.data=cd;powerChart.update();}
 }
 
-// ==========================================
-// 신규 연동 추가: 공지사항 렌더링
-// ==========================================
 async function updateNotice() {
   const data = await fetchAPI('notice');
   const el = document.getElementById('notice-list');
@@ -492,7 +508,6 @@ async function updateNotice() {
     return;
   }
   
-  // 최대 5개까지만 화면에 출력
   el.innerHTML = data.slice(0, 5).map(n => {
     let cls = 'nb-info';
     if (n.category === '긴급') cls = 'nb-important';
@@ -501,9 +516,6 @@ async function updateNotice() {
   }).join('');
 }
 
-// ==========================================
-// 신규 연동 추가: 주간 캘린더 (방문자) 렌더링
-// ==========================================
 async function updateVisitor() {
   const data = await fetchAPI('visitor');
   const grid = document.getElementById('week-cal-grid');
@@ -512,9 +524,9 @@ async function updateVisitor() {
 
   const today = new Date();
   const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - today.getDay()); // 일요일을 주의 시작으로
+  weekStart.setDate(today.getDate() - today.getDay());
   const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 6); // 토요일
+  weekEnd.setDate(weekStart.getDate() + 6);
   
   const fmt = d => `${d.getMonth() + 1}/${d.getDate()}`;
   if (rangeEl) rangeEl.textContent = `${fmt(weekStart)} ~ ${fmt(weekEnd)}`;
@@ -528,7 +540,6 @@ async function updateVisitor() {
     const isToday = dayDate.toDateString() === today.toDateString();
     const nc = i === 0 ? 'color:var(--accent-red)' : i === 6 ? 'color:var(--accent-blue)' : '';
 
-    // 구글 시트에서 넘어온 날짜(예: 5/10)와 달력의 해당 칸 날짜 비교
     const todayEvents = (data || []).filter(v => {
       if(!v.date) return false;
       const parts = v.date.split('/');
@@ -539,11 +550,10 @@ async function updateVisitor() {
     });
 
     const eventsHtml = todayEvents.map(e => {
-      // 엑셀 시트에 적은 "상태" 값에 따라 캘린더 라벨 색상 지정 (기존 UI 호환)
-      let evType = 'ev-visit'; // 기본: 파란색
-      if (e.status === '완료') evType = 'ev-task'; // 녹색
-      else if (e.status === '취소') evType = 'ev-urgent'; // 빨간색
-      else if (e.status === '예정') evType = 'ev-note'; // 노란색
+      let evType = 'ev-visit';
+      if (e.status === '완료') evType = 'ev-task';
+      else if (e.status === '취소') evType = 'ev-urgent';
+      else if (e.status === '예정') evType = 'ev-note';
 
       return `<div class="week-event ${evType}" title="${e.time} - ${e.purpose}">${e.time} ${e.name}</div>`;
     }).join('');
@@ -554,13 +564,9 @@ async function updateVisitor() {
   grid.innerHTML = html;
 }
 
-// ==========================================
-// 전체 데이터 갱신
-// ==========================================
 async function refreshAll(){
   document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> UPDATING...';
   
-  // API 데이터 동시 호출 (notice, visitor 추가)
   await Promise.all([
     updateWeather(),
     updateEnv(),
@@ -578,7 +584,6 @@ async function refreshAll(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  // 페이지 로드 시 전체 갱신 시작
   refreshAll();
   setInterval(refreshAll,REFRESH_INTERVAL);
 });
