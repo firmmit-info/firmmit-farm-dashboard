@@ -592,15 +592,14 @@ async function updateVisitor() {
 async function refreshAll(){
   document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> UPDATING...';
   
-  await Promise.all([
-    updateWeather(),
-    updateEnv(),
-    updateHarvest(),
-    updateWorkers(),
-    updatePower(),
-    updateNotice(),
-    updateVisitor()
-  ]);
+  // 구글 서버가 튕기지 않도록, 동시에 요청하지 않고 하나씩 차례대로 가져옵니다.
+  await updateWeather();
+  await updateEnv();
+  await updateHarvest();
+  await updateWorkers();
+  await updatePower();
+  await updateNotice();
+  await updateVisitor();
   
   renderGradeDonutFixed();
   document.getElementById('loadingOverlay').style.display='none';
