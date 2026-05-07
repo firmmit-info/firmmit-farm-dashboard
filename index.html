@@ -61,14 +61,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 
 /* 수확량 현황 */
 .harvest-card{grid-column:span 4;}
-.harvest-inner{display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start;}
-.harvest-inner > div:first-child{flex:1 1 600px; min-width:0;}
+.harvest-inner{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;}
+.harvest-inner > div:first-child{flex:1 1 600px;min-width:0;}
 .harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
 .harvest-total{text-align:right;}
 .harvest-total .big{font-size:34px;font-weight:700;color:var(--accent-green);}
 .harvest-total .small{font-size:16px;color:var(--text-muted);}
 .harvest-chart-wrap{position:relative;height:220px;}
-.harvest-right{flex:0 0 420px; background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px; align-self: flex-start;}
+.harvest-right{flex:0 0 420px;background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px;align-self:flex-start;}
 .grade-section-title{font-size:18px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
 .grade-donut-row{display:flex;align-items:center;gap:20px;}
 .grade-bars{flex:1;display:flex;flex-direction:column;gap:10px;}
@@ -81,39 +81,38 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .grade-bar-bg{width:100%;height:10px;background:var(--bg-main);border-radius:5px;overflow:hidden;}
 .grade-bar-fill{height:100%;border-radius:5px;transition:width 1s ease;}
 
-/* 하단 3단 통합 레이아웃 */
-.bottom-row{grid-column:span 4; display:grid; grid-template-columns: 1fr 1fr 1.3fr; gap:14px; min-height: 320px;}
-.bottom-card{height:100%; display:flex; flex-direction:column;}
-.list-container{flex:1; display:flex; flex-direction:column; gap:8px; overflow-y:auto;}
-.list-item{display:flex; flex-direction:column; padding:10px 0; border-bottom:1px solid var(--border-color);}
+/* 하단 3단 */
+.bottom-row{grid-column:span 4;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:14px;min-height:320px;}
+.bottom-card{height:100%;display:flex;flex-direction:column;}
+.list-container{flex:1;display:flex;flex-direction:column;gap:8px;overflow-y:auto;}
+.list-item{display:flex;flex-direction:column;padding:10px 0;border-bottom:1px solid var(--border-color);}
 .list-item:last-child{border-bottom:none;}
-.list-top{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
-.item-badge{font-size:14px; font-weight:700; padding:3px 8px; border-radius:6px;}
-.item-title{font-size:18px; font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.item-content{font-size:15px; color:var(--text-muted); padding-left:2px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-.item-date{font-size:14px; color:var(--text-muted); margin-left:auto;}
+.list-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.item-badge{font-size:14px;font-weight:700;padding:3px 8px;border-radius:6px;}
+.item-title{font-size:18px;font-weight:600;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.item-content{font-size:15px;color:var(--text-muted);padding-left:2px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.item-date{font-size:14px;color:var(--text-muted);margin-left:auto;}
 
-/* 하단 근무자 현황 */
-.worker-mini-grid{display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; align-content:start;}
-.worker-mini-item{display:flex; align-items:center; gap:12px; background:var(--bg-card2); border-radius:8px; padding:14px; border:1px solid var(--border-color);}
-.worker-mini-avatar{width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700;}
-.worker-mini-info .name{font-size:17px; font-weight:700; margin-bottom:2px;}
-.worker-mini-info .role{font-size:14px; color:var(--text-muted);}
-
+/* 근무자 */
+.worker-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;align-content:start;}
+.worker-mini-item{display:flex;align-items:center;gap:12px;background:var(--bg-card2);border-radius:8px;padding:14px;border:1px solid var(--border-color);}
+.worker-mini-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;}
+.worker-mini-info .name{font-size:17px;font-weight:700;margin-bottom:2px;}
+.worker-mini-info .role{font-size:14px;color:var(--text-muted);}
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 
 /* 반응형 */
 @media(max-width:1200px){
   .harvest-inner{flex-direction:column;}
-  .harvest-right{width:100%; max-width:100%; flex:none;}
+  .harvest-right{width:100%;max-width:100%;flex:none;}
   .bottom-row{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.9);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;color:var(--accent-green);">
+<div id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.9);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;color:var(--accent-green);">
   <div style="width:50px;height:50px;border:3px solid #1e3a1e;border-top-color:var(--accent-green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px;"></div>
   <span>데이터 동기화 중...</span>
 </div>
@@ -130,12 +129,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   </header>
 
   <div class="grid-main">
-    
+
+    <!-- 외부 기상 -->
     <div class="card weather-card">
       <div class="card-title"><i class="fas fa-cloud-sun"></i> 외부 기상</div>
       <div class="weather-main">
         <div id="weather-icon" style="font-size:48px;">⛅</div>
-        <div class="weather-temp"><span class="val" id="ext-temp">--</span><span style="font-size:20px; color:var(--text-sub);">°C</span></div>
+        <div class="weather-temp"><span class="val" id="ext-temp">--</span><span style="font-size:20px;color:var(--text-sub);">°C</span></div>
       </div>
       <div class="weather-grid">
         <div class="weather-item"><div class="label">💧 습도</div><div class="value" id="ext-hum">--%</div></div>
@@ -145,6 +145,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       </div>
     </div>
 
+    <!-- 내부 환경 -->
     <div class="card env-card">
       <div class="card-title"><i class="fas fa-temperature-half"></i> 내부 환경 모니터링</div>
       <div class="chart-container"><canvas id="envChart"></canvas></div>
@@ -155,6 +156,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       </div>
     </div>
 
+    <!-- 전력량 -->
     <div class="card power-card">
       <div class="card-title"><i class="fas fa-bolt"></i> 전력량</div>
       <div class="power-gauge-wrap">
@@ -165,13 +167,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
         </div>
       </div>
       <div class="power-items">
-        <div class="power-item">공조 <span class="pval" id="pw-hvac">--kW</span></div>
-        <div class="power-item">조명 <span class="pval" id="pw-light">--kW</span></div>
-        <div class="power-item">양액펌프 <span class="pval" id="pw-pump">--kW</span></div>
-        <div class="power-item">기타 <span class="pval" id="pw-etc">--kW</span></div>
+        <div class="power-item">공조<span class="pval" id="pw-hvac">--kW</span></div>
+        <div class="power-item">조명<span class="pval" id="pw-light">--kW</span></div>
+        <div class="power-item">양액펌프<span class="pval" id="pw-pump">--kW</span></div>
+        <div class="power-item">기타<span class="pval" id="pw-etc">--kW</span></div>
       </div>
     </div>
 
+    <!-- 수확량 -->
     <div class="card harvest-card">
       <div class="card-title"><i class="fas fa-chart-bar"></i> 일자별 수확량 (최근 2주)</div>
       <div class="harvest-inner">
@@ -188,12 +191,12 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
         <div class="harvest-right">
           <div class="grade-section-title">🍓 과실 등급 분류 현황 (누적)</div>
           <div class="grade-donut-row">
-            <div style="position:relative; width:100px; height:100px;">
+            <div style="position:relative;width:100px;height:100px;">
               <canvas id="gradeDonut" width="100" height="100"></canvas>
             </div>
             <div>
-              <div style="font-size:14px; color:var(--text-muted);">총 분류량</div>
-              <div id="grade-total-kg" style="font-size:26px; font-weight:700; color:var(--accent-green);">--</div>
+              <div style="font-size:14px;color:var(--text-muted);">총 분류량</div>
+              <div id="grade-total-kg" style="font-size:26px;font-weight:700;color:var(--accent-green);">--</div>
             </div>
           </div>
           <div class="grade-bars">
@@ -223,27 +226,33 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       </div>
     </div>
 
+    <!-- 하단 3단 -->
     <div class="bottom-row">
+
+      <!-- 공지사항 -->
       <div class="card bottom-card">
         <div class="card-title"><i class="fas fa-bullhorn"></i> 공지사항</div>
         <div id="notice-list" class="list-container">
-           <div style="color:var(--text-muted); padding:10px;">데이터 로딩중...</div>
-        </div>
-      </div>
-      
-      <div class="card bottom-card">
-        <div class="card-title"><i class="fas fa-calendar-check"></i> 방문 일정</div>
-        <div id="visitor-list" class="list-container">
-           <div style="color:var(--text-muted); padding:10px;">데이터 로딩중...</div>
+          <div style="color:var(--text-muted);padding:10px;">데이터 로딩중...</div>
         </div>
       </div>
 
+      <!-- 방문 일정 -->
+      <div class="card bottom-card">
+        <div class="card-title"><i class="fas fa-calendar-check"></i> 방문 일정</div>
+        <div id="visitor-list" class="list-container">
+          <div style="color:var(--text-muted);padding:10px;">데이터 로딩중...</div>
+        </div>
+      </div>
+
+      <!-- 오늘 출근자 -->
       <div class="card bottom-card">
         <div class="card-title"><i class="fas fa-user-friends"></i> 오늘 출근자</div>
         <div id="worker-list-today" class="worker-mini-grid">
-           <div style="grid-column:span 2; color:var(--text-muted); padding:10px;">데이터 로딩중...</div>
+          <div style="grid-column:span 2;color:var(--text-muted);padding:10px;">데이터 로딩중...</div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -253,15 +262,16 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzqF_SlIj67yNUEAsgtL4_Q
 const REFRESH_INTERVAL = 60000;
 let envChart = null, harvestChart = null, powerChart = null, gradeDonutChart = null;
 
+// ── 시계 ──
 function updateClock() {
-  const now = new Date();
-  const days = ['일', '월', '화', '수', '목', '금', '토'];
-  document.getElementById('clock-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-  document.getElementById('clock-date').textContent = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+  const now = new Date(), days = ['일','월','화','수','목','금','토'];
+  document.getElementById('clock-time').textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  document.getElementById('clock-date').textContent = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
 }
 setInterval(updateClock, 1000);
 updateClock();
 
+// ── API 호출 ──
 async function fetchAPI(type) {
   try {
     const res = await fetch(`${API_URL}?type=${type}`, { redirect: 'follow' });
@@ -273,16 +283,26 @@ async function fetchAPI(type) {
   }
 }
 
+// ── 공지사항 ──
 async function updateNotice() {
   const data = await fetchAPI('notice');
   const el = document.getElementById('notice-list');
-  if (!el || !data || data.length === 0) {
-    if (el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">등록된 공지사항이 없습니다.</div>';
+  if (!el) return;
+  if (!data || data.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-muted);padding:10px;">등록된 공지사항이 없습니다.</div>';
     return;
   }
-  el.innerHTML = data.reverse().slice(0, 4).map(n => {
-    const bg = n.category === '긴급' ? 'rgba(255,77,109,0.2)' : n.category === '시스템' ? 'rgba(77,166,255,0.15)' : 'rgba(0,255,136,0.1)';
-    const co = n.category === '긴급' ? 'var(--accent-red)' : n.category === '시스템' ? 'var(--accent-blue)' : 'var(--accent-green)';
+  // 최신순으로 정렬 후 최대 4개 표시
+  el.innerHTML = [...data].reverse().slice(0, 4).map(n => {
+    // 분류에 따라 배지 색상 결정
+    let bg, co;
+    if (n.category === '긴급') {
+      bg = 'rgba(255,77,109,0.2)'; co = 'var(--accent-red)';
+    } else if (n.category === '시스템') {
+      bg = 'rgba(77,166,255,0.15)'; co = 'var(--accent-blue)';
+    } else {
+      bg = 'rgba(0,255,136,0.1)'; co = 'var(--accent-green)';
+    }
     return `<div class="list-item">
       <div class="list-top">
         <span class="item-badge" style="background:${bg};color:${co}">${n.category}</span>
@@ -293,43 +313,20 @@ async function updateNotice() {
     </div>`;
   }).join('');
 }
-  
-  el.innerHTML = data.reverse().slice(0, 4).map(n => {
-    let category = n.category;
-    let title = n.title;
-    let date = n.date;
-    let content = n.content || '내용이 없습니다.';
-    
-    let cls = category === '긴급' ? 'nb-important' : 'nb-general';
-    let bg = category === '긴급' ? 'rgba(255,77,109,0.2)' : 'rgba(0,255,136,0.1)';
-    let co = category === '긴급' ? 'var(--accent-red)' : 'var(--accent-green)';
-    
-    return `
-      <div class="list-item">
-        <div class="list-top">
-          <span class="item-badge" style="background:${bg}; color:${co}">${category}</span>
-          <span class="item-title">${title}</span>
-          <span class="item-date">${date}</span>
-        </div>
-        <div class="item-content" style="margin-top:4px;">${content}</div>
-      </div>`;
-  }).join('');
-}
 
+// ── 방문 일정 ──
 async function updateVisitor() {
   const data = await fetchAPI('visitor');
   const el = document.getElementById('visitor-list');
-  if (!el || !data || data.length === 0) {
-    if (el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">예정된 방문 일정이 없습니다.</div>';
+  if (!el) return;
+  if (!data || data.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-muted);padding:10px;">예정된 방문 일정이 없습니다.</div>';
     return;
   }
-  
-  const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 4);
-  
-  el.innerHTML = sortedData.map(v => `
+  el.innerHTML = [...data].sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 4).map(v => `
     <div class="list-item">
       <div class="list-top">
-        <span class="item-badge" style="background:rgba(77,166,255,0.15); color:var(--accent-blue)">방문</span>
+        <span class="item-badge" style="background:rgba(77,166,255,0.15);color:var(--accent-blue)">방문</span>
         <span class="item-title">${v.name}</span>
         <span class="item-date">${v.date} ${v.time}</span>
       </div>
@@ -337,6 +334,9 @@ async function updateVisitor() {
     </div>`).join('');
 }
 
+// ── 오늘 출근자 ──
+// GAS getWorkers()가 { onDutyWorkers: [...] } 형태로 반환
+// 근무자 시트 구조: A=날짜, B~I=역할별 이름 (헤더가 역할명)
 async function updateWorkers() {
   const data = await fetchAPI('workers');
   const el = document.getElementById('worker-list-today');
@@ -347,11 +347,10 @@ async function updateWorkers() {
   }
   el.innerHTML = data.onDutyWorkers.map(w => {
     const isMgr   = w.type === '담당자';
-    const color   = w.color || (isMgr ? 'var(--accent-yellow)' : 'var(--accent-green)');
+    const color   = w.color || (isMgr ? '#ffd700' : '#00ff88');
     const bgClr   = isMgr ? 'rgba(255,215,0,0.1)' : 'rgba(0,255,136,0.1)';
     const badgeCls = isMgr ? 'badge-manager' : 'badge-work';
-    // 여러 역할을 맡으면 쉼표로 이어서 표시
-    const roleText = w.roles ? w.roles.join(', ') : w.role;
+    const roleText = (w.roles && w.roles.length > 0) ? w.roles.join(', ') : (w.role || '');
     return `<div class="worker-mini-item">
       <div class="worker-mini-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name)[0]}</div>
       <div class="worker-mini-info" style="flex:1;overflow:hidden;">
@@ -363,169 +362,121 @@ async function updateWorkers() {
   }).join('');
 }
 
+// ── 날씨 ──
 async function updateWeather() {
   const data = await fetchAPI('weather');
   if (!data) return;
-  const iconMap = {'맑음':'☀️', '구름':'⛅', '흐림':'☁️', '비':'🌧️', '눈':'❄️', '안개':'🌫️'};
+  const iconMap = {'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️','안개':'🌫️'};
   const iconKey = Object.keys(iconMap).find(k => (data.description || '').includes(k));
-  
   document.getElementById('weather-icon').textContent = iconKey ? iconMap[iconKey] : '🌡️';
   document.getElementById('ext-temp').textContent = data.temperature;
-  document.getElementById('ext-hum').textContent = data.humidity + '%';
+  document.getElementById('ext-hum').textContent  = data.humidity + '%';
   document.getElementById('ext-wind').textContent = data.windSpeed + 'm/s';
-  document.getElementById('ext-uv').textContent = data.uvIndex || '-';
+  document.getElementById('ext-uv').textContent   = data.uvIndex || '-';
   document.getElementById('ext-feel').textContent = (data.feelsLike || data.temperature) + '°C';
 }
 
+// ── 내부 환경 ──
 async function updateEnv() {
   const data = await fetchAPI('env');
   if (!data) return;
   const c = data.current;
-  
   document.getElementById('in-temp').textContent = c.temperature + '°C';
-  document.getElementById('in-hum').textContent = c.humidity + '%';
-  document.getElementById('in-co2').textContent = (c.co2 || 0).toLocaleString();
-  
+  document.getElementById('in-hum').textContent  = c.humidity + '%';
+  document.getElementById('in-co2').textContent  = (c.co2 || 0).toLocaleString();
   const cd = {
     labels: data.hourly.map(h => h.time || ''),
     datasets: [
-      { label: '온도(°C)', data: data.hourly.map(h => h.temperature), borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.08)', borderWidth: 2, fill: true, tension: 0.4, yAxisID: 'y1' },
-      { label: '습도(%)', data: data.hourly.map(h => h.humidity), borderColor: '#4da6ff', backgroundColor: 'rgba(77,166,255,0.08)', borderWidth: 2, fill: true, tension: 0.4, yAxisID: 'y2' }
+      { label:'온도(°C)', data:data.hourly.map(h=>h.temperature), borderColor:'#ff6b6b', backgroundColor:'rgba(255,107,107,0.08)', borderWidth:2, fill:true, tension:0.4, yAxisID:'y1' },
+      { label:'습도(%)',  data:data.hourly.map(h=>h.humidity),    borderColor:'#4da6ff', backgroundColor:'rgba(77,166,255,0.08)',   borderWidth:2, fill:true, tension:0.4, yAxisID:'y2' }
     ]
   };
-  
   const opts = {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: '#7aaa7a', font: { size: 12 }, boxWidth: 14 } } },
-    scales: {
-      x: { ticks: { color: '#7aaa7a', maxTicksLimit: 8, font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y1: { position: 'left', min: 10, max: 30, ticks: { color: '#ff6b6b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y2: { position: 'right', min: 40, max: 90, ticks: { color: '#4da6ff' }, grid: { drawOnChartArea: false } }
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ labels:{ color:'#7aaa7a', font:{size:12}, boxWidth:14 } } },
+    scales:{
+      x:  { ticks:{ color:'#7aaa7a', maxTicksLimit:8, font:{size:11} }, grid:{ color:'rgba(255,255,255,0.04)' } },
+      y1: { position:'left',  min:10, max:30, ticks:{ color:'#ff6b6b' }, grid:{ color:'rgba(255,255,255,0.04)' } },
+      y2: { position:'right', min:40, max:90, ticks:{ color:'#4da6ff' }, grid:{ drawOnChartArea:false } }
     }
   };
-  
-  if (!envChart) {
-    envChart = new Chart(document.getElementById('envChart').getContext('2d'), { type: 'line', data: cd, options: opts });
-  } else {
-    envChart.data = cd;
-    envChart.update();
-  }
+  if (!envChart) { envChart = new Chart(document.getElementById('envChart').getContext('2d'), { type:'line', data:cd, options:opts }); }
+  else           { envChart.data = cd; envChart.update(); }
 }
 
+// ── 수확량 + 과실등급 ──
 async function updateHarvest() {
   const data = await fetchAPI('harvest');
   if (!data) return;
-  
   document.getElementById('harvest-month-total').textContent = (data.monthTotal || 0) + ' kg';
-  
   const recent14 = (data.daily || []).slice(-14);
   const cd = {
     labels: recent14.map(d => d.date),
-    datasets: [{ label: '수확량(kg)', data: recent14.map(d => d.amount), backgroundColor: 'rgba(0,255,136,0.8)', borderRadius: 4 }]
+    datasets: [{ label:'수확량(kg)', data:recent14.map(d=>d.amount), backgroundColor:'rgba(0,255,136,0.8)', borderRadius:4 }]
   };
-  
   if (!harvestChart) {
     harvestChart = new Chart(document.getElementById('harvestChart').getContext('2d'), {
-      type: 'bar', data: cd,
-      options: {
-        responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-        scales: {
-          x: { ticks: { color: '#7aaa7a', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-          y: { ticks: { color: '#7aaa7a' }, grid: { color: 'rgba(255,255,255,0.04)' } }
-        }
-      }
+      type:'bar', data:cd,
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } },
+        scales:{ x:{ ticks:{ color:'#7aaa7a', font:{size:12} }, grid:{ color:'rgba(255,255,255,0.04)' } }, y:{ ticks:{ color:'#7aaa7a' }, grid:{ color:'rgba(255,255,255,0.04)' } } } }
     });
-  } else {
-    harvestChart.data = cd;
-    harvestChart.update();
-  }
-  
-  let grade = data.gradeToday || { normal: 408, small: 54.1, deform: 29.5 };
+  } else { harvestChart.data = cd; harvestChart.update(); }
+
+  const grade = data.gradeToday || { normal:408, small:54.1, deform:29.5 };
   const total = +(grade.normal + grade.small + (grade.deform || 0)).toFixed(1);
   const pN = total > 0 ? Math.round(grade.normal / total * 100) : 0;
-  const pS = total > 0 ? Math.round(grade.small / total * 100) : 0;
+  const pS = total > 0 ? Math.round(grade.small  / total * 100) : 0;
   const pD = total > 0 ? (100 - pN - pS) : 0;
-
-  document.getElementById('grade-total-kg').textContent = total + 'kg';
-  document.getElementById('kg-normal').textContent = grade.normal + 'kg';
-  document.getElementById('kg-small').textContent = grade.small + 'kg';
-  document.getElementById('kg-deform').textContent = (grade.deform || 0) + 'kg';
-  
-  document.getElementById('pct-normal').textContent = pN + '%';
-  document.getElementById('pct-small').textContent = pS + '%';
-  document.getElementById('pct-deform').textContent = pD + '%';
-  
-  document.getElementById('bar-normal').style.width = pN + '%';
-  document.getElementById('bar-small').style.width = pS + '%';
-  document.getElementById('bar-deform').style.width = pD + '%';
-
+  document.getElementById('grade-total-kg').textContent    = total + 'kg';
+  document.getElementById('kg-normal').textContent         = grade.normal + 'kg';
+  document.getElementById('kg-small').textContent          = grade.small + 'kg';
+  document.getElementById('kg-deform').textContent         = (grade.deform || 0) + 'kg';
+  document.getElementById('pct-normal').textContent        = pN + '%';
+  document.getElementById('pct-small').textContent         = pS + '%';
+  document.getElementById('pct-deform').textContent        = pD + '%';
+  document.getElementById('bar-normal').style.width        = pN + '%';
+  document.getElementById('bar-small').style.width         = pS + '%';
+  document.getElementById('bar-deform').style.width        = pD + '%';
   const dcd = {
-    labels: ['정상과', '소과', '기형과'],
-    datasets: [{
-      data: [grade.normal, grade.small, grade.deform || 0],
-      backgroundColor: ['rgba(0,255,136,0.8)', 'rgba(255,215,0,0.8)', 'rgba(255,77,109,0.8)'],
-      borderColor: ['#00ff88', '#ffd700', '#ff4d6d'],
-      borderWidth: 1
-    }]
+    labels: ['정상과','소과','기형과'],
+    datasets:[{ data:[grade.normal, grade.small, grade.deform||0], backgroundColor:['rgba(0,255,136,0.8)','rgba(255,215,0,0.8)','rgba(255,77,109,0.8)'], borderColor:['#00ff88','#ffd700','#ff4d6d'], borderWidth:1 }]
   };
-  
   if (!gradeDonutChart) {
     gradeDonutChart = new Chart(document.getElementById('gradeDonut').getContext('2d'), {
-      type: 'doughnut', data: dcd,
-      options: { cutout: '65%', responsive: false, plugins: { legend: { display: false } } }
+      type:'doughnut', data:dcd, options:{ cutout:'65%', responsive:false, plugins:{ legend:{ display:false } } }
     });
-  } else {
-    gradeDonutChart.data = dcd;
-    gradeDonutChart.update();
-  }
+  } else { gradeDonutChart.data = dcd; gradeDonutChart.update(); }
 }
 
+// ── 전력 ──
 async function updatePower() {
   const data = await fetchAPI('power');
   if (!data) return;
-  const c = data.current;
+  const c      = data.current;
   const remain = parseFloat(((c.maxCapacity || 80) - (c.total || 0)).toFixed(1));
-  
-  document.getElementById('power-val').textContent = c.total || 0;
-  document.getElementById('pw-hvac').textContent = (c.hvac || 0) + 'kW';
-  document.getElementById('pw-light').textContent = (c.light || 0) + 'kW';
-  document.getElementById('pw-pump').textContent = (c.pump || 0) + 'kW';
-  document.getElementById('pw-etc').textContent = (c.etc || 0) + 'kW';
-
+  document.getElementById('power-val').textContent  = c.total || 0;
+  document.getElementById('pw-hvac').textContent    = (c.hvac  || 0) + 'kW';
+  document.getElementById('pw-light').textContent   = (c.light || 0) + 'kW';
+  document.getElementById('pw-pump').textContent    = (c.pump  || 0) + 'kW';
+  document.getElementById('pw-etc').textContent     = (c.etc   || 0) + 'kW';
   const cd = {
-    labels: ['조명', '양액펌프', '공조', '기타', '여유'],
-    datasets: [{
-      data: [c.light, c.pump, c.hvac, c.etc, remain],
-      backgroundColor: ['rgba(255,215,0,0.85)', 'rgba(0,212,170,0.85)', 'rgba(77,166,255,0.85)', 'rgba(255,107,107,0.75)', 'rgba(255,255,255,0.05)'],
-      borderWidth: 0
-    }]
+    labels: ['조명','양액펌프','공조','기타','여유'],
+    datasets:[{ data:[c.light, c.pump, c.hvac, c.etc, remain], backgroundColor:['rgba(255,215,0,0.85)','rgba(0,212,170,0.85)','rgba(77,166,255,0.85)','rgba(255,107,107,0.75)','rgba(255,255,255,0.05)'], borderWidth:0 }]
   };
-  
   if (!powerChart) {
     powerChart = new Chart(document.getElementById('powerGauge').getContext('2d'), {
-      type: 'doughnut', data: cd,
-      options: { cutout: '70%', responsive: false, plugins: { legend: { display: false } } }
+      type:'doughnut', data:cd, options:{ cutout:'70%', responsive:false, plugins:{ legend:{ display:false } } }
     });
-  } else {
-    powerChart.data = cd;
-    powerChart.update();
-  }
+  } else { powerChart.data = cd; powerChart.update(); }
 }
 
+// ── 전체 갱신 ──
 async function refreshAll() {
   document.getElementById('statusBadge').innerHTML = '<div class="status-dot"></div> UPDATING...';
-  await Promise.all([
-    updateWeather(),
-    updateEnv(),
-    updateHarvest(),
-    updatePower(),
-    updateNotice(),
-    updateVisitor(),
-    updateWorkers()
-  ]);
+  await Promise.all([updateWeather(), updateEnv(), updateHarvest(), updatePower(), updateNotice(), updateVisitor(), updateWorkers()]);
   document.getElementById('loadingOverlay').style.display = 'none';
   const now = new Date();
-  document.getElementById('statusBadge').innerHTML = `<div class="status-dot"></div> LIVE · ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} 갱신`;
+  document.getElementById('statusBadge').innerHTML = `<div class="status-dot"></div> LIVE · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 갱신`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
