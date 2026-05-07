@@ -304,7 +304,6 @@ async function updateNotice(){
     else if(n.category==='시스템'){bg='rgba(77,166,255,0.15)';co='var(--accent-blue)';}
     else{bg='rgba(0,255,136,0.1)';co='var(--accent-green)';}
     
-    // ★ 날짜(item-date)를 list-top 안으로 다시 넣어서 옆에 나란히 붙게 했습니다!
     return `<div class="list-item">
       <div class="list-top">
         <span class="item-badge" style="background:${bg};color:${co}">${n.category}</span>
@@ -359,17 +358,30 @@ async function updateWeather(){
   document.getElementById('ext-feel').textContent=(data.feelsLike||data.temperature)+'°C';
 }
 
+// ★ CO2 그래프 노란색 라인이 추가된 부분입니다.
 async function updateEnv(){
   const data=await fetchAPI('env');if(!data)return;
   const c=data.current;
   document.getElementById('in-temp').textContent=c.temperature+'°C';
   document.getElementById('in-hum').textContent=c.humidity+'%';
   document.getElementById('in-co2').textContent=(c.co2||0).toLocaleString();
+  
   const cd={labels:data.hourly.map(h=>h.time||''),datasets:[
     {label:'온도(°C)',data:data.hourly.map(h=>h.temperature),borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y1'},
-    {label:'습도(%)',data:data.hourly.map(h=>h.humidity),borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y2'}
+    {label:'습도(%)',data:data.hourly.map(h=>h.humidity),borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y2'},
+    {label:'CO₂(ppm)',data:data.hourly.map(h=>h.co2||null),borderColor:'#ffd700',backgroundColor:'rgba(255,215,0,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y3'}
   ]};
-  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}}},scales:{x:{ticks:{color:'#7aaa7a',maxTicksLimit:8,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{position:'left',min:10,max:30,ticks:{color:'#ff6b6b'},grid:{color:'rgba(255,255,255,0.04)'}},y2:{position:'right',min:40,max:90,ticks:{color:'#4da6ff'},grid:{drawOnChartArea:false}}}};
+  
+  const opts={
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}}},
+    scales:{
+      x:{ticks:{color:'#7aaa7a',maxTicksLimit:8,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},
+      y1:{position:'left',min:10,max:30,ticks:{color:'#ff6b6b'},grid:{color:'rgba(255,255,255,0.04)'}},
+      y2:{position:'right',min:40,max:90,ticks:{color:'#4da6ff'},grid:{drawOnChartArea:false}},
+      y3:{position:'right',min:400,max:1000,display:false} // 숫자가 겹치지 않게 숨김 처리하여 그래프 선만 예쁘게 표시
+    }
+  };
   if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
   else{envChart.data=cd;envChart.update();}
 }
