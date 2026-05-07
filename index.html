@@ -66,7 +66,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 /* 수확량 + 과실등급 */
 .harvest-card{grid-column:span 4;}
 .harvest-inner{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:flex-start;}
-@media(max-width:900px){.harvest-inner{grid-template-columns:1fr;}}
 .harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
 .harvest-total .big{font-size:34px;font-weight:700;color:var(--accent-green);}
 .harvest-total .small{font-size:16px;color:var(--text-muted);}
@@ -115,7 +114,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .ev-urgent{background:rgba(255,77,109,0.1);color:var(--accent-red);border-color:rgba(255,77,109,0.25);}
 .ev-note{background:rgba(255,215,0,0.08);color:var(--accent-yellow);border-color:rgba(255,215,0,0.2);}
 
-/* ★ 근무자 단일 줄 레이아웃 수정 */
+/* 근무자 */
 .workers-card{grid-column:span 4;}
 .workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:stretch;}
 .worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);display:flex;flex-direction:column;justify-content:center;height:100%;}
@@ -139,8 +138,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 ::-webkit-scrollbar-track{background:var(--bg-main);border-radius:3px;}
 ::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:3px;}
 
-/* 반응형 */
+/* ★ 반응형 조정 (수확량 그래프와 과실 등급 현황이 자연스럽게 줄바꿈되도록 수정) */
 @media(max-width:1600px){.worker-list{grid-template-columns:repeat(5,1fr);}}
+@media(max-width:1200px){
+  /* 1200px 이하일 때 수확량 우측 패널이 그래프 밑으로 떨어지도록 변경 */
+  .harvest-inner{grid-template-columns:1fr;}
+  .grade-donut-row{justify-content:center;}
+}
 @media(max-width:1024px){
   .grid-main{grid-template-columns:repeat(2,1fr);}
   .harvest-card,.notice-card,.workers-card,.env-card{grid-column:span 2;}
@@ -150,6 +154,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   .grid-main{grid-template-columns:1fr;}
   .card{grid-column:span 1 !important;}
   .worker-list{grid-template-columns:repeat(2,1fr);}
+  .harvest-chart-wrap{height:200px;} /* 모바일에서는 그래프 높이를 살짝 줄임 */
 }
 @media(max-width:480px){
   .worker-list{grid-template-columns:1fr;}
@@ -443,7 +448,6 @@ async function updateWorkers() {
 
   const listAll = document.getElementById('worker-list-all');
 
-  // ★ 하나의 라인에 전체 인원을 뿌리고 상태(출근/퇴근/연차)에 따라 시각 효과 차별화
   if (listAll) {
     listAll.innerHTML = data.allWorkers && data.allWorkers.length > 0 
       ? data.allWorkers.map(w => {
@@ -460,7 +464,6 @@ async function updateWorkers() {
             timeText = isLeave ? `🌴 ${s}` : `🌙 퇴근`;
           }
           
-          // 비활성화(퇴근, 연차)인 경우 투명도와 흑백 필터를 주고 테두리 색상을 흐리게 만듦
           const cardStyle = isWorking ? '' : 'opacity:0.4; filter:grayscale(80%); border-color:var(--border-color);';
           const timeStyle = isWorking ? 'color:var(--accent-teal);' : 'color:var(--text-muted);';
 
