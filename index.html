@@ -280,6 +280,19 @@ async function updateNotice() {
     if (el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">등록된 공지사항이 없습니다.</div>';
     return;
   }
+  el.innerHTML = data.reverse().slice(0, 4).map(n => {
+    const bg = n.category === '긴급' ? 'rgba(255,77,109,0.2)' : n.category === '시스템' ? 'rgba(77,166,255,0.15)' : 'rgba(0,255,136,0.1)';
+    const co = n.category === '긴급' ? 'var(--accent-red)' : n.category === '시스템' ? 'var(--accent-blue)' : 'var(--accent-green)';
+    return `<div class="list-item">
+      <div class="list-top">
+        <span class="item-badge" style="background:${bg};color:${co}">${n.category}</span>
+        <span class="item-title">${n.title}</span>
+        <span class="item-date">${n.date}</span>
+      </div>
+      <div class="item-content" style="margin-top:4px;">${n.content || '내용 없음'}</div>
+    </div>`;
+  }).join('');
+}
   
   el.innerHTML = data.reverse().slice(0, 4).map(n => {
     let category = n.category;
