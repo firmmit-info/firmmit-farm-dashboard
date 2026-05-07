@@ -543,7 +543,8 @@ async function updateNotice() {
     return;
   }
   
-  el.innerHTML = data.slice(0, 5).map(n => {
+  // ★ .reverse()를 추가해서 맨 밑에 적은 최신 공지사항부터 5개를 가져오게 만들었습니다.
+  el.innerHTML = data.reverse().slice(0, 5).map(n => {
     let cls = 'nb-info';
     if (n.category === '긴급') cls = 'nb-important';
     else if (n.category === '일반') cls = 'nb-general';
