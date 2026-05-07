@@ -115,14 +115,15 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .ev-urgent{background:rgba(255,77,109,0.1);color:var(--accent-red);border-color:rgba(255,77,109,0.25);}
 .ev-note{background:rgba(255,215,0,0.08);color:var(--accent-yellow);border-color:rgba(255,215,0,0.2);}
 
-/* 근무자 */
+/* ★ 근무자 단일 줄 레이아웃 수정 */
 .workers-card{grid-column:span 4;}
 .workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:stretch;}
 .worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);display:flex;flex-direction:column;justify-content:center;height:100%;}
 .worker-stat-box .ws-num{font-size:34px;font-weight:700;color:var(--accent-green);}
 .worker-stat-box .ws-label{font-size:16px;color:var(--text-muted);margin-top:3px;}
 .worker-list{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
-.worker-item{display:flex;align-items:center;gap:10px;background:var(--bg-card2);border-radius:8px;padding:12px 14px;border:1px solid var(--border-color);transition:border-color .3s;}
+.worker-item{display:flex;align-items:center;gap:10px;background:var(--bg-card2);border-radius:8px;padding:12px 14px;border:1px solid var(--border-color);transition:all .3s ease;}
+.worker-item:hover{border-color:var(--accent-green);}
 .worker-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0;}
 .worker-info .w-name{font-size:18px;font-weight:700;}
 .worker-info .w-role{font-size:15px;color:var(--text-muted);margin-top:2px;}
@@ -148,6 +149,10 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @media(max-width:768px){
   .grid-main{grid-template-columns:1fr;}
   .card{grid-column:span 1 !important;}
+  .worker-list{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:480px){
+  .worker-list{grid-template-columns:1fr;}
 }
 </style>
 <link rel="icon" href="data:,">
@@ -301,23 +306,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 
     <div class="card workers-card">
       <div class="card-title"><i class="fas fa-users"></i> 근무자 현황</div>
-      <div style="display:flex; flex-direction:column; gap:16px;">
-        <div class="workers-inner">
-          <div class="worker-stat-box">
-            <div id="w-total" class="ws-num">0</div>
-            <div class="ws-label">총 근무자</div>
-          </div>
-          <div id="worker-list-all" class="worker-list"></div>
+      <div class="workers-inner">
+        <div class="worker-stat-box">
+          <div id="w-on-duty" class="ws-num">0</div>
+          <div class="ws-label" style="margin-bottom: 6px;">출근 현황</div>
+          <div id="w-status-details" style="font-size: 14px; font-weight: 500; display: flex; justify-content: center; gap: 8px;">
+            </div>
         </div>
-        <div class="workers-inner">
-          <div class="worker-stat-box">
-            <div id="w-on-duty" class="ws-num">0</div>
-            <div class="ws-label" style="margin-bottom: 6px;">출근 현황</div>
-            <div id="w-status-details" style="font-size: 14px; font-weight: 500; display: flex; justify-content: center; gap: 8px;">
-              </div>
-          </div>
-          <div id="worker-list-on" class="worker-list"></div>
-        </div>
+        <div id="worker-list-all" class="worker-list"></div>
       </div>
     </div>
 
@@ -423,9 +419,6 @@ async function updateWorkers() {
   const data = await fetchAPI('workers');
   if (!data) return;
   
-  document.getElementById('w-total').textContent = data.summary.total || 0;
-  
-  // ★ 출근, 퇴근, 연차 인원 계산 로직
   let onCount = 0, offCount = 0, leaveCount = 0;
   if (data.allWorkers) {
     data.allWorkers.forEach(w => {
@@ -436,10 +429,9 @@ async function updateWorkers() {
     });
   }
 
-  // 메인 큰 숫자는 출근 인원으로 유지
-  document.getElementById('w-on-duty').textContent = data.summary.onDuty || onCount;
+  const onDutyEl = document.getElementById('w-on-duty');
+  if (onDutyEl) onDutyEl.textContent = data.summary.onDuty || onCount;
   
-  // 하단 디테일 텍스트에 각 인원수 삽입
   const detailsEl = document.getElementById('w-status-details');
   if(detailsEl) {
     detailsEl.innerHTML = `<span style="color:var(--accent-green)">출근 ${data.summary.onDuty || onCount}</span> 
@@ -450,45 +442,39 @@ async function updateWorkers() {
   }
 
   const listAll = document.getElementById('worker-list-all');
-  const listOn = document.getElementById('worker-list-on');
 
-  // ★ 1열: 총 근무자 (이름, 역할, 직책만 깔끔하게 표시)
+  // ★ 하나의 라인에 전체 인원을 뿌리고 상태(출근/퇴근/연차)에 따라 시각 효과 차별화
   if (listAll) {
     listAll.innerHTML = data.allWorkers && data.allWorkers.length > 0 
       ? data.allWorkers.map(w => {
           const isMgr = w.type === '담당자';
           const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
           const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
-          return `<div class="worker-item">
+          
+          const s = String(w.status).trim();
+          const isWorking = s === '근무중' || s === '출근';
+          const isLeave = s === '연차' || s === '휴가';
+          
+          let timeText = `⏱ ${w.startTime} 출근`;
+          if (!isWorking) {
+            timeText = isLeave ? `🌴 ${s}` : `🌙 퇴근`;
+          }
+          
+          // 비활성화(퇴근, 연차)인 경우 투명도와 흑백 필터를 주고 테두리 색상을 흐리게 만듦
+          const cardStyle = isWorking ? '' : 'opacity:0.4; filter:grayscale(80%); border-color:var(--border-color);';
+          const timeStyle = isWorking ? 'color:var(--accent-teal);' : 'color:var(--text-muted);';
+
+          return `<div class="worker-item" style="${cardStyle}">
             <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
             <div class="worker-info">
               <div class="w-name">${w.name}</div>
               <div class="w-role">${w.role}</div>
+              <div class="w-time" style="${timeStyle}font-size:14px;margin-top:2px;">${timeText}</div>
             </div>
             <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
           </div>`;
         }).join('')
       : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">등록된 근무자가 없습니다.</div>';
-  }
-
-  // ★ 2열: 출근 (현재 근무중인 인원만 표시)
-  if (listOn) {
-    listOn.innerHTML = data.onDutyWorkers && data.onDutyWorkers.length > 0
-      ? data.onDutyWorkers.map(w => {
-          const isMgr = w.type === '담당자';
-          const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
-          const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
-          return `<div class="worker-item">
-            <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
-            <div class="worker-info">
-              <div class="w-name">${w.name}</div>
-              <div class="w-role">${w.role}</div>
-              <div class="w-time" style="color:var(--accent-teal);font-size:14px;margin-top:2px;">⏱ ${w.startTime} 출근</div>
-            </div>
-            <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
-          </div>`;
-        }).join('')
-      : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">현재 출근한 인원이 없습니다.</div>';
   }
 }
 
