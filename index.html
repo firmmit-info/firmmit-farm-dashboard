@@ -332,7 +332,7 @@ async function updateWorkers() {
   }).join('');
 }
 
-// 4. 외부 날씨 (UV, 체감온도 복구)
+// 4. 외부 기상
 async function updateWeather(){
   const data=await fetchAPI('weather'); if(!data)return;
   const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️','안개':'🌫️'};
@@ -345,7 +345,7 @@ async function updateWeather(){
   document.getElementById('ext-feel').textContent=(data.feelsLike||data.temperature)+'°C';
 }
 
-// 5. 환경 차트 (X축 시간 라벨 복구)
+// 5. 환경 차트
 async function updateEnv(){
   const data=await fetchAPI('env'); if(!data)return;
   const c=data.current;
@@ -369,21 +369,27 @@ async function updateEnv(){
   else{envChart.data=cd; envChart.update();}
 }
 
-// 6. 수확량 현황 (X축 날짜 복구 및 과실 등급 바 복구)
+// 6. 수확량 현황 (★ d.date.slice(5)를 빼고 정상 복구 완료)
 async function updateHarvest(){
   const data=await fetchAPI('harvest'); if(!data)return;
   const recent14 = (data.daily||[]).slice(-14);
-  const cd={labels:recent14.map(d=>d.date.slice(5)),datasets:[{label:'수확량(kg)',data:recent14.map(d=>d.amount),backgroundColor:'rgba(0,255,136,0.8)',borderRadius:4}]};
+  
+  // d.date 자체를 그대로 사용하도록 수정했습니다.
+  const cd={labels:recent14.map(d=>d.date),datasets:[{label:'수확량(kg)',data:recent14.map(d=>d.amount),backgroundColor:'rgba(0,255,136,0.8)',borderRadius:4}]};
   
   if(!harvestChart){
     harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{
       type:'bar',data:cd,
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{color:'#7aaa7a',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a'},grid:{color:'rgba(255,255,255,0.04)'}}}}
+      options:{
+        responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{
+          x:{ticks:{color:'#7aaa7a',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'}},
+          y:{ticks:{color:'#7aaa7a'},grid:{color:'rgba(255,255,255,0.04)'}}
+        }
+      }
     });
   } else {harvestChart.data=cd; harvestChart.update();}
   
-  // 과실 등급 데이터 렌더링
   let grade = data.gradeToday || { normal: 408, small: 54.1, deform: 29.5 };
   const total = +(grade.normal + grade.small + (grade.deform || 0)).toFixed(1);
   const pN = total>0 ? Math.round(grade.normal/total*100) : 0;
@@ -421,7 +427,7 @@ async function updateHarvest(){
   } else { gradeDonutChart.data = dcd; gradeDonutChart.update(); }
 }
 
-// 7. 전력량 복구 (공조, 조명, 양액펌프, 기타)
+// 7. 전력량
 async function updatePower(){
   const data=await fetchAPI('power'); if(!data)return;
   const c=data.current;
