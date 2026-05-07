@@ -87,6 +87,11 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 @keyframes spin{to{transform:rotate(360deg)}}
+.weather-card{grid-column:span 1;}
+.env-card{grid-column:span 2;}
+.power-card{grid-column:span 1;}
+.harvest-card{grid-column:span 4;}
+.bottom-row{grid-column:span 4;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:14px;min-height:320px;}
 @media(max-width:1200px){
   .harvest-inner{flex-direction:column;}
   .harvest-inner > div:first-child{flex:1 1 100%;}
@@ -95,8 +100,11 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 }
 @media(max-width:1024px){
   .grid-main{grid-template-columns:repeat(2,1fr);}
+  .weather-card{grid-column:span 1;}
+  .env-card{grid-column:span 2;}
+  .power-card{grid-column:span 1;}
   .harvest-card{grid-column:span 2;}
-  .bottom-row{grid-column:span 2;}
+  .bottom-row{grid-column:span 2;grid-template-columns:1fr;}
 }
 @media(max-width:768px){
   .wrapper{padding:0 8px 8px;}
@@ -104,16 +112,16 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   .clock-area{text-align:left;width:100%;}
   #clock-time{font-size:26px;}
   #clock-date{font-size:13px;}
-  .grid-main{grid-template-columns:1fr;}
-  .harvest-card,.bottom-row{grid-column:span 1;}
-  .bottom-row{grid-template-columns:1fr;}
+  .grid-main{grid-template-columns:1fr !important;}
+  .weather-card,.env-card,.power-card,.harvest-card,.bottom-row{grid-column:span 1 !important;}
+  .bottom-row{grid-template-columns:1fr !important;}
   .card{padding:12px;}
   .card-title{font-size:16px;}
   .card-title i{font-size:16px;}
   .harvest-chart-wrap{height:200px;}
   .chart-container{height:140px;}
   .weather-temp .val{font-size:34px;}
-  .worker-mini-grid{grid-template-columns:1fr;}
+  .worker-mini-grid{grid-template-columns:1fr 1fr;}
   .logo-text h1{font-size:20px;}
   .logo-text p{font-size:12px;}
   .power-items{grid-template-columns:1fr 1fr;}
@@ -123,6 +131,8 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   .item-content{font-size:13px;}
   .grade-donut-row{flex-direction:column;align-items:center;}
   .grade-bars{width:100%;}
+  .harvest-inner{flex-direction:column;}
+  .harvest-right{width:100%;flex:none;}
 }
 @media(max-width:480px){
   #clock-time{font-size:22px;}
