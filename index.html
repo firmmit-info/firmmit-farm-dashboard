@@ -63,14 +63,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .power-item{background:var(--bg-card2);border-radius:8px;padding:10px 8px;text-align:center;font-size:18px;color:var(--text-sub);}
 .power-item .pval{font-size:18px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
 
-/* 수확량 + 과실등급 */
+/* ★ 수확량 + 과실등급 (너비 조절 및 높이 조절) */
 .harvest-card{grid-column:span 4;}
-.harvest-inner{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:flex-start;}
+.harvest-inner{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:flex-start;} /* 우측 패널 420px로 확장 */
 @media(max-width:900px){.harvest-inner{grid-template-columns:1fr;}}
 .harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
 .harvest-total .big{font-size:34px;font-weight:700;color:var(--accent-green);}
-.harvest-total .small{font-size:14px;color:var(--text-muted);}
-.harvest-chart-wrap{position:relative;height:180px;}
+.harvest-total .small{font-size:16px;color:var(--text-muted);}
+.harvest-chart-wrap{position:relative;height:250px;} /* 그래프 높이 250px로 확 키움 */
 .harvest-right{background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px; align-self: flex-start;}
 .grade-donut-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
 .grade-section-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
@@ -89,7 +89,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .grade-bar-bg{width:100%;height:10px;background:var(--bg-main);border-radius:5px;overflow:hidden;}
 .grade-bar-fill{height:100%;border-radius:5px;transition:width 1s ease;}
 
-/* 공지사항 & 캘린더 (비율 2:3 적용) */
+/* 공지사항 & 캘린더 */
 .notice-card{grid-column:span 4;}
 .notice-inner{display:grid;grid-template-columns:2fr 3fr;gap:18px;}
 .notice-board-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;margin-bottom:12px;}
@@ -223,7 +223,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     </div>
 
     <div class="card harvest-card">
-      <div class="card-title"><i class="fas fa-chart-bar"></i> 일자별 수확량 (최근 30일 · KG)</div>
+      <div class="card-title"><i class="fas fa-chart-bar"></i> 일자별 수확량 (최근 2주 · KG)</div>
       <div class="harvest-inner">
         <div>
           <div class="harvest-header">
@@ -236,47 +236,47 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
           <div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div>
         </div>
         <div class="harvest-right">
-  <div>
-    <div class="grade-section-title"><i class="fas fa-seedling" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>과실 등급 분류 현황 <br> (1화방 누적)</div>
-    <div class="grade-section-note">정상과 ≥12g &nbsp;|&nbsp; 소과 &lt;12g</div>
-  </div>
-  <div class="grade-donut-row">
-    
-    <div style="display:flex; align-items:center; gap:20px;">
-      <div class="grade-donut-wrap">
-        <canvas id="gradeDonut" width="110" height="110"></canvas>
-      </div>
-      <div style="display:flex; flex-direction:column; justify-content:center;">
-        <div style="font-size:16px; color:var(--text-muted); margin-bottom:4px;">총 분류량</div>
-        <div id="grade-total-kg" style="font-size:32px; font-weight:700; color:var(--accent-green);">--</div>
+          <div>
+            <div class="grade-section-title"><i class="fas fa-seedling" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>과실 등급 분류 현황 (1화방 누적)</div>
+            <div class="grade-section-note">정상과 ≥12g &nbsp;|&nbsp; 소과 &lt;12g</div>
+          </div>
+          <div class="grade-donut-row">
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div class="grade-donut-wrap">
+                <canvas id="gradeDonut" width="110" height="110"></canvas>
+              </div>
+              <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div style="font-size:16px; color:var(--text-muted); margin-bottom:4px;">총 분류량</div>
+                <div id="grade-total-kg" style="font-size:32px; font-weight:700; color:var(--accent-green);">--</div>
+              </div>
+            </div>
+            <div class="grade-bars">
+              <div class="grade-bar-row">
+                <div class="grade-bar-top">
+                  <span class="grade-bar-label" style="color:var(--accent-green);">🍓 정상과</span>
+                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
+                </div>
+                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
+              </div>
+              <div class="grade-bar-row">
+                <div class="grade-bar-top">
+                  <span class="grade-bar-label" style="color:var(--accent-yellow);">🫐 소과</span>
+                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
+                </div>
+                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
+              </div>
+              <div class="grade-bar-row">
+                <div class="grade-bar-top">
+                  <span class="grade-bar-label" style="color:var(--accent-red);">⚠️ 기형과</span>
+                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
+                </div>
+                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="grade-bars">
-      <div class="grade-bar-row">
-        <div class="grade-bar-top">
-          <span class="grade-bar-label" style="color:var(--accent-green);">🍓 정상과</span>
-          <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
-        </div>
-        <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
-      </div>
-      <div class="grade-bar-row">
-        <div class="grade-bar-top">
-          <span class="grade-bar-label" style="color:var(--accent-yellow);">🫐 소과</span>
-          <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
-        </div>
-        <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
-      </div>
-      <div class="grade-bar-row">
-        <div class="grade-bar-top">
-          <span class="grade-bar-label" style="color:var(--accent-red);">⚠️ 기형과</span>
-          <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
-        </div>
-        <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
-      </div>
-    </div>
-  </div>
-</div>
 
     <div class="card notice-card">
       <div class="card-title"><i class="fas fa-calendar-alt"></i> 공지사항 및 방문자 일정</div>
@@ -384,13 +384,18 @@ async function updateEnv(){
 async function updateHarvest(){
   const data=await fetchAPI('harvest');if(!data)return;
   document.getElementById('harvest-month-total').textContent=(data.monthTotal||0)+' kg';
-  const labels=(data.daily||[]).map(d=>d.date);
-  const amounts=(data.daily||[]).map(d=>d.amount);
+  
+  // ★ 시트에서 넘어온 데이터 중 "가장 최근 14일(2주)"만 딱 잘라서 화면에 그립니다.
+  const recent14 = (data.daily||[]).slice(-14);
+  
+  const labels=recent14.map(d=>d.date);
+  const amounts=recent14.map(d=>d.amount);
   const bgColors=amounts.map(v=>v>=40?'rgba(0,255,136,0.7)':v>=28?'rgba(0,212,170,0.6)':'rgba(77,166,255,0.5)');
   const bdColors=amounts.map(v=>v>=40?'#00ff88':v>=28?'#00d4aa':'#4da6ff');
   const cd={labels,datasets:[{label:'수확량 (kg)',data:amounts,backgroundColor:bgColors,borderColor:bdColors,borderWidth:1,borderRadius:4}]};
-  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.raw} kg`}}},scales:{x:{ticks:{color:'#7aaa7a',maxTicksLimit:10,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}}});}
+  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.raw} kg`}}},scales:{x:{ticks:{color:'#7aaa7a',maxTicksLimit:14,font:{size:13}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a',font:{size:13}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}}});}
   else{harvestChart.data=cd;harvestChart.update();}
+  
   if(data.gradeToday)updateGradeChart(data.gradeToday);
   else if(!gradeDonutChart)renderGradeDonutFixed();
 }
