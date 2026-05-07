@@ -10,101 +10,102 @@
   <style>
 :root {--bg-main:#0a0f0a;--bg-card:#111811;--bg-card2:#162016;--border-color:#1e3a1e;--accent-green:#00ff88;--accent-teal:#00d4aa;--accent-yellow:#ffd700;--accent-red:#ff4d6d;--accent-blue:#4da6ff;--text-main:#e8f5e8;--text-sub:#7aaa7a;--text-muted:#4a6a4a;--glow-green:0 0 15px rgba(0,255,136,0.3);}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-main);color:var(--text-main);min-height:100vh;overflow:hidden;} /* 스크롤 방지 */
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-main);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(0,255,136,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-.wrapper{position:relative;z-index:1;max-width:1920px;margin:0 auto;padding:0 16px 10px;}
-.header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:linear-gradient(135deg,#0d1a0d,#111f11);border-bottom:2px solid var(--accent-green);box-shadow:0 4px 20px rgba(0,255,136,0.1);margin-bottom:12px;}
-.logo-area{display:flex;align-items:center;gap:12px;}
-.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--glow-green);}
-.logo-text h1{font-size:22px;font-weight:900;color:var(--accent-green);letter-spacing:1.5px;}
-.logo-text p{font-size:13px;color:var(--text-sub);margin-top:1px;}
-.status-badge{display:flex;align-items:center;gap:8px;background:rgba(0,255,136,0.1);border:1px solid var(--accent-green);border-radius:20px;padding:5px 14px;font-size:14px;color:var(--accent-green);}
-.status-dot{width:7px;height:7px;background:var(--accent-green);border-radius:50%;animation:blink 1.5s infinite;}
+.wrapper{position:relative;z-index:1;max-width:1920px;margin:0 auto;padding:0 16px 16px;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:linear-gradient(135deg,#0d1a0d,#111f11);border-bottom:2px solid var(--accent-green);box-shadow:0 4px 30px rgba(0,255,136,0.1);margin-bottom:16px;}
+.logo-area{display:flex;align-items:center;gap:16px;}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--glow-green);}
+.logo-text h1{font-size:26px;font-weight:900;color:var(--accent-green);letter-spacing:2px;text-shadow:0 0 20px rgba(0,255,136,0.5);}
+.logo-text p{font-size:15px;color:var(--text-sub);letter-spacing:1px;margin-top:2px;}
+.status-badge{display:flex;align-items:center;gap:8px;background:rgba(0,255,136,0.1);border:1px solid var(--accent-green);border-radius:20px;padding:6px 16px;font-size:16px;color:var(--accent-green);}
+.status-dot{width:8px;height:8px;background:var(--accent-green);border-radius:50%;animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 .clock-area{text-align:right;}
-#clock-time{font-size:32px;font-weight:700;color:var(--accent-green);text-shadow:var(--glow-green);line-height:1;}
-#clock-date{font-size:14px;color:var(--text-sub);margin-top:2px;}
+#clock-time{font-size:40px;font-weight:700;color:var(--accent-green);font-variant-numeric:tabular-nums;text-shadow:var(--glow-green);}
+#clock-date{font-size:16px;color:var(--text-sub);margin-top:2px;}
+.grid-main{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
+.card-title{font-size:24px;font-weight:700;color:var(--text-sub);letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title i{color:var(--accent-green);font-size:24px;}
 
-.grid-main{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:15px;position:relative;overflow:hidden;}
-.card-title{font-size:22px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.card-title i{color:var(--accent-green);font-size:22px;}
-
-/* 상단 카드 */
+/* 외부 기상 */
 .weather-card{grid-column:span 1;}
-.env-card{grid-column:span 2;}
-.power-card{grid-column:span 1;}
-
-.weather-main{display:flex;align-items:center;justify-content:space-around;margin-bottom:15px;}
-.weather-temp .val{font-size:40px;font-weight:700;color:var(--accent-yellow);}
-.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.weather-item{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;}
-.weather-item .label{font-size:15px;color:var(--text-muted);margin-bottom:2px;}
+.weather-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.weather-icon-big{font-size:54px;filter:drop-shadow(0 0 10px rgba(255,215,0,0.5));}
+.weather-temp .val{font-size:44px;font-weight:700;color:var(--accent-yellow);}
+.weather-temp .unit{font-size:20px;color:var(--text-sub);}
+.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.weather-item{background:var(--bg-card2);border-radius:8px;padding:14px 10px;text-align:center;}
+.weather-item .label{font-size:16px;color:var(--text-muted);margin-bottom:4px;}
 .weather-item .value{font-size:18px;font-weight:700;color:var(--accent-blue);}
 
-.chart-container{position:relative;height:140px;}
-.env-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
-.env-stat-item{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;}
-.env-stat-item .s-label{font-size:16px;color:var(--text-muted);}
+/* 내부 환경 */
+.env-card{grid-column:span 2;}
+.chart-container{position:relative;height:160px;}
+.env-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.env-stat-item{background:var(--bg-card2);border-radius:8px;padding:12px 8px;text-align:center;border:1px solid var(--border-color);}
+.env-stat-item .s-label{font-size:18px;color:var(--text-muted);margin-bottom:4px;}
 .env-stat-item .s-val{font-size:20px;font-weight:700;}
 
-/* 전력 */
+/* 전력량 */
 .power-card{grid-column:span 1;}
 .power-gauge-wrap{position:relative;text-align:center;margin:10px 0;}
 .power-gauge-wrap canvas{display:block;margin:0 auto;}
 .power-center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.power-center-text .kw{font-size:30px;font-weight:700;color:var(--accent-yellow);}
+.power-center-text .kw{font-size:28px;font-weight:700;color:var(--accent-yellow);}
 .power-center-text .kwlabel{font-size:14px;color:var(--text-muted);}
 .power-items{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
-.power-item{background:var(--bg-card2);border-radius:8px;padding:10px 8px;text-align:center;font-size:18px;color:var(--text-sub);}
-.power-item .pval{font-size:18px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
+.power-item{background:var(--bg-card2);border-radius:8px;padding:10px 8px;text-align:center;font-size:16px;color:var(--text-sub);}
+.power-item .pval{font-size:16px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
 
-/* 수확량 카드 */
+/* 수확량 현황 */
 .harvest-card{grid-column:span 4;}
-.harvest-inner{display:flex; flex-wrap:wrap; gap:15px; align-items:flex-start;}
+.harvest-inner{display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start;}
 .harvest-inner > div:first-child{flex:1 1 600px; min-width:0;}
-.harvest-total .big{font-size:32px;font-weight:700;color:var(--accent-green);}
-.harvest-chart-wrap{position:relative;height:180px;}
-.harvest-right{flex:0 0 420px; background:var(--bg-card2);border-radius:10px;padding:15px;display:flex;flex-direction:column;gap:12px;}
-.grade-donut-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-.grade-section-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
-.grade-section-note{font-size:18px;color:var(--text-muted);margin-top:3px;}
-.grade-donut-wrap{position:relative;width:100px;height:100px;flex-shrink:0;}
-.grade-donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.grade-donut-center .gd-val{font-size:20px;font-weight:700;color:var(--accent-green);}
-.grade-donut-center .gd-label{font-size:12px;color:var(--text-muted);}
-.grade-bars{flex:1;min-width:180px;display:flex;flex-direction:column;gap:8px;}
-.grade-bar-row{display:flex;flex-direction:column;gap:4px;}
+.harvest-chart-wrap{position:relative;height:220px;}
+.harvest-right{flex:0 0 420px; background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px; align-self: flex-start;}
+.grade-section-title{font-size:18px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
+.grade-donut-row{display:flex;align-items:center;gap:20px;}
+.grade-bars{flex:1;display:flex;flex-direction:column;gap:10px;}
+.grade-bar-row{display:flex;flex-direction:column;gap:6px;}
 .grade-bar-top{display:flex;align-items:center;justify-content:space-between;}
 .grade-bar-label{font-size:16px;font-weight:600;}
 .grade-bar-meta{display:flex;align-items:center;gap:8px;}
 .grade-bar-pct{font-size:16px;font-weight:700;}
 .grade-bar-kg{font-size:14px;color:var(--text-muted);}
-.grade-bar-bg{width:100%;height:8px;background:var(--bg-main);border-radius:4px;overflow:hidden;}
-.grade-bar-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.grade-bar-bg{width:100%;height:10px;background:var(--bg-main);border-radius:5px;overflow:hidden;}
+.grade-bar-fill{height:100%;border-radius:5px;transition:width 1s ease;}
 
 /* 하단 3단 통합 레이아웃 */
-.bottom-row{grid-column:span 4; display:grid; grid-template-columns: 1fr 1fr 1.3fr; gap:12px; height: 260px;}
+.bottom-row{grid-column:span 4; display:grid; grid-template-columns: 1fr 1fr 1.3fr; gap:14px; min-height: 320px;}
 .bottom-card{height:100%; display:flex; flex-direction:column;}
-.list-container{flex:1; overflow:hidden; display:flex; flex-direction:column; gap:8px;}
-.list-item{display:flex; flex-direction:column; padding:8px 0; border-bottom:1px solid var(--border-color);}
+.list-container{flex:1; display:flex; flex-direction:column; gap:8px; overflow-y:auto;}
+.list-item{display:flex; flex-direction:column; padding:10px 0; border-bottom:1px solid var(--border-color);}
 .list-item:last-child{border-bottom:none;}
-.list-top{display:flex; align-items:center; gap:8px; margin-bottom:4px;}
-.item-badge{font-size:13px; font-weight:700; padding:2px 7px; border-radius:6px;}
-.item-title{font-size:17px; font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.item-content{font-size:15px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-left:2px;}
+.list-top{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+.item-badge{font-size:14px; font-weight:700; padding:3px 8px; border-radius:6px;}
+.item-title{font-size:18px; font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.item-content{font-size:15px; color:var(--text-muted); padding-left:2px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
 .item-date{font-size:14px; color:var(--text-muted); margin-left:auto;}
 
 /* 하단 근무자 현황 */
-.worker-mini-grid{display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; flex:1; align-content:start;}
-.worker-mini-item{display:flex; align-items:center; gap:10px; background:var(--bg-card2); border-radius:8px; padding:12px 14px; border:1px solid var(--border-color);}
-.worker-mini-avatar{width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;}
-.worker-mini-info .name{font-size:16px; font-weight:700; margin-bottom:2px;}
-.worker-mini-info .role{font-size:13px; color:var(--text-muted);}
+.worker-mini-grid{display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; align-content:start;}
+.worker-mini-item{display:flex; align-items:center; gap:12px; background:var(--bg-card2); border-radius:8px; padding:14px; border:1px solid var(--border-color);}
+.worker-mini-avatar{width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700;}
+.worker-mini-info .name{font-size:17px; font-weight:700; margin-bottom:2px;}
+.worker-mini-info .role{font-size:14px; color:var(--text-muted);}
 
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
 .green{color:var(--accent-green)}.blue{color:var(--accent-blue)}.yellow{color:var(--accent-yellow)}
+
+/* 반응형 */
+@media(max-width:1200px){
+  .harvest-inner{flex-direction:column;}
+  .harvest-right{width:100%; max-width:100%; flex:none;}
+  .bottom-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -126,6 +127,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   </header>
 
   <div class="grid-main">
+    
     <div class="card weather-card">
       <div class="card-title"><i class="fas fa-cloud-sun"></i> 외부 기상</div>
       <div class="weather-main">
@@ -133,8 +135,10 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
         <div class="weather-temp"><span class="val" id="ext-temp">--</span><span style="font-size:20px; color:var(--text-sub);">°C</span></div>
       </div>
       <div class="weather-grid">
-        <div class="weather-item"><div class="label">습도</div><div class="value" id="ext-hum">--%</div></div>
-        <div class="weather-item"><div class="label">풍속</div><div class="value" id="ext-wind">--m/s</div></div>
+        <div class="weather-item"><div class="label">💧 습도</div><div class="value" id="ext-hum">--%</div></div>
+        <div class="weather-item"><div class="label">🌬 풍속</div><div class="value" id="ext-wind">--m/s</div></div>
+        <div class="weather-item"><div class="label">☀️ UV 지수</div><div class="value" id="ext-uv">-</div></div>
+        <div class="weather-item"><div class="label">🌡 체감온도</div><div class="value" id="ext-feel">--°C</div></div>
       </div>
     </div>
 
@@ -144,7 +148,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div class="env-stats">
         <div class="env-stat-item"><div class="s-label">현재 온도</div><div class="s-val green" id="in-temp">--°C</div></div>
         <div class="env-stat-item"><div class="s-label">현재 습도</div><div class="s-val blue" id="in-hum">--%</div></div>
-        <div class="env-stat-item"><div class="s-label">CO₂</div><div class="s-val yellow" id="in-co2">--</div></div>
+        <div class="env-stat-item"><div class="s-label">CO₂ (ppm)</div><div class="s-val yellow" id="in-co2">--</div></div>
       </div>
     </div>
 
@@ -158,27 +162,52 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
         </div>
       </div>
       <div class="power-items">
-        <div class="power-item" style="padding:6px;">공조 <span class="pval" id="pw-hvac">--kW</span></div>
-        <div class="power-item" style="padding:6px;">조명 <span class="pval" id="pw-light">--kW</span></div>
+        <div class="power-item">공조 <span class="pval" id="pw-hvac">--kW</span></div>
+        <div class="power-item">조명 <span class="pval" id="pw-light">--kW</span></div>
+        <div class="power-item">양액펌프 <span class="pval" id="pw-pump">--kW</span></div>
+        <div class="power-item">기타 <span class="pval" id="pw-etc">--kW</span></div>
       </div>
     </div>
 
     <div class="card harvest-card">
-      <div class="card-title"><i class="fas fa-chart-bar"></i> 수확량 현황 (최근 2주)</div>
+      <div class="card-title"><i class="fas fa-chart-bar"></i> 일자별 수확량 (최근 2주)</div>
       <div class="harvest-inner">
-        <div><div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div></div>
+        <div>
+          <div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div>
+        </div>
         <div class="harvest-right">
-          <div class="grade-section-title">🍓 과실 등급 분류 (누적)</div>
-          <div style="display:flex; align-items:center; gap:20px;">
-            <canvas id="gradeDonut" width="100" height="100"></canvas>
+          <div class="grade-section-title">🍓 과실 등급 분류 현황 (누적)</div>
+          <div class="grade-donut-row">
+            <div style="position:relative; width:100px; height:100px;">
+              <canvas id="gradeDonut" width="100" height="100"></canvas>
+            </div>
             <div>
               <div style="font-size:14px; color:var(--text-muted);">총 분류량</div>
               <div id="grade-total-kg" style="font-size:26px; font-weight:700; color:var(--accent-green);">--</div>
             </div>
           </div>
-          <div style="font-size:15px; display:flex; flex-direction:column; gap:6px; margin-top:5px;">
-             <div style="display:flex; justify-content:space-between;"><span>정상과</span><span id="kg-normal" class="green">--kg</span></div>
-             <div style="display:flex; justify-content:space-between;"><span>소과</span><span id="kg-small" class="yellow">--kg</span></div>
+          <div class="grade-bars">
+            <div class="grade-bar-row">
+              <div class="grade-bar-top">
+                <span class="grade-bar-label" style="color:var(--accent-green);">정상과</span>
+                <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
+              </div>
+              <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
+            </div>
+            <div class="grade-bar-row">
+              <div class="grade-bar-top">
+                <span class="grade-bar-label" style="color:var(--accent-yellow);">소과</span>
+                <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
+              </div>
+              <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
+            </div>
+            <div class="grade-bar-row">
+              <div class="grade-bar-top">
+                <span class="grade-bar-label" style="color:var(--accent-red);">기형과</span>
+                <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
+              </div>
+              <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -210,8 +239,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 
 <script>
-// ★ 아래 API URL은 기존 예은 님의 주소 그대로 유지했습니다.
-const API_URL='https://script.google.com/macros/s/AKfycbyJO0gxcRh_XNsykIFSPYpez4cSvK7NB8NuFBga7sdwKtLLrJ6EtcSOrzkepGMqtGwm8A/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbzqF_SlIj67yNUEAsgtL4_QOeqbK9lbxwTH2XOerT94twL5IsY4FhIbxv358aVqMTOdlA/exec';
 const REFRESH_INTERVAL=60000;
 let envChart=null,harvestChart=null,powerChart=null,gradeDonutChart=null;
 
@@ -229,7 +257,7 @@ async function fetchAPI(type){
   }catch(err){return null;}
 }
 
-// 1. 공지사항 (내용 노출, 최대 4개)
+// 1. 공지사항
 async function updateNotice() {
   const data = await fetchAPI('notice');
   const el = document.getElementById('notice-list');
@@ -253,7 +281,7 @@ async function updateNotice() {
   }).join('');
 }
 
-// 2. 방문 일정 (리스트형, 내용 노출, 최대 4개)
+// 2. 방문 일정
 async function updateVisitor() {
   const data = await fetchAPI('visitor');
   const el = document.getElementById('visitor-list');
@@ -261,10 +289,7 @@ async function updateVisitor() {
     if(el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">예정된 방문 일정이 없습니다.</div>';
     return;
   }
-  
-  // 날짜 순으로 정렬 후 4개 자르기
   const sortedData = data.sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 4);
-  
   el.innerHTML = sortedData.map(v => `
     <div class="list-item">
       <div class="list-top">
@@ -276,7 +301,7 @@ async function updateVisitor() {
     </div>`).join('');
 }
 
-// 3. 오늘 근무자 (서버에서 '오늘 출근 명단'만 걸러서 온다고 가정)
+// 3. 오늘 근무자
 async function updateWorkers() {
   const data = await fetchAPI('workers'); 
   const el = document.getElementById('worker-list-today');
@@ -287,9 +312,8 @@ async function updateWorkers() {
     return;
   }
 
-  // 서버(GAS)에서 이름과 직책(role)을 정확히 매핑해서 보내준 데이터를 그립니다.
   el.innerHTML = data.onDutyWorkers.map(w => {
-    const isMgr = w.role.includes('총괄') || w.role.includes('담당');
+    const isMgr = w.role && (w.role.includes('총괄') || w.role.includes('담당'));
     const color = isMgr ? 'var(--accent-yellow)' : 'var(--accent-green)';
     const bgClr = isMgr ? 'rgba(255,215,0,0.1)' : 'rgba(0,255,136,0.1)';
     const badgeCls = isMgr ? 'badge-manager' : 'badge-work';
@@ -308,51 +332,107 @@ async function updateWorkers() {
   }).join('');
 }
 
-// --- 나머지 기존 차트/날씨 로직 ---
+// 4. 외부 날씨 (UV, 체감온도 복구)
 async function updateWeather(){
   const data=await fetchAPI('weather'); if(!data)return;
-  const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️'};
+  const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️','안개':'🌫️'};
   const iconKey=Object.keys(iconMap).find(k=>(data.description||'').includes(k));
   document.getElementById('weather-icon').textContent=iconKey?iconMap[iconKey]:'🌡️';
   document.getElementById('ext-temp').textContent=data.temperature;
   document.getElementById('ext-hum').textContent=data.humidity+'%';
   document.getElementById('ext-wind').textContent=data.windSpeed+'m/s';
+  document.getElementById('ext-uv').textContent=data.uvIndex||'-';
+  document.getElementById('ext-feel').textContent=(data.feelsLike||data.temperature)+'°C';
 }
 
+// 5. 환경 차트 (X축 시간 라벨 복구)
 async function updateEnv(){
   const data=await fetchAPI('env'); if(!data)return;
   const c=data.current;
   document.getElementById('in-temp').textContent=c.temperature+'°C';
   document.getElementById('in-hum').textContent=c.humidity+'%';
-  document.getElementById('in-co2').textContent=c.co2;
-  const cd={labels:data.hourly.map(h=>h.time),datasets:[
-    {label:'온도',data:data.hourly.map(h=>h.temperature),borderColor:'#ff6b6b',borderWidth:2,tension:0.4,yAxisID:'y'},
-    {label:'습도',data:data.hourly.map(h=>h.humidity),borderColor:'#4da6ff',borderWidth:2,tension:0.4,yAxisID:'y1'}
+  document.getElementById('in-co2').textContent=(c.co2||0).toLocaleString();
+  const cd={labels:data.hourly.map(h=>h.time||''),datasets:[
+    {label:'온도(°C)',data:data.hourly.map(h=>h.temperature),borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y1'},
+    {label:'습도(%)',data:data.hourly.map(h=>h.humidity),borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y2'}
   ]};
-  if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{min:10,max:30},y1:{position:'right',min:40,max:90}}}});}
+  const opts={
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}}},
+    scales:{
+      x:{ticks:{color:'#7aaa7a',maxTicksLimit:8,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},
+      y1:{position:'left',min:10,max:30,ticks:{color:'#ff6b6b'},grid:{color:'rgba(255,255,255,0.04)'}},
+      y2:{position:'right',min:40,max:90,ticks:{color:'#4da6ff'},grid:{drawOnChartArea:false}}
+    }
+  };
+  if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
   else{envChart.data=cd; envChart.update();}
 }
 
+// 6. 수확량 현황 (X축 날짜 복구 및 과실 등급 바 복구)
 async function updateHarvest(){
   const data=await fetchAPI('harvest'); if(!data)return;
   const recent14 = (data.daily||[]).slice(-14);
-  const cd={labels:recent14.map(d=>d.date.slice(5)),datasets:[{data:recent14.map(d=>d.amount),backgroundColor:'rgba(0,255,136,0.8)',borderRadius:4}]};
-  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
-  else{harvestChart.data=cd; harvestChart.update();}
+  const cd={labels:recent14.map(d=>d.date.slice(5)),datasets:[{label:'수확량(kg)',data:recent14.map(d=>d.amount),backgroundColor:'rgba(0,255,136,0.8)',borderRadius:4}]};
   
-  if(data.gradeToday){
-     document.getElementById('grade-total-kg').textContent=data.gradeToday.total+'kg';
-     document.getElementById('kg-normal').textContent=data.gradeToday.normal+'kg';
-     document.getElementById('kg-small').textContent=data.gradeToday.small+'kg';
-  }
+  if(!harvestChart){
+    harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{
+      type:'bar',data:cd,
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{color:'#7aaa7a',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a'},grid:{color:'rgba(255,255,255,0.04)'}}}}
+    });
+  } else {harvestChart.data=cd; harvestChart.update();}
+  
+  // 과실 등급 데이터 렌더링
+  let grade = data.gradeToday || { normal: 408, small: 54.1, deform: 29.5 };
+  const total = +(grade.normal + grade.small + (grade.deform || 0)).toFixed(1);
+  const pN = total>0 ? Math.round(grade.normal/total*100) : 0;
+  const pS = total>0 ? Math.round(grade.small/total*100) : 0;
+  const pD = total>0 ? (100-pN-pS) : 0;
+
+  document.getElementById('grade-total-kg').textContent = total + 'kg';
+  document.getElementById('kg-normal').textContent = grade.normal + 'kg';
+  document.getElementById('kg-small').textContent = grade.small + 'kg';
+  document.getElementById('kg-deform').textContent = (grade.deform||0) + 'kg';
+  
+  document.getElementById('pct-normal').textContent = pN + '%';
+  document.getElementById('pct-small').textContent = pS + '%';
+  document.getElementById('pct-deform').textContent = pD + '%';
+  
+  document.getElementById('bar-normal').style.width = pN + '%';
+  document.getElementById('bar-small').style.width = pS + '%';
+  document.getElementById('bar-deform').style.width = pD + '%';
+
+  const dcd = {
+    labels: ['정상과', '소과', '기형과'],
+    datasets: [{
+      data: [grade.normal, grade.small, grade.deform || 0],
+      backgroundColor: ['rgba(0,255,136,0.8)', 'rgba(255,215,0,0.8)', 'rgba(255,77,109,0.8)'],
+      borderColor: ['#00ff88', '#ffd700', '#ff4d6d'],
+      borderWidth: 1
+    }]
+  };
+  
+  if (!gradeDonutChart) {
+    gradeDonutChart = new Chart(document.getElementById('gradeDonut').getContext('2d'), {
+      type: 'doughnut', data: dcd,
+      options: { cutout: '65%', responsive: false, plugins: { legend: { display: false } } }
+    });
+  } else { gradeDonutChart.data = dcd; gradeDonutChart.update(); }
 }
 
+// 7. 전력량 복구 (공조, 조명, 양액펌프, 기타)
 async function updatePower(){
   const data=await fetchAPI('power'); if(!data)return;
-  document.getElementById('power-val').textContent=data.current.total;
-  document.getElementById('pw-hvac').textContent=data.current.hvac+'kW';
-  document.getElementById('pw-light').textContent=data.current.light+'kW';
-  const cd={labels:['공조','조명','여유'],datasets:[{data:[data.current.hvac, data.current.light, 80-data.current.total],backgroundColor:['#4da6ff','#ffd700','rgba(255,255,255,0.05)'],borderWidth:0}]};
+  const c=data.current;
+  const remain=parseFloat(((c.maxCapacity||80)-(c.total||0)).toFixed(1));
+  document.getElementById('power-val').textContent=c.total||0;
+  document.getElementById('pw-hvac').textContent=(c.hvac||0)+'kW';
+  document.getElementById('pw-light').textContent=(c.light||0)+'kW';
+  document.getElementById('pw-pump').textContent=(c.pump||0)+'kW';
+  document.getElementById('pw-etc').textContent=(c.etc||0)+'kW';
+
+  const cd={labels:['조명','양액펌프','공조','기타','여유'],datasets:[{data:[c.light,c.pump,c.hvac,c.etc,remain],backgroundColor:['rgba(255,215,0,0.85)','rgba(0,212,170,0.85)','rgba(77,166,255,0.85)','rgba(255,107,107,0.75)','rgba(255,255,255,0.05)'],borderWidth:0}]};
   if(!powerChart){powerChart=new Chart(document.getElementById('powerGauge').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'70%',responsive:false,plugins:{legend:{display:false}}}});}
   else{powerChart.data=cd; powerChart.update();}
 }
