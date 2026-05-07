@@ -236,45 +236,47 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
           <div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div>
         </div>
         <div class="harvest-right">
-          <div>
-            <div class="grade-section-title"><i class="fas fa-seedling" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>과실 등급 분류 현황 (1화방 누적)</div>
-            <div class="grade-section-note">정상과 ≥12g &nbsp;|&nbsp; 소과 &lt;12g</div>
-          </div>
-          <div class="grade-donut-row">
-            <div class="grade-donut-wrap">
-              <canvas id="gradeDonut" width="110" height="110"></canvas>
-              <div class="grade-donut-center">
-                <div class="gd-val" id="grade-total-kg">--</div>
-                <div class="gd-label">총 kg</div>
-              </div>
-            </div>
-            <div class="grade-bars">
-              <div class="grade-bar-row">
-                <div class="grade-bar-top">
-                  <span class="grade-bar-label" style="color:var(--accent-green);">🍓 정상과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
-                </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
-              </div>
-              <div class="grade-bar-row">
-                <div class="grade-bar-top">
-                  <span class="grade-bar-label" style="color:var(--accent-yellow);">🫐 소과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
-                </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
-              </div>
-              <div class="grade-bar-row">
-                <div class="grade-bar-top">
-                  <span class="grade-bar-label" style="color:var(--accent-red);">⚠️ 기형과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
-                </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div>
+    <div class="grade-section-title"><i class="fas fa-seedling" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>과실 등급 분류 현황 (1화방 누적)</div>
+    <div class="grade-section-note">정상과 ≥12g &nbsp;|&nbsp; 소과 &lt;12g</div>
+  </div>
+  <div class="grade-donut-row">
+    
+    <div style="display:flex; align-items:center; gap:20px;">
+      <div class="grade-donut-wrap">
+        <canvas id="gradeDonut" width="110" height="110"></canvas>
+      </div>
+      <div style="display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-size:16px; color:var(--text-muted); margin-bottom:4px;">총 분류량</div>
+        <div id="grade-total-kg" style="font-size:32px; font-weight:700; color:var(--accent-green);">--</div>
       </div>
     </div>
+
+    <div class="grade-bars">
+      <div class="grade-bar-row">
+        <div class="grade-bar-top">
+          <span class="grade-bar-label" style="color:var(--accent-green);">🍓 정상과</span>
+          <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
+        </div>
+        <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
+      </div>
+      <div class="grade-bar-row">
+        <div class="grade-bar-top">
+          <span class="grade-bar-label" style="color:var(--accent-yellow);">🫐 소과</span>
+          <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
+        </div>
+        <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
+      </div>
+      <div class="grade-bar-row">
+        <div class="grade-bar-top">
+          <span class="grade-bar-label" style="color:var(--accent-red);">⚠️ 기형과</span>
+          <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
+        </div>
+        <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
     <div class="card notice-card">
       <div class="card-title"><i class="fas fa-calendar-alt"></i> 공지사항 및 방문자 일정</div>
