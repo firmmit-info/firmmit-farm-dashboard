@@ -258,6 +258,7 @@ async function fetchAPI(type){
 }
 
 // 1. 공지사항
+// 공지사항 업데이트 함수
 async function updateNotice() {
   const data = await fetchAPI('notice');
   const el = document.getElementById('notice-list');
@@ -265,18 +266,26 @@ async function updateNotice() {
     if(el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">등록된 공지사항이 없습니다.</div>';
     return;
   }
+  
   el.innerHTML = data.reverse().slice(0, 4).map(n => {
-    let cls = n.category === '긴급' ? 'nb-important' : 'nb-general';
-    let bg = n.category === '긴급' ? 'rgba(255,77,109,0.2)' : 'rgba(0,255,136,0.1)';
-    let co = n.category === '긴급' ? 'var(--accent-red)' : 'var(--accent-green)';
+    // 서버에서 섞여서 들어오는 데이터를 원래 의미에 맞게 재배치
+    let category = n.title;     // '긴급' 또는 '일반'
+    let title = n.date;         // '아그로스타 방한' 등 실제 제목
+    let date = n.category;      // '2026-05-11' 등 날짜
+    let content = n.content || '내용이 없습니다.'; // 서버에서 내용이 안 오면 빈칸 처리
+    
+    let cls = category === '긴급' ? 'nb-important' : 'nb-general';
+    let bg = category === '긴급' ? 'rgba(255,77,109,0.2)' : 'rgba(0,255,136,0.1)';
+    let co = category === '긴급' ? 'var(--accent-red)' : 'var(--accent-green)';
+    
     return `
       <div class="list-item">
         <div class="list-top">
-          <span class="item-badge" style="background:${bg}; color:${co}">${n.category}</span>
-          <span class="item-title">${n.title}</span>
-          <span class="item-date">${n.date}</span>
+          <span class="item-badge" style="background:${bg}; color:${co}">${category}</span>
+          <span class="item-title">${title}</span>
+          <span class="item-date">${date}</span>
         </div>
-        <div class="item-content">${n.content || n.title}</div>
+        <div class="item-content" style="margin-top:4px;">${content}</div>
       </div>`;
   }).join('');
 }
