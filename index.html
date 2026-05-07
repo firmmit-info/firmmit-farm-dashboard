@@ -63,14 +63,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .power-item{background:var(--bg-card2);border-radius:8px;padding:10px 8px;text-align:center;font-size:18px;color:var(--text-sub);}
 .power-item .pval{font-size:18px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
 
-/* ★ 수확량 + 과실등급 (너비 조절 및 높이 조절) */
+/* 수확량 + 과실등급 */
 .harvest-card{grid-column:span 4;}
-.harvest-inner{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:flex-start;} /* 우측 패널 420px로 확장 */
+.harvest-inner{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:flex-start;}
 @media(max-width:900px){.harvest-inner{grid-template-columns:1fr;}}
 .harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
 .harvest-total .big{font-size:34px;font-weight:700;color:var(--accent-green);}
 .harvest-total .small{font-size:16px;color:var(--text-muted);}
-.harvest-chart-wrap{position:relative;height:250px;} /* 그래프 높이 250px로 확 키움 */
+.harvest-chart-wrap{position:relative;height:250px;}
 .harvest-right{background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px; align-self: flex-start;}
 .grade-donut-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
 .grade-section-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
@@ -312,7 +312,9 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
         <div class="workers-inner">
           <div class="worker-stat-box">
             <div id="w-on-duty" class="ws-num">0</div>
-            <div class="ws-label">출근</div>
+            <div class="ws-label" style="margin-bottom: 6px;">출근 현황</div>
+            <div id="w-status-details" style="font-size: 14px; font-weight: 500; display: flex; justify-content: center; gap: 8px;">
+              </div>
           </div>
           <div id="worker-list-on" class="worker-list"></div>
         </div>
@@ -384,10 +386,7 @@ async function updateEnv(){
 async function updateHarvest(){
   const data=await fetchAPI('harvest');if(!data)return;
   document.getElementById('harvest-month-total').textContent=(data.monthTotal||0)+' kg';
-  
-  // ★ 시트에서 넘어온 데이터 중 "가장 최근 14일(2주)"만 딱 잘라서 화면에 그립니다.
   const recent14 = (data.daily||[]).slice(-14);
-  
   const labels=recent14.map(d=>d.date);
   const amounts=recent14.map(d=>d.amount);
   const bgColors=amounts.map(v=>v>=40?'rgba(0,255,136,0.7)':v>=28?'rgba(0,212,170,0.6)':'rgba(77,166,255,0.5)');
@@ -423,21 +422,74 @@ function updateGradeChart(grade){
 async function updateWorkers() {
   const data = await fetchAPI('workers');
   if (!data) return;
+  
   document.getElementById('w-total').textContent = data.summary.total || 0;
-  document.getElementById('w-on-duty').textContent = data.summary.onDuty || 0;
+  
+  // ★ 출근, 퇴근, 연차 인원 계산 로직
+  let onCount = 0, offCount = 0, leaveCount = 0;
+  if (data.allWorkers) {
+    data.allWorkers.forEach(w => {
+      const s = String(w.status).trim();
+      if (s === '근무중' || s === '출근') onCount++;
+      else if (s === '퇴근') offCount++;
+      else if (s === '연차' || s === '휴가') leaveCount++;
+    });
+  }
+
+  // 메인 큰 숫자는 출근 인원으로 유지
+  document.getElementById('w-on-duty').textContent = data.summary.onDuty || onCount;
+  
+  // 하단 디테일 텍스트에 각 인원수 삽입
+  const detailsEl = document.getElementById('w-status-details');
+  if(detailsEl) {
+    detailsEl.innerHTML = `<span style="color:var(--accent-green)">출근 ${data.summary.onDuty || onCount}</span> 
+                           <span style="color:var(--text-muted)">|</span> 
+                           <span style="color:var(--accent-yellow)">퇴근 ${offCount}</span> 
+                           <span style="color:var(--text-muted)">|</span> 
+                           <span style="color:var(--accent-red)">연차 ${leaveCount}</span>`;
+  }
+
   const listAll = document.getElementById('worker-list-all');
   const listOn = document.getElementById('worker-list-on');
-  const createCard = (w) => {
-    const isMgr = w.type === '담당자';
-    const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
-    const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
-    const isOffDuty = w.status !== '근무중';
-    const timeText = isOffDuty ? `🌙 퇴근` : `⏱ ${w.startTime} 출근`;
-    const cardStyle = isOffDuty ? 'opacity:0.6; filter:grayscale(30%); border-color:var(--border-color);' : '';
-    return `<div class="worker-item" style="${cardStyle}"><div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div><div class="worker-info"><div class="w-name">${w.name}</div><div class="w-role">${w.role}</div><div class="w-time">${timeText}</div></div><span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span></div>`;
-  };
-  if (listAll) listAll.innerHTML = data.allWorkers.map(createCard).join('');
-  if (listOn) listOn.innerHTML = data.onDutyWorkers.map(createCard).join('');
+
+  // ★ 1열: 총 근무자 (이름, 역할, 직책만 깔끔하게 표시)
+  if (listAll) {
+    listAll.innerHTML = data.allWorkers && data.allWorkers.length > 0 
+      ? data.allWorkers.map(w => {
+          const isMgr = w.type === '담당자';
+          const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
+          const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
+          return `<div class="worker-item">
+            <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
+            <div class="worker-info">
+              <div class="w-name">${w.name}</div>
+              <div class="w-role">${w.role}</div>
+            </div>
+            <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
+          </div>`;
+        }).join('')
+      : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">등록된 근무자가 없습니다.</div>';
+  }
+
+  // ★ 2열: 출근 (현재 근무중인 인원만 표시)
+  if (listOn) {
+    listOn.innerHTML = data.onDutyWorkers && data.onDutyWorkers.length > 0
+      ? data.onDutyWorkers.map(w => {
+          const isMgr = w.type === '담당자';
+          const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
+          const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
+          return `<div class="worker-item">
+            <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
+            <div class="worker-info">
+              <div class="w-name">${w.name}</div>
+              <div class="w-role">${w.role}</div>
+              <div class="w-time" style="color:var(--accent-teal);font-size:14px;margin-top:2px;">⏱ ${w.startTime} 출근</div>
+            </div>
+            <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
+          </div>`;
+        }).join('')
+      : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">현재 출근한 인원이 없습니다.</div>';
+  }
 }
 
 async function updatePower(){
