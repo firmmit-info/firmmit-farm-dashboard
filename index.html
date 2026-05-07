@@ -328,29 +328,25 @@ async function updateWorkers() {
   const data = await fetchAPI('workers');
   const el = document.getElementById('worker-list-today');
   if (!el) return;
-
   if (!data || !data.onDutyWorkers || data.onDutyWorkers.length === 0) {
-    el.innerHTML = '<div style="grid-column:span 2; color:var(--text-muted); padding:20px; text-align:center;">오늘 출근 명단이 없습니다.</div>';
+    el.innerHTML = '<div style="grid-column:span 2;color:var(--text-muted);padding:20px;text-align:center;">오늘 출근 명단이 없습니다.</div>';
     return;
   }
-
   el.innerHTML = data.onDutyWorkers.map(w => {
-    const isMgr = w.role && (w.role.includes('총괄') || w.role.includes('담당'));
-    const color = isMgr ? 'var(--accent-yellow)' : 'var(--accent-green)';
-    const bgClr = isMgr ? 'rgba(255,215,0,0.1)' : 'rgba(0,255,136,0.1)';
+    const isMgr   = w.type === '담당자';
+    const color   = w.color || (isMgr ? 'var(--accent-yellow)' : 'var(--accent-green)');
+    const bgClr   = isMgr ? 'rgba(255,215,0,0.1)' : 'rgba(0,255,136,0.1)';
     const badgeCls = isMgr ? 'badge-manager' : 'badge-work';
-    const typeTxt = isMgr ? '담당자' : '작업자';
-
-    return `
-      <div class="worker-mini-item">
-        <div class="worker-mini-avatar" style="background:${bgClr}; color:${color}; border:1px solid ${color}40">${String(w.name)[0]}</div>
-        <div class="worker-mini-info" style="flex:1; overflow:hidden;">
-          <div class="name">${w.name}</div>
-          <div class="role" style="white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${w.role}</div>
-        </div>
-        <span class="item-badge ${badgeCls}" style="font-size:11px;">${typeTxt}</span>
+    // 여러 역할을 맡으면 쉼표로 이어서 표시
+    const roleText = w.roles ? w.roles.join(', ') : w.role;
+    return `<div class="worker-mini-item">
+      <div class="worker-mini-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name)[0]}</div>
+      <div class="worker-mini-info" style="flex:1;overflow:hidden;">
+        <div class="name">${w.name}</div>
+        <div class="role" style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${roleText}</div>
       </div>
-    `;
+      <span class="item-badge ${badgeCls}" style="font-size:11px;">${w.type}</span>
+    </div>`;
   }).join('');
 }
 
