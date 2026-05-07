@@ -10,47 +10,43 @@
   <style>
 :root {--bg-main:#0a0f0a;--bg-card:#111811;--bg-card2:#162016;--border-color:#1e3a1e;--accent-green:#00ff88;--accent-teal:#00d4aa;--accent-yellow:#ffd700;--accent-red:#ff4d6d;--accent-blue:#4da6ff;--text-main:#e8f5e8;--text-sub:#7aaa7a;--text-muted:#4a6a4a;--glow-green:0 0 15px rgba(0,255,136,0.3);}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-main);color:var(--text-main);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-main);color:var(--text-main);min-height:100vh;overflow:hidden;} /* 스크롤 방지 */
 body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(0,255,136,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-.wrapper{position:relative;z-index:1;max-width:1920px;margin:0 auto;padding:0 16px 16px;}
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:linear-gradient(135deg,#0d1a0d,#111f11);border-bottom:2px solid var(--accent-green);box-shadow:0 4px 30px rgba(0,255,136,0.1);margin-bottom:16px;}
-.logo-area{display:flex;align-items:center;gap:16px;}
-.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--glow-green);}
-.logo-text h1{font-size:26px;font-weight:900;color:var(--accent-green);letter-spacing:2px;text-shadow:0 0 20px rgba(0,255,136,0.5);}
-.logo-text p{font-size:15px;color:var(--text-sub);letter-spacing:1px;margin-top:2px;}
-.status-badge{display:flex;align-items:center;gap:8px;background:rgba(0,255,136,0.1);border:1px solid var(--accent-green);border-radius:20px;padding:6px 16px;font-size:16px;color:var(--accent-green);}
-.status-dot{width:8px;height:8px;background:var(--accent-green);border-radius:50%;animation:blink 1.5s infinite;}
+.wrapper{position:relative;z-index:1;max-width:1920px;margin:0 auto;padding:0 16px 10px;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:linear-gradient(135deg,#0d1a0d,#111f11);border-bottom:2px solid var(--accent-green);box-shadow:0 4px 20px rgba(0,255,136,0.1);margin-bottom:12px;}
+.logo-area{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--glow-green);}
+.logo-text h1{font-size:22px;font-weight:900;color:var(--accent-green);letter-spacing:1.5px;}
+.logo-text p{font-size:13px;color:var(--text-sub);margin-top:1px;}
+.status-badge{display:flex;align-items:center;gap:8px;background:rgba(0,255,136,0.1);border:1px solid var(--accent-green);border-radius:20px;padding:5px 14px;font-size:14px;color:var(--accent-green);}
+.status-dot{width:7px;height:7px;background:var(--accent-green);border-radius:50%;animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 .clock-area{text-align:right;}
-#clock-time{font-size:40px;font-weight:700;color:var(--accent-green);font-variant-numeric:tabular-nums;text-shadow:var(--glow-green);}
-#clock-date{font-size:16px;color:var(--text-sub);margin-top:2px;}
-.grid-main{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
-.card:hover{border-color:var(--accent-green);box-shadow:var(--glow-green);}
-.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent-green),transparent);}
-.card-title{font-size:28px;font-weight:700;color:var(--text-sub);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.card-title i{color:var(--accent-green);font-size:28px;}
+#clock-time{font-size:32px;font-weight:700;color:var(--accent-green);text-shadow:var(--glow-green);line-height:1;}
+#clock-date{font-size:14px;color:var(--text-sub);margin-top:2px;}
 
-/* 날씨 */
+.grid-main{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:15px;position:relative;overflow:hidden;}
+.card-title{font-size:22px;font-weight:700;color:var(--text-sub);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.card-title i{color:var(--accent-green);font-size:22px;}
+
+/* 상단 카드 */
 .weather-card{grid-column:span 1;}
-.weather-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.weather-icon-big{font-size:54px;filter:drop-shadow(0 0 10px rgba(255,215,0,0.5));}
-.weather-temp .val{font-size:44px;font-weight:700;color:var(--accent-yellow);}
-.weather-temp .unit{font-size:20px;color:var(--text-sub);}
-.weather-desc{font-size:18px;color:var(--text-sub);margin-bottom:18px;text-align:center;}
-.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.weather-item{background:var(--bg-card2);border-radius:8px;padding:14px 10px;text-align:center;}
-.weather-item .label{font-size:20px;color:var(--text-muted);margin-bottom:4px;}
-.weather-item .value{font-size:22px;font-weight:700;color:var(--accent-blue);}
-
-/* 내부환경 */
 .env-card{grid-column:span 2;}
-.chart-container{position:relative;height:160px;}
-.env-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
-.env-stat-item{background:var(--bg-card2);border-radius:8px;padding:12px 8px;text-align:center;border:1px solid var(--border-color);}
-.env-stat-item .s-label{font-size:20px;color:var(--text-muted);margin-bottom:4px;}
-.env-stat-item .s-val{font-size:22px;font-weight:700;}
-.green{color:var(--accent-green)}.blue{color:var(--accent-blue)}.yellow{color:var(--accent-yellow)}
+.power-card{grid-column:span 1;}
+
+.weather-main{display:flex;align-items:center;justify-content:space-around;margin-bottom:15px;}
+.weather-temp .val{font-size:40px;font-weight:700;color:var(--accent-yellow);}
+.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.weather-item{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;}
+.weather-item .label{font-size:15px;color:var(--text-muted);margin-bottom:2px;}
+.weather-item .value{font-size:18px;font-weight:700;color:var(--accent-blue);}
+
+.chart-container{position:relative;height:140px;}
+.env-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.env-stat-item{background:var(--bg-card2);border-radius:8px;padding:10px;text-align:center;}
+.env-stat-item .s-label{font-size:16px;color:var(--text-muted);}
+.env-stat-item .s-val{font-size:20px;font-weight:700;}
 
 /* 전력 */
 .power-card{grid-column:span 1;}
@@ -63,146 +59,82 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .power-item{background:var(--bg-card2);border-radius:8px;padding:10px 8px;text-align:center;font-size:18px;color:var(--text-sub);}
 .power-item .pval{font-size:18px;font-weight:700;color:var(--accent-yellow);display:block;margin-top:3px;}
 
-/* ★ 수확량 + 과실등급 (공간 부족 시 자동 줄바꿈) */
+/* 수확량 카드 */
 .harvest-card{grid-column:span 4;}
-.harvest-inner{display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start;}
-.harvest-inner > div:first-child{flex:999 1 600px; min-width:0; width:100%;}
-.harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
-.harvest-total .big{font-size:34px;font-weight:700;color:var(--accent-green);}
-.harvest-total .small{font-size:16px;color:var(--text-muted);}
-.harvest-chart-wrap{position:relative;height:250px;}
-.harvest-right{flex:1 1 460px; max-width:480px; background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px;}
+.harvest-inner{display:flex; flex-wrap:wrap; gap:15px; align-items:flex-start;}
+.harvest-inner > div:first-child{flex:1 1 600px; min-width:0;}
+.harvest-total .big{font-size:32px;font-weight:700;color:var(--accent-green);}
+.harvest-chart-wrap{position:relative;height:180px;}
+.harvest-right{flex:0 0 420px; background:var(--bg-card2);border-radius:10px;padding:15px;display:flex;flex-direction:column;gap:12px;}
 .grade-donut-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
 .grade-section-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
 .grade-section-note{font-size:18px;color:var(--text-muted);margin-top:3px;}
-.grade-donut-wrap{position:relative;width:110px;height:110px;flex-shrink:0;}
+.grade-donut-wrap{position:relative;width:100px;height:100px;flex-shrink:0;}
 .grade-donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.grade-donut-center .gd-val{font-size:22px;font-weight:700;color:var(--accent-green);}
+.grade-donut-center .gd-val{font-size:20px;font-weight:700;color:var(--accent-green);}
 .grade-donut-center .gd-label{font-size:12px;color:var(--text-muted);}
-.grade-bars{flex:1;min-width:180px;display:flex;flex-direction:column;gap:10px;}
-.grade-bar-row{display:flex;flex-direction:column;gap:6px;}
+.grade-bars{flex:1;min-width:180px;display:flex;flex-direction:column;gap:8px;}
+.grade-bar-row{display:flex;flex-direction:column;gap:4px;}
 .grade-bar-top{display:flex;align-items:center;justify-content:space-between;}
-.grade-bar-label{font-size:18px;font-weight:600;}
+.grade-bar-label{font-size:16px;font-weight:600;}
 .grade-bar-meta{display:flex;align-items:center;gap:8px;}
-.grade-bar-pct{font-size:18px;font-weight:700;}
-.grade-bar-kg{font-size:16px;color:var(--text-muted);}
-.grade-bar-bg{width:100%;height:10px;background:var(--bg-main);border-radius:5px;overflow:hidden;}
-.grade-bar-fill{height:100%;border-radius:5px;transition:width 1s ease;}
+.grade-bar-pct{font-size:16px;font-weight:700;}
+.grade-bar-kg{font-size:14px;color:var(--text-muted);}
+.grade-bar-bg{width:100%;height:8px;background:var(--bg-main);border-radius:4px;overflow:hidden;}
+.grade-bar-fill{height:100%;border-radius:4px;transition:width 1s ease;}
 
-/* 공지사항 & 캘린더 */
-.notice-card{grid-column:span 4;}
-.notice-inner{display:grid;grid-template-columns:2fr 3fr;gap:18px;}
-.notice-board-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;margin-bottom:12px;}
-.notice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-color);}
-.notice-badge{font-size:18px;font-weight:700;padding:3px 8px;border-radius:8px;flex-shrink:0;}
-.nb-important{background:rgba(255,77,109,0.2);color:var(--accent-red);border:1px solid rgba(255,77,109,0.3);}
-.nb-general{background:rgba(0,255,136,0.08);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
-.nb-info{background:rgba(77,166,255,0.1);color:var(--accent-blue);border:1px solid rgba(77,166,255,0.2);}
-.notice-title{font-size:19px;font-weight:600;color:var(--text-main);margin-bottom:4px;}
-.notice-date{font-size:18px;color:var(--text-muted);}
-.week-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.week-cal-title{font-size:20px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
-.week-cal-range{font-size:18px;color:var(--text-muted);}
-.week-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
-.week-day-col{display:flex;flex-direction:column;gap:6px;}
-.week-day-head{text-align:center;padding:8px 2px;border-radius:6px;background:var(--bg-card2);border:1px solid var(--border-color);}
-.week-day-name{font-size:18px;color:var(--text-muted);font-weight:600;}
-.week-day-date{font-size:19px;font-weight:700;color:var(--text-main);margin-top:2px;}
-.week-day-head.today{border-color:var(--accent-green);background:rgba(0,255,136,0.08);}
-.week-event{border-radius:5px;padding:6px 8px;font-size:19px;font-weight:600;line-height:1.4;min-height:30px;}
-.ev-visit{background:rgba(77,166,255,0.12);color:var(--accent-blue);border-color:rgba(77,166,255,0.25);}
-.ev-task{background:rgba(0,255,136,0.08);color:var(--accent-green);border-color:rgba(0,255,136,0.2);}
-.ev-urgent{background:rgba(255,77,109,0.1);color:var(--accent-red);border-color:rgba(255,77,109,0.25);}
-.ev-note{background:rgba(255,215,0,0.08);color:var(--accent-yellow);border-color:rgba(255,215,0,0.2);}
+/* 하단 3단 통합 레이아웃 */
+.bottom-row{grid-column:span 4; display:grid; grid-template-columns: 1fr 1fr 1.3fr; gap:12px; height: 260px;}
+.bottom-card{height:100%; display:flex; flex-direction:column;}
+.list-container{flex:1; overflow:hidden; display:flex; flex-direction:column; gap:8px;}
+.list-item{display:flex; flex-direction:column; padding:8px 0; border-bottom:1px solid var(--border-color);}
+.list-item:last-child{border-bottom:none;}
+.list-top{display:flex; align-items:center; gap:8px; margin-bottom:4px;}
+.item-badge{font-size:13px; font-weight:700; padding:2px 7px; border-radius:6px;}
+.item-title{font-size:17px; font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.item-content{font-size:15px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-left:2px;}
+.item-date{font-size:14px; color:var(--text-muted); margin-left:auto;}
 
-/* 근무자 현황 */
-.workers-card{grid-column:span 4;}
-.workers-inner{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:stretch;}
-.worker-stat-box{background:var(--bg-card2);border-radius:8px;padding:14px 18px;text-align:center;border:1px solid var(--border-color);display:flex;flex-direction:column;justify-content:center;height:100%;}
-.worker-stat-box .ws-num{font-size:34px;font-weight:700;color:var(--accent-green);}
-.worker-stat-box .ws-label{font-size:16px;color:var(--text-muted);margin-top:3px;}
-.worker-list{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
-.worker-item{display:flex;align-items:center;gap:10px;background:var(--bg-card2);border-radius:8px;padding:12px 14px;border:1px solid var(--border-color);transition:all .3s ease;}
-.worker-item:hover{border-color:var(--accent-green);}
-.worker-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0;}
-.worker-info .w-name{font-size:18px;font-weight:700;}
-.worker-info .w-role{font-size:15px;color:var(--text-muted);margin-top:2px;}
-.worker-badge{margin-left:auto;font-size:14px;padding:4px 8px;border-radius:10px;font-weight:600;}
+/* 하단 근무자 현황 */
+.worker-mini-grid{display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; flex:1; align-content:start;}
+.worker-mini-item{display:flex; align-items:center; gap:10px; background:var(--bg-card2); border-radius:8px; padding:12px 14px; border:1px solid var(--border-color);}
+.worker-mini-avatar{width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;}
+.worker-mini-info .name{font-size:16px; font-weight:700; margin-bottom:2px;}
+.worker-mini-info .role{font-size:13px; color:var(--text-muted);}
 
-/* 로딩 / 토스트 */
-.loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
-.loading-spinner{width:60px;height:60px;border:3px solid var(--border-color);border-top:3px solid var(--accent-green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{color:var(--accent-green);font-size:20px;letter-spacing:2px;}
-.toast{position:fixed;bottom:20px;right:20px;background:#1a0a0a;border:1px solid var(--accent-red);color:var(--accent-red);padding:12px 20px;border-radius:8px;font-size:16px;z-index:1000;display:none;}
-::-webkit-scrollbar{width:6px;height:10px;}
-::-webkit-scrollbar-track{background:var(--bg-main);border-radius:3px;}
-::-webkit-scrollbar-thumb{background:var(--accent-green);border-radius:3px;}
-
-/* ★ 반응형 세밀 조정 */
-@media(max-width:1600px){.worker-list{grid-template-columns:repeat(5,1fr);}}
-@media(max-width:1200px){
-  /* 과실 등급 박스가 밑으로 내려왔을 때 화면에 꽉 차게 예쁘게 보이도록 설정 */
-  .harvest-right{max-width:100%;}
-  .grade-donut-row{justify-content:center;}
-}
-@media(max-width:1024px){
-  .grid-main{grid-template-columns:repeat(2,1fr);}
-  .harvest-card,.notice-card,.workers-card,.env-card{grid-column:span 2;}
-  .notice-inner{grid-template-columns:1fr;}
-}
-@media(max-width:768px){
-  .grid-main{grid-template-columns:1fr;}
-  .card{grid-column:span 1 !important;}
-  .worker-list{grid-template-columns:repeat(2,1fr);}
-  .harvest-chart-wrap{height:200px;} /* 모바일에서는 그래프 높이를 살짝 줄임 */
-}
-@media(max-width:480px){
-  .worker-list{grid-template-columns:1fr;}
-}
+.badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
+.badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
+.green{color:var(--accent-green)}.blue{color:var(--accent-blue)}.yellow{color:var(--accent-yellow)}
 </style>
-<link rel="icon" href="data:,">
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">🍓 FIRMMIT 데이터 불러오는 중...</div>
+<div class="loading-overlay" id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.9);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;color:var(--accent-green);">
+  <div style="width:50px;height:50px;border:3px solid #1e3a1e;border-top-color:var(--accent-green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px;"></div>
+  <span>데이터 동기화 중...</span>
 </div>
-<div class="toast" id="errorToast"></div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <div class="wrapper">
   <header class="header">
     <div class="logo-area">
       <div class="logo-icon">🍓</div>
-      <div class="logo-text">
-        <h1>FIRMMIT</h1>
-        <p>딸기수직농장 (이천) · SMART FARM MONITORING SYSTEM</p>
-      </div>
+      <div class="logo-text"><h1>FIRMMIT</h1><p>이천 딸기수직농장 모니터링</p></div>
     </div>
-    <div class="status-badge" id="statusBadge">
-      <div class="status-dot"></div> CONNECTING...
-    </div>
-    <div class="clock-area">
-      <div id="clock-time">00:00:00</div>
-      <div id="clock-date"></div>
-    </div>
+    <div class="status-badge" id="statusBadge"><div class="status-dot"></div> CONNECTING...</div>
+    <div class="clock-area"><div id="clock-time">00:00:00</div><div id="clock-date"></div></div>
   </header>
 
   <div class="grid-main">
-
     <div class="card weather-card">
-      <div class="card-title"><i class="fas fa-cloud-sun"></i> 외부 환경 · 이천시</div>
+      <div class="card-title"><i class="fas fa-cloud-sun"></i> 외부 기상</div>
       <div class="weather-main">
-        <div class="weather-icon-big" id="weather-icon">⛅</div>
-        <div class="weather-temp"><span class="val" id="ext-temp">--</span><span class="unit">°C</span></div>
+        <div id="weather-icon" style="font-size:48px;">⛅</div>
+        <div class="weather-temp"><span class="val" id="ext-temp">--</span><span style="font-size:20px; color:var(--text-sub);">°C</span></div>
       </div>
-      <div class="weather-desc" id="weather-desc">데이터 로딩중...</div>
       <div class="weather-grid">
-        <div class="weather-item"><div class="label">💧 외부 습도</div><div class="value" id="ext-hum">--%</div></div>
-        <div class="weather-item"><div class="label">🌬 풍속</div><div class="value" id="ext-wind">--m/s</div></div>
-        <div class="weather-item"><div class="label">☀️ UV 지수</div><div class="value" id="ext-uv">-</div></div>
-        <div class="weather-item"><div class="label">🌡 체감온도</div><div class="value" id="ext-feel">--°C</div></div>
+        <div class="weather-item"><div class="label">습도</div><div class="value" id="ext-hum">--%</div></div>
+        <div class="weather-item"><div class="label">풍속</div><div class="value" id="ext-wind">--m/s</div></div>
       </div>
     </div>
 
@@ -212,123 +144,75 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div class="env-stats">
         <div class="env-stat-item"><div class="s-label">현재 온도</div><div class="s-val green" id="in-temp">--°C</div></div>
         <div class="env-stat-item"><div class="s-label">현재 습도</div><div class="s-val blue" id="in-hum">--%</div></div>
-        <div class="env-stat-item"><div class="s-label">CO₂ (ppm)</div><div class="s-val yellow" id="in-co2">--</div></div>
+        <div class="env-stat-item"><div class="s-label">CO₂</div><div class="s-val yellow" id="in-co2">--</div></div>
       </div>
     </div>
 
     <div class="card power-card">
-      <div class="card-title"><i class="fas fa-bolt"></i> 실시간 전력 사용량</div>
+      <div class="card-title"><i class="fas fa-bolt"></i> 전력량</div>
       <div class="power-gauge-wrap">
-        <canvas id="powerGauge" width="160" height="160"></canvas>
+        <canvas id="powerGauge" width="130" height="130"></canvas>
         <div class="power-center-text">
           <div class="kw" id="power-val">--</div>
-          <div class="kwlabel">kW · 사용중</div>
+          <div class="kwlabel">kW 사용</div>
         </div>
       </div>
       <div class="power-items">
-        <div class="power-item">조명<span class="pval" id="pw-light">--kW</span></div>
-        <div class="power-item">양액펌프<span class="pval" id="pw-pump">--kW</span></div>
-        <div class="power-item">공조<span class="pval" id="pw-hvac">--kW</span></div>
-        <div class="power-item">기타<span class="pval" id="pw-etc">--kW</span></div>
+        <div class="power-item" style="padding:6px;">공조 <span class="pval" id="pw-hvac">--kW</span></div>
+        <div class="power-item" style="padding:6px;">조명 <span class="pval" id="pw-light">--kW</span></div>
       </div>
     </div>
 
     <div class="card harvest-card">
-      <div class="card-title"><i class="fas fa-chart-bar"></i> 일자별 수확량 (kg)</div>
+      <div class="card-title"><i class="fas fa-chart-bar"></i> 수확량 현황 (최근 2주)</div>
       <div class="harvest-inner">
-        <div>
-          <div class="harvest-header">
-            <div></div>
-            <div class="harvest-total">
-              <div class="big" id="harvest-month-total">-- kg</div>
-              <div class="small">이달 누적 수확량</div>
-            </div>
-          </div>
-          <div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div>
-        </div>
+        <div><div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div></div>
         <div class="harvest-right">
-          <div>
-            <div class="grade-section-title"><i class="fas fa-seedling" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>과실 등급 분류 현황 (1화방 누적)</div>
-            <div class="grade-section-note">정상과 ≥12g &nbsp;|&nbsp; 소과 &lt;12g</div>
+          <div class="grade-section-title">🍓 과실 등급 분류 (누적)</div>
+          <div style="display:flex; align-items:center; gap:20px;">
+            <canvas id="gradeDonut" width="100" height="100"></canvas>
+            <div>
+              <div style="font-size:14px; color:var(--text-muted);">총 분류량</div>
+              <div id="grade-total-kg" style="font-size:26px; font-weight:700; color:var(--accent-green);">--</div>
+            </div>
           </div>
-          <div class="grade-donut-row">
-            <div style="display:flex; align-items:center; gap:20px;">
-              <div class="grade-donut-wrap">
-                <canvas id="gradeDonut" width="110" height="110"></canvas>
-              </div>
-              <div style="display:flex; flex-direction:column; justify-content:center;">
-                <div style="font-size:16px; color:var(--text-muted); margin-bottom:4px;">총 분류량</div>
-                <div id="grade-total-kg" style="font-size:32px; font-weight:700; color:var(--accent-green);">--</div>
-              </div>
-            </div>
-            <div class="grade-bars">
-              <div class="grade-bar-row">
-                <div class="grade-bar-top">
-                  <span class="grade-bar-label" style="color:var(--accent-green);">🍓 정상과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-green);" id="pct-normal">--%</span><span class="grade-bar-kg" id="kg-normal">--kg</span></div>
-                </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-normal" style="width:0%;background:linear-gradient(90deg,#00ff88,#00d4aa);"></div></div>
-              </div>
-              <div class="grade-bar-row">
-                <div class="grade-bar-top">
-                  <span class="grade-bar-label" style="color:var(--accent-yellow);">🫐 소과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-yellow);" id="pct-small">--%</span><span class="grade-bar-kg" id="kg-small">--kg</span></div>
-                </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-small" style="width:0%;background:linear-gradient(90deg,#ffd700,#ffec6e);"></div></div>
-              </div>
-              <div class="grade-bar-row">
-                <div class="grade-bar-top">
-                  <span class="grade-bar-label" style="color:var(--accent-red);">⚠️ 기형과</span>
-                  <div class="grade-bar-meta"><span class="grade-bar-pct" style="color:var(--accent-red);" id="pct-deform">--%</span><span class="grade-bar-kg" id="kg-deform">--kg</span></div>
-                </div>
-                <div class="grade-bar-bg"><div class="grade-bar-fill" id="bar-deform" style="width:0%;background:linear-gradient(90deg,#ff4d6d,#ff8fa3);"></div></div>
-              </div>
-            </div>
+          <div style="font-size:15px; display:flex; flex-direction:column; gap:6px; margin-top:5px;">
+             <div style="display:flex; justify-content:space-between;"><span>정상과</span><span id="kg-normal" class="green">--kg</span></div>
+             <div style="display:flex; justify-content:space-between;"><span>소과</span><span id="kg-small" class="yellow">--kg</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card notice-card">
-      <div class="card-title"><i class="fas fa-calendar-alt"></i> 공지사항 및 방문자 일정</div>
-      <div class="notice-inner">
-        <div>
-          <div class="notice-board-title"><i class="fas fa-bullhorn" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>공지사항</div>
-          <div id="notice-list">
-            <div style="color:#4a6a4a;padding:10px;">데이터 로딩중...</div>
-          </div>
+    <div class="bottom-row">
+      <div class="card bottom-card">
+        <div class="card-title"><i class="fas fa-bullhorn"></i> 공지사항</div>
+        <div id="notice-list" class="list-container">
+           <div style="color:var(--text-muted); padding:10px;">데이터 로딩중...</div>
         </div>
-        <div>
-          <div class="week-cal-header">
-            <div class="week-cal-title"><i class="fas fa-calendar-week" style="color:var(--accent-green);margin-right:6px;font-size:11px;"></i>이번 주 일정</div>
-            <div class="week-cal-range" id="cal-range">--</div>
-          </div>
-          <div class="week-cal-grid" id="week-cal-grid">
-            <div style="color:#4a6a4a;grid-column:span 7;padding:10px;">데이터 로딩중...</div>
-          </div>
+      </div>
+      
+      <div class="card bottom-card">
+        <div class="card-title"><i class="fas fa-calendar-check"></i> 방문 일정</div>
+        <div id="visitor-list" class="list-container">
+           <div style="color:var(--text-muted); padding:10px;">데이터 로딩중...</div>
+        </div>
+      </div>
+
+      <div class="card bottom-card">
+        <div class="card-title"><i class="fas fa-user-friends"></i> 오늘 출근자</div>
+        <div id="worker-list-today" class="worker-mini-grid">
+           <div style="grid-column:span 2; color:var(--text-muted); padding:10px;">데이터 로딩중...</div>
         </div>
       </div>
     </div>
-
-    <div class="card workers-card">
-      <div class="card-title"><i class="fas fa-users"></i> 근무자 현황</div>
-      <div class="workers-inner">
-        <div class="worker-stat-box">
-          <div id="w-on-duty" class="ws-num">0</div>
-          <div class="ws-label" style="margin-bottom: 6px;">출근 현황</div>
-          <div id="w-status-details" style="font-size: 14px; font-weight: 500; display: flex; justify-content: center; gap: 8px;">
-            </div>
-        </div>
-        <div id="worker-list-all" class="worker-list"></div>
-      </div>
-    </div>
-
   </div>
 </div>
 
 <script>
+// ★ 아래 API URL은 기존 예은 님의 주소 그대로 유지했습니다.
 const API_URL='https://script.google.com/macros/s/AKfycbzqF_SlIj67yNUEAsgtL4_QOeqbK9lbxwTH2XOerT94twL5IsY4FhIbxv358aVqMTOdlA/exec';
-const REFRESH_INTERVAL=30000;
+const REFRESH_INTERVAL=60000;
 let envChart=null,harvestChart=null,powerChart=null,gradeDonutChart=null;
 
 function updateClock(){
@@ -336,224 +220,152 @@ function updateClock(){
   document.getElementById('clock-time').textContent=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
   document.getElementById('clock-date').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
 }
-setInterval(updateClock,1000);updateClock();
+setInterval(updateClock,1000); updateClock();
 
 async function fetchAPI(type){
   try{
     const res=await fetch(`${API_URL}?type=${type}`,{redirect:'follow'});
-    const data=JSON.parse(await res.text());
-    if(data.error)throw new Error(data.error);
-    return data;
-  }catch(err){showToast(`[${type}] 오류: ${err.message}`);return null;}
+    return JSON.parse(await res.text());
+  }catch(err){return null;}
 }
 
-function showToast(msg){
-  const t=document.getElementById('errorToast');
-  t.textContent='⚠️ '+msg;t.style.display='block';
-  setTimeout(()=>t.style.display='none',4000);
+// 1. 공지사항 (내용 노출, 최대 4개)
+async function updateNotice() {
+  const data = await fetchAPI('notice');
+  const el = document.getElementById('notice-list');
+  if (!el || !data || data.length === 0) {
+    if(el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">등록된 공지사항이 없습니다.</div>';
+    return;
+  }
+  el.innerHTML = data.reverse().slice(0, 4).map(n => {
+    let cls = n.category === '긴급' ? 'nb-important' : 'nb-general';
+    let bg = n.category === '긴급' ? 'rgba(255,77,109,0.2)' : 'rgba(0,255,136,0.1)';
+    let co = n.category === '긴급' ? 'var(--accent-red)' : 'var(--accent-green)';
+    return `
+      <div class="list-item">
+        <div class="list-top">
+          <span class="item-badge" style="background:${bg}; color:${co}">${n.category}</span>
+          <span class="item-title">${n.title}</span>
+          <span class="item-date">${n.date}</span>
+        </div>
+        <div class="item-content">${n.content || n.title}</div>
+      </div>`;
+  }).join('');
 }
 
+// 2. 방문 일정 (리스트형, 내용 노출, 최대 4개)
+async function updateVisitor() {
+  const data = await fetchAPI('visitor');
+  const el = document.getElementById('visitor-list');
+  if (!el || !data || data.length === 0) {
+    if(el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">예정된 방문 일정이 없습니다.</div>';
+    return;
+  }
+  
+  // 날짜 순으로 정렬 후 4개 자르기
+  const sortedData = data.sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 4);
+  
+  el.innerHTML = sortedData.map(v => `
+    <div class="list-item">
+      <div class="list-top">
+        <span class="item-badge" style="background:rgba(77,166,255,0.15); color:var(--accent-blue)">방문</span>
+        <span class="item-title">${v.name}</span>
+        <span class="item-date">${v.date} ${v.time}</span>
+      </div>
+      <div class="item-content">${v.purpose || '상세 방문 목적 없음'}</div>
+    </div>`).join('');
+}
+
+// 3. 오늘 근무자 (서버에서 '오늘 출근 명단'만 걸러서 온다고 가정)
+async function updateWorkers() {
+  const data = await fetchAPI('workers'); 
+  const el = document.getElementById('worker-list-today');
+  if (!el) return;
+
+  if (!data || !data.onDutyWorkers || data.onDutyWorkers.length === 0) {
+    el.innerHTML = '<div style="grid-column:span 2; color:var(--text-muted); padding:20px; text-align:center;">오늘 출근 명단이 없습니다.</div>';
+    return;
+  }
+
+  // 서버(GAS)에서 이름과 직책(role)을 정확히 매핑해서 보내준 데이터를 그립니다.
+  el.innerHTML = data.onDutyWorkers.map(w => {
+    const isMgr = w.role.includes('총괄') || w.role.includes('담당');
+    const color = isMgr ? 'var(--accent-yellow)' : 'var(--accent-green)';
+    const bgClr = isMgr ? 'rgba(255,215,0,0.1)' : 'rgba(0,255,136,0.1)';
+    const badgeCls = isMgr ? 'badge-manager' : 'badge-work';
+    const typeTxt = isMgr ? '담당자' : '작업자';
+
+    return `
+      <div class="worker-mini-item">
+        <div class="worker-mini-avatar" style="background:${bgClr}; color:${color}; border:1px solid ${color}40">${String(w.name)[0]}</div>
+        <div class="worker-mini-info" style="flex:1; overflow:hidden;">
+          <div class="name">${w.name}</div>
+          <div class="role" style="white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${w.role}</div>
+        </div>
+        <span class="item-badge ${badgeCls}" style="font-size:11px;">${typeTxt}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// --- 나머지 기존 차트/날씨 로직 ---
 async function updateWeather(){
-  const data=await fetchAPI('weather');if(!data)return;
-  const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️','안개':'🌫️'};
-  const desc=data.description||'';
-  const iconKey=Object.keys(iconMap).find(k=>desc.includes(k));
+  const data=await fetchAPI('weather'); if(!data)return;
+  const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️'};
+  const iconKey=Object.keys(iconMap).find(k=>(data.description||'').includes(k));
   document.getElementById('weather-icon').textContent=iconKey?iconMap[iconKey]:'🌡️';
   document.getElementById('ext-temp').textContent=data.temperature;
   document.getElementById('ext-hum').textContent=data.humidity+'%';
   document.getElementById('ext-wind').textContent=data.windSpeed+'m/s';
-  document.getElementById('ext-uv').textContent=data.uvIndex;
-  document.getElementById('ext-feel').textContent=data.feelsLike+'°C';
-  document.getElementById('weather-desc').textContent=desc||'데이터 없음';
 }
 
 async function updateEnv(){
-  const data=await fetchAPI('env');if(!data)return;
+  const data=await fetchAPI('env'); if(!data)return;
   const c=data.current;
-  document.getElementById('in-temp').textContent=(c.temperature||0)+'°C';
-  document.getElementById('in-hum').textContent=(c.humidity||0)+'%';
-  document.getElementById('in-co2').textContent=(c.co2||0).toLocaleString();
-  const labels=(data.hourly||[]).map(h=>h.time||'');
-  const temps=(data.hourly||[]).map(h=>h.temperature);
-  const hums=(data.hourly||[]).map(h=>h.humidity);
-  const cd={labels,datasets:[
-    {label:'온도(°C)',data:temps,borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y1'},
-    {label:'습도(%)',data:hums,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true,yAxisID:'y2'}
+  document.getElementById('in-temp').textContent=c.temperature+'°C';
+  document.getElementById('in-hum').textContent=c.humidity+'%';
+  document.getElementById('in-co2').textContent=c.co2;
+  const cd={labels:data.hourly.map(h=>h.time),datasets:[
+    {label:'온도',data:data.hourly.map(h=>h.temperature),borderColor:'#ff6b6b',borderWidth:2,tension:0.4,yAxisID:'y'},
+    {label:'습도',data:data.hourly.map(h=>h.humidity),borderColor:'#4da6ff',borderWidth:2,tension:0.4,yAxisID:'y1'}
   ]};
-  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1}},scales:{x:{ticks:{color:'#7aaa7a',maxTicksLimit:8,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},y1:{type:'linear',position:'left',ticks:{color:'#ff6b6b',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},min:10,max:25},y2:{type:'linear',position:'right',ticks:{color:'#4da6ff',font:{size:11}},grid:{drawOnChartArea:false},min:60,max:95}}};
-  if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
-  else{envChart.data=cd;envChart.update();}
+  if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{min:10,max:30},y1:{position:'right',min:40,max:90}}}});}
+  else{envChart.data=cd; envChart.update();}
 }
 
 async function updateHarvest(){
-  const data=await fetchAPI('harvest');if(!data)return;
-  document.getElementById('harvest-month-total').textContent=(data.monthTotal||0)+' kg';
+  const data=await fetchAPI('harvest'); if(!data)return;
   const recent14 = (data.daily||[]).slice(-14);
-  const labels=recent14.map(d=>d.date);
-  const amounts=recent14.map(d=>d.amount);
-  const bgColors=amounts.map(v=>v>=40?'rgba(0,255,136,0.7)':v>=28?'rgba(0,212,170,0.6)':'rgba(77,166,255,0.5)');
-  const bdColors=amounts.map(v=>v>=40?'#00ff88':v>=28?'#00d4aa':'#4da6ff');
-  const cd={labels,datasets:[{label:'수확량 (kg)',data:amounts,backgroundColor:bgColors,borderColor:bdColors,borderWidth:1,borderRadius:4}]};
-  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.raw} kg`}}},scales:{x:{ticks:{color:'#7aaa7a',maxTicksLimit:14,font:{size:13}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7aaa7a',font:{size:13}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}}});}
-  else{harvestChart.data=cd;harvestChart.update();}
+  const cd={labels:recent14.map(d=>d.date.slice(5)),datasets:[{data:recent14.map(d=>d.amount),backgroundColor:'rgba(0,255,136,0.8)',borderRadius:4}]};
+  if(!harvestChart){harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{type:'bar',data:cd,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+  else{harvestChart.data=cd; harvestChart.update();}
   
-  if(data.gradeToday)updateGradeChart(data.gradeToday);
-  else if(!gradeDonutChart)renderGradeDonutFixed();
-}
-
-function renderGradeDonutFixed(){
-  if(gradeDonutChart)return;
-  const cd={labels:['정상과(≥12g)','소과(<12g)','기형과'],datasets:[{data:[408.0,54.1,29.5],backgroundColor:['rgba(0,255,136,0.8)','rgba(255,215,0,0.8)','rgba(255,77,109,0.8)'],borderColor:['#00ff88','#ffd700','#ff4d6d'],borderWidth:1,hoverOffset:6}]};
-  gradeDonutChart=new Chart(document.getElementById('gradeDonut').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'60%',responsive:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw}kg`}}}}});
-}
-
-function updateGradeChart(grade){
-  const total=+(grade.normal+grade.small+grade.deform).toFixed(1);
-  const pN=total>0?Math.round(grade.normal/total*100):0;
-  const pS=total>0?Math.round(grade.small/total*100):0;
-  const pD=total>0?(100-pN-pS):0;
-  document.getElementById('grade-total-kg').textContent=total+'kg';
-  document.getElementById('bar-normal').style.width=pN+'%';document.getElementById('pct-normal').textContent=pN+'%';document.getElementById('kg-normal').textContent=grade.normal+'kg';
-  document.getElementById('bar-small').style.width=pS+'%';document.getElementById('pct-small').textContent=pS+'%';document.getElementById('kg-small').textContent=grade.small+'kg';
-  document.getElementById('bar-deform').style.width=pD+'%';document.getElementById('pct-deform').textContent=pD+'%';document.getElementById('kg-deform').textContent=grade.deform+'kg';
-  const cd={labels:['정상과(≥12g)','소과(<12g)','기형과'],datasets:[{data:[grade.normal,grade.small,grade.deform],backgroundColor:['rgba(0,255,136,0.8)','rgba(255,215,0,0.8)','rgba(255,77,109,0.8)'],borderColor:['#00ff88','#ffd700','#ff4d6d'],borderWidth:1,hoverOffset:6}]};
-  if(!gradeDonutChart){gradeDonutChart=new Chart(document.getElementById('gradeDonut').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'60%',responsive:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw}kg`}}}}});}
-  else{gradeDonutChart.data=cd;gradeDonutChart.update();}
-}
-
-async function updateWorkers() {
-  const data = await fetchAPI('workers');
-  if (!data) return;
-  
-  let onCount = 0, offCount = 0, leaveCount = 0;
-  if (data.allWorkers) {
-    data.allWorkers.forEach(w => {
-      const s = String(w.status).trim();
-      if (s === '근무중' || s === '출근') onCount++;
-      else if (s === '퇴근') offCount++;
-      else if (s === '연차' || s === '휴가') leaveCount++;
-    });
-  }
-
-  const onDutyEl = document.getElementById('w-on-duty');
-  if (onDutyEl) onDutyEl.textContent = data.summary.onDuty || onCount;
-  
-  const detailsEl = document.getElementById('w-status-details');
-  if(detailsEl) {
-    detailsEl.innerHTML = `<span style="color:var(--accent-green)">출근 ${data.summary.onDuty || onCount}</span> 
-                           <span style="color:var(--text-muted)">|</span> 
-                           <span style="color:var(--accent-yellow)">퇴근 ${offCount}</span> 
-                           <span style="color:var(--text-muted)">|</span> 
-                           <span style="color:var(--accent-red)">연차 ${leaveCount}</span>`;
-  }
-
-  const listAll = document.getElementById('worker-list-all');
-
-  if (listAll) {
-    listAll.innerHTML = data.allWorkers && data.allWorkers.length > 0 
-      ? data.allWorkers.map(w => {
-          const isMgr = w.type === '담당자';
-          const color = w.color || (isMgr ? '#ffd700' : '#00ff88');
-          const bgClr = isMgr ? 'rgba(255,215,0,0.15)' : 'rgba(0,255,136,0.15)';
-          
-          const s = String(w.status).trim();
-          const isWorking = s === '근무중' || s === '출근';
-          const isLeave = s === '연차' || s === '휴가';
-          
-          let timeText = `⏱ ${w.startTime} 출근`;
-          if (!isWorking) {
-            timeText = isLeave ? `🌴 ${s}` : `🌙 퇴근`;
-          }
-          
-          const cardStyle = isWorking ? '' : 'opacity:0.4; filter:grayscale(80%); border-color:var(--border-color);';
-          const timeStyle = isWorking ? 'color:var(--accent-teal);' : 'color:var(--text-muted);';
-
-          return `<div class="worker-item" style="${cardStyle}">
-            <div class="worker-avatar" style="background:${bgClr};color:${color};border:1px solid ${color}40">${String(w.name || '?')[0]}</div>
-            <div class="worker-info">
-              <div class="w-name">${w.name}</div>
-              <div class="w-role">${w.role}</div>
-              <div class="w-time" style="${timeStyle}font-size:14px;margin-top:2px;">${timeText}</div>
-            </div>
-            <span class="worker-badge ${isMgr ? 'badge-manager' : 'badge-work'}">${w.type}</span>
-          </div>`;
-        }).join('')
-      : '<div style="color:#4a6a4a;padding:20px;grid-column:span 6;">등록된 근무자가 없습니다.</div>';
+  if(data.gradeToday){
+     document.getElementById('grade-total-kg').textContent=data.gradeToday.total+'kg';
+     document.getElementById('kg-normal').textContent=data.gradeToday.normal+'kg';
+     document.getElementById('kg-small').textContent=data.gradeToday.small+'kg';
   }
 }
 
 async function updatePower(){
-  const data=await fetchAPI('power');if(!data)return;
-  const c=data.current;
-  const remain=parseFloat(((c.maxCapacity||80)-(c.total||0)).toFixed(1));
-  document.getElementById('power-val').textContent=c.total||0;
-  document.getElementById('pw-light').textContent=(c.light||0)+'kW';
-  document.getElementById('pw-pump').textContent=(c.pump||0)+'kW';
-  document.getElementById('pw-hvac').textContent=(c.hvac||0)+'kW';
-  document.getElementById('pw-etc').textContent=(c.etc||0)+'kW';
-  const cd={labels:['조명','양액펌프','공조','기타','여유'],datasets:[{data:[c.light,c.pump,c.hvac,c.etc,remain],backgroundColor:['rgba(255,215,0,0.85)','rgba(0,212,170,0.85)','rgba(77,166,255,0.85)','rgba(255,107,107,0.75)','rgba(255,255,255,0.05)'],borderColor:['#ffd700','#00d4aa','#4da6ff','#ff6b6b','transparent'],borderWidth:1,hoverOffset:8}]};
-  if(!powerChart){powerChart=new Chart(document.getElementById('powerGauge').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'65%',responsive:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,15,10,0.9)',borderColor:'#1e3a1e',borderWidth:1,callbacks:{label:ctx=>ctx.label!=='여유'?` ${ctx.raw} kW`:' 여유'}}}}});}
-  else{powerChart.data=cd;powerChart.update();}
-}
-
-async function updateNotice() {
-  const data = await fetchAPI('notice');
-  const el = document.getElementById('notice-list');
-  if (!el || !data) return;
-  el.innerHTML = data.reverse().slice(0, 5).map(n => {
-    let cls = 'nb-info';
-    if (n.category === '긴급') cls = 'nb-important';
-    else if (n.category === '일반') cls = 'nb-general';
-    return `<div class="notice-item"><span class="notice-badge ${cls}">${n.category}</span><div><div class="notice-title">${n.title}</div><div class="notice-date">${n.date}</div></div></div>`;
-  }).join('');
-}
-
-async function updateVisitor() {
-  const data = await fetchAPI('visitor');
-  const grid = document.getElementById('week-cal-grid');
-  const rangeEl = document.getElementById('cal-range');
-  if (!grid) return;
-  const today = new Date();
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - today.getDay());
-  const fmt = d => `${d.getMonth() + 1}/${d.getDate()}`;
-  if (rangeEl) rangeEl.textContent = `${fmt(weekStart)} ~ ${fmt(new Date(weekStart.getTime() + 6*24*60*60*1000))}`;
-  const dayNames = ['일','월','화','수','목','금','토'];
-  let html = '';
-  for (let i = 0; i < 7; i++) {
-    const dayDate = new Date(weekStart);
-    dayDate.setDate(weekStart.getDate() + i);
-    const isToday = dayDate.toDateString() === today.toDateString();
-    const todayEvents = (data || []).filter(v => {
-      if(!v.date) return false;
-      const nums = v.date.match(/\d+/g);
-      if (!nums || nums.length < 2) return false;
-      let m = parseInt(nums[nums.length >= 3 ? 1 : 0]), d = parseInt(nums[nums.length >= 3 ? 2 : 1]);
-      return m === (dayDate.getMonth() + 1) && d === dayDate.getDate();
-    });
-    const eventsHtml = todayEvents.map(e => {
-      let evType = 'ev-visit';
-      if (e.status === '완료') evType = 'ev-task';
-      else if (e.status === '취소') evType = 'ev-urgent';
-      else if (e.status === '예정') evType = 'ev-note';
-      return `<div class="week-event ${evType}" title="${e.time} - ${e.purpose}">${e.time} ${e.name}</div>`;
-    }).join('');
-    const nc = i === 0 ? 'color:var(--accent-red)' : i === 6 ? 'color:var(--accent-blue)' : '';
-    html += `<div class="week-day-col"><div class="week-day-head${isToday ? ' today' : ''}"><div class="week-day-name" style="${nc}">${dayNames[i]}</div><div class="week-day-date" style="${nc}">${dayDate.getDate()}</div></div>${eventsHtml}</div>`;
-  }
-  grid.innerHTML = html;
+  const data=await fetchAPI('power'); if(!data)return;
+  document.getElementById('power-val').textContent=data.current.total;
+  document.getElementById('pw-hvac').textContent=data.current.hvac+'kW';
+  document.getElementById('pw-light').textContent=data.current.light+'kW';
+  const cd={labels:['공조','조명','여유'],datasets:[{data:[data.current.hvac, data.current.light, 80-data.current.total],backgroundColor:['#4da6ff','#ffd700','rgba(255,255,255,0.05)'],borderWidth:0}]};
+  if(!powerChart){powerChart=new Chart(document.getElementById('powerGauge').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'70%',responsive:false,plugins:{legend:{display:false}}}});}
+  else{powerChart.data=cd; powerChart.update();}
 }
 
 async function refreshAll(){
   document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> UPDATING...';
-  await updateWeather(); await updateEnv(); await updateHarvest(); await updateWorkers(); await updatePower(); await updateNotice(); await updateVisitor();
-  renderGradeDonutFixed();
+  await Promise.all([updateWeather(), updateEnv(), updateHarvest(), updatePower(), updateNotice(), updateVisitor(), updateWorkers()]);
   document.getElementById('loadingOverlay').style.display='none';
   const now=new Date();
   document.getElementById('statusBadge').innerHTML=`<div class="status-dot"></div> LIVE · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 갱신`;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{ refreshAll(); setInterval(refreshAll,REFRESH_INTERVAL); });
+document.addEventListener('DOMContentLoaded',()=>{ refreshAll(); setInterval(refreshAll, REFRESH_INTERVAL); });
 </script>
 </body>
 </html>
