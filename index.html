@@ -86,10 +86,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .worker-mini-info .role{font-size:14px;color:var(--text-muted);}
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
-.loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.9);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;color:var(--accent-green);}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* 반응형 */
 @media(max-width:1200px){
   .harvest-inner{flex-direction:column;}
   .harvest-inner > div:first-child{flex:1 1 100%;}
@@ -138,7 +135,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay">
+<div class="loading-overlay" id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,15,10,0.9);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;color:var(--accent-green);">
   <div style="width:50px;height:50px;border:3px solid #1e3a1e;border-top-color:var(--accent-green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px;"></div>
   <span>데이터 동기화 중...</span>
 </div>
@@ -154,6 +151,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   </header>
 
   <div class="grid-main">
+
     <div class="card weather-card">
       <div class="card-title"><i class="fas fa-cloud-sun"></i> 외부 기상</div>
       <div class="weather-main">
@@ -266,6 +264,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -309,8 +308,7 @@ async function updateVisitor(){
   const el=document.getElementById('visitor-list');
   if(!el)return;
   if(!data||data.length===0){el.innerHTML='<div style="color:var(--text-muted);padding:10px;">예정된 방문 일정이 없습니다.</div>';return;}
-  el.innerHTML=[...data].sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,4).map(v=>`
-    <div class="list-item"><div class="list-top"><span class="item-badge" style="background:rgba(77,166,255,0.15);color:var(--accent-blue)">방문</span><span class="item-title">${v.name}</span><span class="item-date">${v.date} ${v.time}</span></div><div class="item-content" style="margin-top:4px;">${v.purpose||'상세 방문 목적 없음'}</div></div>`).join('');
+  el.innerHTML=[...data].sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,4).map(v=>`<div class="list-item"><div class="list-top"><span class="item-badge" style="background:rgba(77,166,255,0.15);color:var(--accent-blue)">방문</span><span class="item-title">${v.name}</span><span class="item-date">${v.date} ${v.time}</span></div><div class="item-content" style="margin-top:4px;">${v.purpose||'상세 방문 목적 없음'}</div></div>`).join('');
 }
 
 async function updateWorkers(){
