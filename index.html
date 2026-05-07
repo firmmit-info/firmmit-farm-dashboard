@@ -63,6 +63,10 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .harvest-card{grid-column:span 4;}
 .harvest-inner{display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start;}
 .harvest-inner > div:first-child{flex:1 1 600px; min-width:0;}
+.harvest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.harvest-total{text-align:right;}
+.harvest-total .big{font-size:34px;font-weight:700;color:var(--accent-green);}
+.harvest-total .small{font-size:16px;color:var(--text-muted);}
 .harvest-chart-wrap{position:relative;height:220px;}
 .harvest-right{flex:0 0 420px; background:var(--bg-card2);border:1px solid var(--border-color);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px; align-self: flex-start;}
 .grade-section-title{font-size:18px;font-weight:700;color:var(--text-sub);letter-spacing:1px;}
@@ -98,7 +102,6 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 
 .badge-manager{background:rgba(255,215,0,0.15);color:var(--accent-yellow);border:1px solid rgba(255,215,0,0.3);}
 .badge-work{background:rgba(0,255,136,0.1);color:var(--accent-green);border:1px solid rgba(0,255,136,0.2);}
-.green{color:var(--accent-green)}.blue{color:var(--accent-blue)}.yellow{color:var(--accent-yellow)}
 
 /* 반응형 */
 @media(max-width:1200px){
@@ -146,9 +149,9 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div class="card-title"><i class="fas fa-temperature-half"></i> 내부 환경 모니터링</div>
       <div class="chart-container"><canvas id="envChart"></canvas></div>
       <div class="env-stats">
-        <div class="env-stat-item"><div class="s-label">현재 온도</div><div class="s-val green" id="in-temp">--°C</div></div>
-        <div class="env-stat-item"><div class="s-label">현재 습도</div><div class="s-val blue" id="in-hum">--%</div></div>
-        <div class="env-stat-item"><div class="s-label">CO₂ (ppm)</div><div class="s-val yellow" id="in-co2">--</div></div>
+        <div class="env-stat-item"><div class="s-label">현재 온도</div><div class="s-val" style="color:var(--accent-green);" id="in-temp">--°C</div></div>
+        <div class="env-stat-item"><div class="s-label">현재 습도</div><div class="s-val" style="color:var(--accent-blue);" id="in-hum">--%</div></div>
+        <div class="env-stat-item"><div class="s-label">CO₂ (ppm)</div><div class="s-val" style="color:var(--accent-yellow);" id="in-co2">--</div></div>
       </div>
     </div>
 
@@ -173,6 +176,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div class="card-title"><i class="fas fa-chart-bar"></i> 일자별 수확량 (최근 2주)</div>
       <div class="harvest-inner">
         <div>
+          <div class="harvest-header">
+            <div></div>
+            <div class="harvest-total">
+              <div class="big" id="harvest-month-total">-- kg</div>
+              <div class="small">이달 누적 수확량</div>
+            </div>
+          </div>
           <div class="harvest-chart-wrap"><canvas id="harvestChart"></canvas></div>
         </div>
         <div class="harvest-right">
@@ -239,40 +249,43 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 
 <script>
-const API_URL='https://script.google.com/macros/s/AKfycbzqF_SlIj67yNUEAsgtL4_QOeqbK9lbxwTH2XOerT94twL5IsY4FhIbxv358aVqMTOdlA/exec';
-const REFRESH_INTERVAL=60000;
-let envChart=null,harvestChart=null,powerChart=null,gradeDonutChart=null;
+const API_URL = 'https://script.google.com/macros/s/AKfycbzqF_SlIj67yNUEAsgtL4_QOeqbK9lbxwTH2XOerT94twL5IsY4FhIbxv358aVqMTOdlA/exec';
+const REFRESH_INTERVAL = 60000;
+let envChart = null, harvestChart = null, powerChart = null, gradeDonutChart = null;
 
-function updateClock(){
-  const now=new Date(),days=['일','월','화','수','목','금','토'];
-  document.getElementById('clock-time').textContent=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  document.getElementById('clock-date').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+function updateClock() {
+  const now = new Date();
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  document.getElementById('clock-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+  document.getElementById('clock-date').textContent = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
 }
-setInterval(updateClock,1000); updateClock();
+setInterval(updateClock, 1000);
+updateClock();
 
-async function fetchAPI(type){
-  try{
-    const res=await fetch(`${API_URL}?type=${type}`,{redirect:'follow'});
-    return JSON.parse(await res.text());
-  }catch(err){return null;}
+async function fetchAPI(type) {
+  try {
+    const res = await fetch(`${API_URL}?type=${type}`, { redirect: 'follow' });
+    const data = JSON.parse(await res.text());
+    if (data.error) throw new Error(data.error);
+    return data;
+  } catch (err) {
+    return null;
+  }
 }
 
-// 1. 공지사항
-// 공지사항 업데이트 함수
 async function updateNotice() {
   const data = await fetchAPI('notice');
   const el = document.getElementById('notice-list');
   if (!el || !data || data.length === 0) {
-    if(el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">등록된 공지사항이 없습니다.</div>';
+    if (el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">등록된 공지사항이 없습니다.</div>';
     return;
   }
   
   el.innerHTML = data.reverse().slice(0, 4).map(n => {
-    // 서버에서 섞여서 들어오는 데이터를 원래 의미에 맞게 재배치
-    let category = n.title;     // '긴급' 또는 '일반'
-    let title = n.date;         // '아그로스타 방한' 등 실제 제목
-    let date = n.category;      // '2026-05-11' 등 날짜
-    let content = n.content || '내용이 없습니다.'; // 서버에서 내용이 안 오면 빈칸 처리
+    let category = n.category;
+    let title = n.title;
+    let date = n.date;
+    let content = n.content || '내용이 없습니다.';
     
     let cls = category === '긴급' ? 'nb-important' : 'nb-general';
     let bg = category === '긴급' ? 'rgba(255,77,109,0.2)' : 'rgba(0,255,136,0.1)';
@@ -290,15 +303,16 @@ async function updateNotice() {
   }).join('');
 }
 
-// 2. 방문 일정
 async function updateVisitor() {
   const data = await fetchAPI('visitor');
   const el = document.getElementById('visitor-list');
   if (!el || !data || data.length === 0) {
-    if(el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">예정된 방문 일정이 없습니다.</div>';
+    if (el) el.innerHTML = '<div style="color:var(--text-muted); padding:10px;">예정된 방문 일정이 없습니다.</div>';
     return;
   }
-  const sortedData = data.sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 4);
+  
+  const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 4);
+  
   el.innerHTML = sortedData.map(v => `
     <div class="list-item">
       <div class="list-top">
@@ -306,13 +320,12 @@ async function updateVisitor() {
         <span class="item-title">${v.name}</span>
         <span class="item-date">${v.date} ${v.time}</span>
       </div>
-      <div class="item-content">${v.purpose || '상세 방문 목적 없음'}</div>
+      <div class="item-content" style="margin-top:4px;">${v.purpose || '상세 방문 목적 없음'}</div>
     </div>`).join('');
 }
 
-// 3. 오늘 근무자
 async function updateWorkers() {
-  const data = await fetchAPI('workers'); 
+  const data = await fetchAPI('workers');
   const el = document.getElementById('worker-list-today');
   if (!el) return;
 
@@ -341,74 +354,93 @@ async function updateWorkers() {
   }).join('');
 }
 
-// 4. 외부 기상
-async function updateWeather(){
-  const data=await fetchAPI('weather'); if(!data)return;
-  const iconMap={'맑음':'☀️','구름':'⛅','흐림':'☁️','비':'🌧️','눈':'❄️','안개':'🌫️'};
-  const iconKey=Object.keys(iconMap).find(k=>(data.description||'').includes(k));
-  document.getElementById('weather-icon').textContent=iconKey?iconMap[iconKey]:'🌡️';
-  document.getElementById('ext-temp').textContent=data.temperature;
-  document.getElementById('ext-hum').textContent=data.humidity+'%';
-  document.getElementById('ext-wind').textContent=data.windSpeed+'m/s';
-  document.getElementById('ext-uv').textContent=data.uvIndex||'-';
-  document.getElementById('ext-feel').textContent=(data.feelsLike||data.temperature)+'°C';
+async function updateWeather() {
+  const data = await fetchAPI('weather');
+  if (!data) return;
+  const iconMap = {'맑음':'☀️', '구름':'⛅', '흐림':'☁️', '비':'🌧️', '눈':'❄️', '안개':'🌫️'};
+  const iconKey = Object.keys(iconMap).find(k => (data.description || '').includes(k));
+  
+  document.getElementById('weather-icon').textContent = iconKey ? iconMap[iconKey] : '🌡️';
+  document.getElementById('ext-temp').textContent = data.temperature;
+  document.getElementById('ext-hum').textContent = data.humidity + '%';
+  document.getElementById('ext-wind').textContent = data.windSpeed + 'm/s';
+  document.getElementById('ext-uv').textContent = data.uvIndex || '-';
+  document.getElementById('ext-feel').textContent = (data.feelsLike || data.temperature) + '°C';
 }
 
-// 5. 환경 차트
-async function updateEnv(){
-  const data=await fetchAPI('env'); if(!data)return;
-  const c=data.current;
-  document.getElementById('in-temp').textContent=c.temperature+'°C';
-  document.getElementById('in-hum').textContent=c.humidity+'%';
-  document.getElementById('in-co2').textContent=(c.co2||0).toLocaleString();
-  const cd={labels:data.hourly.map(h=>h.time||''),datasets:[
-    {label:'온도(°C)',data:data.hourly.map(h=>h.temperature),borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y1'},
-    {label:'습도(%)',data:data.hourly.map(h=>h.humidity),borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,0.08)',borderWidth:2,fill:true,tension:0.4,yAxisID:'y2'}
-  ]};
-  const opts={
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{color:'#7aaa7a',font:{size:12},boxWidth:14}}},
-    scales:{
-      x:{ticks:{color:'#7aaa7a',maxTicksLimit:8,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},
-      y1:{position:'left',min:10,max:30,ticks:{color:'#ff6b6b'},grid:{color:'rgba(255,255,255,0.04)'}},
-      y2:{position:'right',min:40,max:90,ticks:{color:'#4da6ff'},grid:{drawOnChartArea:false}}
+async function updateEnv() {
+  const data = await fetchAPI('env');
+  if (!data) return;
+  const c = data.current;
+  
+  document.getElementById('in-temp').textContent = c.temperature + '°C';
+  document.getElementById('in-hum').textContent = c.humidity + '%';
+  document.getElementById('in-co2').textContent = (c.co2 || 0).toLocaleString();
+  
+  const cd = {
+    labels: data.hourly.map(h => h.time || ''),
+    datasets: [
+      { label: '온도(°C)', data: data.hourly.map(h => h.temperature), borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.08)', borderWidth: 2, fill: true, tension: 0.4, yAxisID: 'y1' },
+      { label: '습도(%)', data: data.hourly.map(h => h.humidity), borderColor: '#4da6ff', backgroundColor: 'rgba(77,166,255,0.08)', borderWidth: 2, fill: true, tension: 0.4, yAxisID: 'y2' }
+    ]
+  };
+  
+  const opts = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#7aaa7a', font: { size: 12 }, boxWidth: 14 } } },
+    scales: {
+      x: { ticks: { color: '#7aaa7a', maxTicksLimit: 8, font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y1: { position: 'left', min: 10, max: 30, ticks: { color: '#ff6b6b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y2: { position: 'right', min: 40, max: 90, ticks: { color: '#4da6ff' }, grid: { drawOnChartArea: false } }
     }
   };
-  if(!envChart){envChart=new Chart(document.getElementById('envChart').getContext('2d'),{type:'line',data:cd,options:opts});}
-  else{envChart.data=cd; envChart.update();}
+  
+  if (!envChart) {
+    envChart = new Chart(document.getElementById('envChart').getContext('2d'), { type: 'line', data: cd, options: opts });
+  } else {
+    envChart.data = cd;
+    envChart.update();
+  }
 }
 
-// 6. 수확량 현황 (★ d.date.slice(5)를 빼고 정상 복구 완료)
-async function updateHarvest(){
-  const data=await fetchAPI('harvest'); if(!data)return;
-  const recent14 = (data.daily||[]).slice(-14);
+async function updateHarvest() {
+  const data = await fetchAPI('harvest');
+  if (!data) return;
   
-  // d.date 자체를 그대로 사용하도록 수정했습니다.
-  const cd={labels:recent14.map(d=>d.date),datasets:[{label:'수확량(kg)',data:recent14.map(d=>d.amount),backgroundColor:'rgba(0,255,136,0.8)',borderRadius:4}]};
+  document.getElementById('harvest-month-total').textContent = (data.monthTotal || 0) + ' kg';
   
-  if(!harvestChart){
-    harvestChart=new Chart(document.getElementById('harvestChart').getContext('2d'),{
-      type:'bar',data:cd,
-      options:{
-        responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{
-          x:{ticks:{color:'#7aaa7a',font:{size:12}},grid:{color:'rgba(255,255,255,0.04)'}},
-          y:{ticks:{color:'#7aaa7a'},grid:{color:'rgba(255,255,255,0.04)'}}
+  const recent14 = (data.daily || []).slice(-14);
+  const cd = {
+    labels: recent14.map(d => d.date),
+    datasets: [{ label: '수확량(kg)', data: recent14.map(d => d.amount), backgroundColor: 'rgba(0,255,136,0.8)', borderRadius: 4 }]
+  };
+  
+  if (!harvestChart) {
+    harvestChart = new Chart(document.getElementById('harvestChart').getContext('2d'), {
+      type: 'bar', data: cd,
+      options: {
+        responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#7aaa7a', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+          y: { ticks: { color: '#7aaa7a' }, grid: { color: 'rgba(255,255,255,0.04)' } }
         }
       }
     });
-  } else {harvestChart.data=cd; harvestChart.update();}
+  } else {
+    harvestChart.data = cd;
+    harvestChart.update();
+  }
   
   let grade = data.gradeToday || { normal: 408, small: 54.1, deform: 29.5 };
   const total = +(grade.normal + grade.small + (grade.deform || 0)).toFixed(1);
-  const pN = total>0 ? Math.round(grade.normal/total*100) : 0;
-  const pS = total>0 ? Math.round(grade.small/total*100) : 0;
-  const pD = total>0 ? (100-pN-pS) : 0;
+  const pN = total > 0 ? Math.round(grade.normal / total * 100) : 0;
+  const pS = total > 0 ? Math.round(grade.small / total * 100) : 0;
+  const pD = total > 0 ? (100 - pN - pS) : 0;
 
   document.getElementById('grade-total-kg').textContent = total + 'kg';
   document.getElementById('kg-normal').textContent = grade.normal + 'kg';
   document.getElementById('kg-small').textContent = grade.small + 'kg';
-  document.getElementById('kg-deform').textContent = (grade.deform||0) + 'kg';
+  document.getElementById('kg-deform').textContent = (grade.deform || 0) + 'kg';
   
   document.getElementById('pct-normal').textContent = pN + '%';
   document.getElementById('pct-small').textContent = pS + '%';
@@ -433,34 +465,64 @@ async function updateHarvest(){
       type: 'doughnut', data: dcd,
       options: { cutout: '65%', responsive: false, plugins: { legend: { display: false } } }
     });
-  } else { gradeDonutChart.data = dcd; gradeDonutChart.update(); }
+  } else {
+    gradeDonutChart.data = dcd;
+    gradeDonutChart.update();
+  }
 }
 
-// 7. 전력량
-async function updatePower(){
-  const data=await fetchAPI('power'); if(!data)return;
-  const c=data.current;
-  const remain=parseFloat(((c.maxCapacity||80)-(c.total||0)).toFixed(1));
-  document.getElementById('power-val').textContent=c.total||0;
-  document.getElementById('pw-hvac').textContent=(c.hvac||0)+'kW';
-  document.getElementById('pw-light').textContent=(c.light||0)+'kW';
-  document.getElementById('pw-pump').textContent=(c.pump||0)+'kW';
-  document.getElementById('pw-etc').textContent=(c.etc||0)+'kW';
+async function updatePower() {
+  const data = await fetchAPI('power');
+  if (!data) return;
+  const c = data.current;
+  const remain = parseFloat(((c.maxCapacity || 80) - (c.total || 0)).toFixed(1));
+  
+  document.getElementById('power-val').textContent = c.total || 0;
+  document.getElementById('pw-hvac').textContent = (c.hvac || 0) + 'kW';
+  document.getElementById('pw-light').textContent = (c.light || 0) + 'kW';
+  document.getElementById('pw-pump').textContent = (c.pump || 0) + 'kW';
+  document.getElementById('pw-etc').textContent = (c.etc || 0) + 'kW';
 
-  const cd={labels:['조명','양액펌프','공조','기타','여유'],datasets:[{data:[c.light,c.pump,c.hvac,c.etc,remain],backgroundColor:['rgba(255,215,0,0.85)','rgba(0,212,170,0.85)','rgba(77,166,255,0.85)','rgba(255,107,107,0.75)','rgba(255,255,255,0.05)'],borderWidth:0}]};
-  if(!powerChart){powerChart=new Chart(document.getElementById('powerGauge').getContext('2d'),{type:'doughnut',data:cd,options:{cutout:'70%',responsive:false,plugins:{legend:{display:false}}}});}
-  else{powerChart.data=cd; powerChart.update();}
+  const cd = {
+    labels: ['조명', '양액펌프', '공조', '기타', '여유'],
+    datasets: [{
+      data: [c.light, c.pump, c.hvac, c.etc, remain],
+      backgroundColor: ['rgba(255,215,0,0.85)', 'rgba(0,212,170,0.85)', 'rgba(77,166,255,0.85)', 'rgba(255,107,107,0.75)', 'rgba(255,255,255,0.05)'],
+      borderWidth: 0
+    }]
+  };
+  
+  if (!powerChart) {
+    powerChart = new Chart(document.getElementById('powerGauge').getContext('2d'), {
+      type: 'doughnut', data: cd,
+      options: { cutout: '70%', responsive: false, plugins: { legend: { display: false } } }
+    });
+  } else {
+    powerChart.data = cd;
+    powerChart.update();
+  }
 }
 
-async function refreshAll(){
-  document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> UPDATING...';
-  await Promise.all([updateWeather(), updateEnv(), updateHarvest(), updatePower(), updateNotice(), updateVisitor(), updateWorkers()]);
-  document.getElementById('loadingOverlay').style.display='none';
-  const now=new Date();
-  document.getElementById('statusBadge').innerHTML=`<div class="status-dot"></div> LIVE · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 갱신`;
+async function refreshAll() {
+  document.getElementById('statusBadge').innerHTML = '<div class="status-dot"></div> UPDATING...';
+  await Promise.all([
+    updateWeather(),
+    updateEnv(),
+    updateHarvest(),
+    updatePower(),
+    updateNotice(),
+    updateVisitor(),
+    updateWorkers()
+  ]);
+  document.getElementById('loadingOverlay').style.display = 'none';
+  const now = new Date();
+  document.getElementById('statusBadge').innerHTML = `<div class="status-dot"></div> LIVE · ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} 갱신`;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{ refreshAll(); setInterval(refreshAll, REFRESH_INTERVAL); });
+document.addEventListener('DOMContentLoaded', () => {
+  refreshAll();
+  setInterval(refreshAll, REFRESH_INTERVAL);
+});
 </script>
 </body>
 </html>
